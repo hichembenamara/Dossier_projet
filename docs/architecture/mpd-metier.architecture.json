@@ -1,0 +1,452 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "MPD HealthAI — domaine métier",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/aedh2/mspr2_version_aedh-Public",
+      "revision": "f6a29aad1020390f60de750a5a4600db18cbae3a"
+    },
+    "views": [
+      {
+        "id": "identite",
+        "label": "Identité et objectifs",
+        "focus": [
+          "organisation",
+          "utilisateur",
+          "objectif_utilisateur",
+          "progression_photo"
+        ],
+        "note": "Un utilisateur appartient à une organisation ; ses objectifs et photos de progression lui sont rattachés."
+      },
+      {
+        "id": "sante",
+        "label": "Mesures et coaching",
+        "focus": [
+          "utilisateur",
+          "mesure_biometrique",
+          "mesure_sommeil_sante",
+          "coach_posture_session",
+          "seance_entrainement",
+          "seance_exercice",
+          "exercice"
+        ],
+        "note": "Mesures, séances et exercices : la table seance_exercice porte l'association n,n."
+      },
+      {
+        "id": "nutrition",
+        "label": "Nutrition",
+        "focus": [
+          "utilisateur",
+          "plat",
+          "journal_alimentaire",
+          "aliment"
+        ],
+        "note": "Le journal alimentaire pointe soit vers un plat, soit vers un aliment."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "seance_exercice",
+      "type": "database",
+      "label": "seance_exercice",
+      "sublabel": "PK seance_exercice_id",
+      "pos": [
+        1160,
+        40
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 207,
+          "label": "SeanceExercice"
+        }
+      ]
+    },
+    {
+      "id": "exercice",
+      "type": "database",
+      "label": "exercice",
+      "sublabel": "PK exercice_id",
+      "pos": [
+        880,
+        40
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 170,
+          "label": "Exercice"
+        }
+      ]
+    },
+    {
+      "id": "mesure_biometrique",
+      "type": "database",
+      "label": "mesure_biometrique",
+      "sublabel": "PK mesure_id",
+      "pos": [
+        320,
+        170
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 124,
+          "label": "MesureBiometrique"
+        }
+      ]
+    },
+    {
+      "id": "mesure_sommeil_sante",
+      "type": "database",
+      "label": "mesure_sommeil_sante",
+      "sublabel": "PK mesure_sommeil_id",
+      "pos": [
+        600,
+        170
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 144,
+          "label": "MesureSommeilSante"
+        }
+      ]
+    },
+    {
+      "id": "coach_posture_session",
+      "type": "database",
+      "label": "coach_posture_session",
+      "sublabel": "PK coach_posture_id",
+      "pos": [
+        880,
+        170
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 222,
+          "label": "CoachPostureSession"
+        }
+      ]
+    },
+    {
+      "id": "seance_entrainement",
+      "type": "database",
+      "label": "seance_entrainement",
+      "sublabel": "PK seance_id",
+      "pos": [
+        1160,
+        170
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 191,
+          "label": "SeanceEntrainement"
+        }
+      ]
+    },
+    {
+      "id": "organisation",
+      "type": "database",
+      "label": "organisation",
+      "sublabel": "PK organisation_id",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 19,
+          "label": "Organisation"
+        }
+      ]
+    },
+    {
+      "id": "utilisateur",
+      "type": "database",
+      "label": "utilisateur",
+      "sublabel": "PK utilisateur_id · FK organisation_id",
+      "pos": [
+        320,
+        300
+      ],
+      "size": [
+        990,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 55,
+          "label": "Utilisateur"
+        }
+      ]
+    },
+    {
+      "id": "objectif_utilisateur",
+      "type": "database",
+      "label": "objectif_utilisateur",
+      "sublabel": "PK objectif_id",
+      "pos": [
+        320,
+        430
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 99,
+          "label": "ObjectifUtilisateur"
+        }
+      ]
+    },
+    {
+      "id": "progression_photo",
+      "type": "database",
+      "label": "progression_photo",
+      "sublabel": "PK photo_id",
+      "pos": [
+        600,
+        430
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 113,
+          "label": "ProgressionPhoto"
+        }
+      ]
+    },
+    {
+      "id": "plat",
+      "type": "database",
+      "label": "plat",
+      "sublabel": "PK plat_id",
+      "pos": [
+        880,
+        430
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 263,
+          "label": "Plat"
+        }
+      ]
+    },
+    {
+      "id": "journal_alimentaire",
+      "type": "database",
+      "label": "journal_alimentaire",
+      "sublabel": "PK journal_id",
+      "pos": [
+        1160,
+        430
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 276,
+          "label": "JournalAlimentaire"
+        }
+      ]
+    },
+    {
+      "id": "aliment",
+      "type": "database",
+      "label": "aliment",
+      "sublabel": "PK aliment_id",
+      "pos": [
+        1160,
+        560
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/db/models.py",
+          "line": 246,
+          "label": "Aliment"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "MariaDB healthai_coaching — tables métier",
+      "wraps": [
+        "seance_exercice",
+        "exercice",
+        "mesure_biometrique",
+        "mesure_sommeil_sante",
+        "coach_posture_session",
+        "seance_entrainement",
+        "organisation",
+        "utilisateur",
+        "objectif_utilisateur",
+        "progression_photo",
+        "plat",
+        "journal_alimentaire",
+        "aliment"
+      ],
+      "pad": 22
+    }
+  ],
+  "connections": [
+    {
+      "from": "utilisateur",
+      "to": "organisation",
+      "variant": "emphasis"
+    },
+    {
+      "from": "mesure_biometrique",
+      "to": "utilisateur",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "mesure_sommeil_sante",
+      "to": "utilisateur",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "coach_posture_session",
+      "to": "utilisateur",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "seance_entrainement",
+      "to": "utilisateur",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "seance_exercice",
+      "to": "seance_entrainement"
+    },
+    {
+      "from": "seance_exercice",
+      "to": "exercice"
+    },
+    {
+      "from": "objectif_utilisateur",
+      "to": "utilisateur",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "progression_photo",
+      "to": "utilisateur",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "progression_photo",
+      "to": "objectif_utilisateur",
+      "variant": "dashed"
+    },
+    {
+      "from": "plat",
+      "to": "utilisateur",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "journal_alimentaire",
+      "to": "utilisateur",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "journal_alimentaire",
+      "to": "plat",
+      "variant": "dashed"
+    },
+    {
+      "from": "journal_alimentaire",
+      "to": "aliment",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Lecture du schéma",
+      "items": [
+        "Flèche = clé étrangère, table fille vers table mère (n,1)",
+        "Pointillés = clé étrangère optionnelle",
+        "Colonne FK = table mère + _id"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Association n,n",
+      "items": [
+        "seance_exercice relie seance_entrainement et exercice",
+        "journal_alimentaire référence un plat ou un aliment"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Traçabilité",
+      "items": [
+        "Mesures, séances, plats et journal portent source_id et lot_id",
+        "Détail dans le MPD pipeline de données"
+      ]
+    }
+  ]
+}

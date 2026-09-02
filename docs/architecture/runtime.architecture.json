@@ -1,0 +1,393 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HealthAI Coaching — runtime",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/aedh2/mspr2_version_aedh-Public",
+      "revision": "f6a29aad1020390f60de750a5a4600db18cbae3a"
+    },
+    "views": [
+      {
+        "id": "chemin-ia",
+        "label": "Chemin d'une recommandation IA",
+        "focus": [
+          "navigateur",
+          "frontend",
+          "api",
+          "ia",
+          "ollama",
+          "mongo"
+        ],
+        "note": "Le navigateur appelle l'API, le module IA interroge Ollama puis journalise la sortie dans MongoDB."
+      },
+      {
+        "id": "persistance",
+        "label": "Deux bases, deux rôles",
+        "focus": [
+          "api",
+          "ia",
+          "mariadb",
+          "mongo",
+          "etl"
+        ],
+        "note": "MariaDB reste la source de vérité relationnelle ; MongoDB reçoit les documents IA à schéma variable."
+      },
+      {
+        "id": "supervision",
+        "label": "Supervision",
+        "focus": [
+          "api",
+          "prometheus",
+          "grafana"
+        ],
+        "note": "Prometheus scrape /metrics toutes les 15 s ; Grafana lit Prometheus et affiche le dashboard provisionné."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "navigateur",
+      "type": "external",
+      "label": "Navigateur",
+      "sublabel": "utilisateur / coach",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        130,
+        62
+      ]
+    },
+    {
+      "id": "frontend",
+      "type": "frontend",
+      "label": "Frontend Next.js",
+      "sublabel": "conteneur :3000",
+      "pos": [
+        300,
+        300
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "frontend/app/api/ai/recommandations/route.ts",
+          "line": 3,
+          "label": "proxy interne"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "API FastAPI",
+      "sublabel": "conteneur :8000",
+      "pos": [
+        580,
+        300
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/main.py",
+          "line": 55,
+          "label": "create_app"
+        }
+      ]
+    },
+    {
+      "id": "ia",
+      "type": "backend",
+      "label": "Module IA",
+      "sublabel": "routes /api/ai/*",
+      "pos": [
+        860,
+        300
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/modules/ai_features.py",
+          "line": 603,
+          "label": "/recommandations"
+        },
+        {
+          "path": "backend/app/services/ai_enhanced.py",
+          "line": 104,
+          "label": "OllamaLLMService"
+        }
+      ]
+    },
+    {
+      "id": "ollama",
+      "type": "external",
+      "label": "Ollama",
+      "sublabel": "llama3.2:1b · :11434",
+      "pos": [
+        1140,
+        300
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/core/config.py",
+          "line": 48,
+          "label": "ollama_base_url"
+        }
+      ]
+    },
+    {
+      "id": "cloud_ia",
+      "type": "external",
+      "label": "IA cloud (option)",
+      "sublabel": "Gemini · HF · DeepSeek",
+      "pos": [
+        1140,
+        520
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/services/ai_enhanced.py",
+          "line": 27,
+          "label": "GeminiVisionService"
+        }
+      ]
+    },
+    {
+      "id": "mariadb",
+      "type": "database",
+      "label": "MariaDB 10.11",
+      "sublabel": "source de vérité :3306",
+      "pos": [
+        580,
+        520
+      ],
+      "size": [
+        150,
+        62
+      ]
+    },
+    {
+      "id": "mongo",
+      "type": "database",
+      "label": "MongoDB 7",
+      "sublabel": "4 collections :27017",
+      "pos": [
+        860,
+        520
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "backend/app/services/document_store.py",
+          "line": 30,
+          "label": "collections"
+        }
+      ]
+    },
+    {
+      "id": "etl",
+      "type": "backend",
+      "label": "ETL",
+      "sublabel": "profil compose « etl »",
+      "pos": [
+        300,
+        520
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "healthai_etl/run_all_etl.py",
+          "line": 11,
+          "label": "run_all_etl"
+        }
+      ]
+    },
+    {
+      "id": "prometheus",
+      "type": "cloud",
+      "label": "Prometheus",
+      "sublabel": "scrape 15 s · :9090",
+      "pos": [
+        580,
+        90
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "sources": [
+        {
+          "path": "monitoring/prometheus.yml",
+          "line": 7,
+          "label": "scrape backend"
+        }
+      ]
+    },
+    {
+      "id": "grafana",
+      "type": "cloud",
+      "label": "Grafana",
+      "sublabel": "dashboard · :3001",
+      "pos": [
+        860,
+        90
+      ],
+      "size": [
+        150,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Docker Compose — réseau healthai",
+      "wraps": [
+        "frontend",
+        "api",
+        "ia",
+        "mariadb",
+        "mongo",
+        "etl",
+        "prometheus",
+        "grafana"
+      ],
+      "pad": 22
+    },
+    {
+      "kind": "security-group",
+      "label": "conteneur healthai-backend (même process Python)",
+      "wraps": [
+        "api",
+        "ia"
+      ],
+      "pad": 14
+    },
+    {
+      "kind": "security-group",
+      "label": "docker-compose.monitoring.yml",
+      "wraps": [
+        "prometheus",
+        "grafana"
+      ],
+      "pad": 14
+    }
+  ],
+  "connections": [
+    {
+      "from": "navigateur",
+      "to": "frontend",
+      "label": "HTTP :3000",
+      "variant": "emphasis"
+    },
+    {
+      "from": "frontend",
+      "to": "api",
+      "label": "REST /api · JWT",
+      "variant": "emphasis"
+    },
+    {
+      "from": "api",
+      "to": "ia",
+      "label": "include_router",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ia",
+      "to": "ollama",
+      "label": "POST /api/generate",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ia",
+      "to": "cloud_ia",
+      "label": "HTTPS si activé",
+      "variant": "dashed"
+    },
+    {
+      "from": "api",
+      "to": "mariadb",
+      "label": "SQL · SQLAlchemy",
+      "labelDy": 60
+    },
+    {
+      "from": "ia",
+      "to": "mongo",
+      "label": "insert_one",
+      "labelDy": 60
+    },
+    {
+      "from": "etl",
+      "to": "mariadb",
+      "label": "chargement CSV",
+      "variant": "dashed"
+    },
+    {
+      "from": "prometheus",
+      "to": "api",
+      "label": "scrape /metrics · 15 s",
+      "variant": "dashed",
+      "labelDy": 50
+    },
+    {
+      "from": "grafana",
+      "to": "prometheus",
+      "label": "PromQL",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Micro-service IA = module du backend",
+      "items": [
+        "ai_features.py monté dans l'API via include_router",
+        "Services Gemini et Ollama dans backend/app/services",
+        "Repli mock si aucun fournisseur ne répond"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Ollama hors du compose",
+      "items": [
+        "Aucun service ollama dans docker-compose.yml",
+        "Cible par défaut http://localhost:11434, injoignable depuis le conteneur",
+        "Prévoir OLLAMA_BASE_URL vers l'hôte ou un service dédié"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Persistance et supervision",
+      "items": [
+        "Mongo : food_analyses, recommendations, ai_provider_calls, recommendation_feedback",
+        "Sans Mongo, l'API continue en mode dégradé",
+        "Prometheus et Grafana exposés sur 127.0.0.1 seulement"
+      ]
+    }
+  ]
+}

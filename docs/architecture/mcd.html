@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCD HealthAI Coaching</title>
+<style>
+  :root { color-scheme: light dark; --bg:#f7f7f5; --fg:#1c1c1c; --card:#fff; --muted:#666; --line:#ddd; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#111418; --fg:#e8e8e8; --card:#1a1f26; --muted:#9aa; --line:#2a3038; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.5 system-ui, sans-serif; }
+  main { max-width:1800px; margin:0 auto; padding:24px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  h2 { font-size:17px; margin:32px 0 8px; }
+  p.lead { color:var(--muted); margin:0 0 16px; }
+  section { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; overflow-x:auto; }
+  .legende { display:flex; flex-wrap:wrap; gap:16px 28px; font-size:13px; color:var(--muted); margin-top:12px; }
+  .legende b { color:var(--fg); }
+  .mermaid svg { max-width:100%; height:auto; }
+</style>
+</head>
+<body>
+<main>
+  <h1>MCD — HealthAI Coaching</h1>
+  <p class="lead">Modèle conceptuel de données (Merise), dérivé de <code>backend/app/db/models.py</code>. Pas de clés étrangères ici : les liens sont des associations nommées avec leurs cardinalités. Le MPD correspondant est dans <code>mpd-metier.architecture.html</code> et <code>mpd-pipeline.architecture.html</code>.</p>
+
+  <section>
+<pre class="mermaid">
+erDiagram
+  ORGANISATION ||--o{ UTILISATEUR : "emploie (1,n) / appartient à (0,1)"
+  UTILISATEUR ||--o{ OBJECTIF : "se fixe (0,n) / concerne (1,1)"
+  UTILISATEUR ||--o{ PROGRESSION_PHOTO : "documente (0,n)"
+  OBJECTIF |o--o{ PROGRESSION_PHOTO : "illustre (0,n) / vise (0,1)"
+  UTILISATEUR ||--o{ MESURE_BIOMETRIQUE : "mesure (0,n)"
+  UTILISATEUR ||--o{ MESURE_SOMMEIL_SANTE : "déclare (0,n)"
+  UTILISATEUR ||--o{ SEANCE_ENTRAINEMENT : "réalise (0,n)"
+  UTILISATEUR ||--o{ COACH_POSTURE_SESSION : "s'entraîne avec (0,n)"
+  SEANCE_ENTRAINEMENT ||--o{ SEANCE_EXERCICE : "comprend (1,n)"
+  EXERCICE ||--o{ SEANCE_EXERCICE : "est pratiqué dans (0,n)"
+  UTILISATEUR ||--o{ PLAT : "consomme (0,n)"
+  UTILISATEUR ||--o{ JOURNAL_ALIMENTAIRE : "tient (0,n)"
+  PLAT |o--o{ JOURNAL_ALIMENTAIRE : "détaille (0,n) / se réfère à (0,1)"
+  ALIMENT |o--o{ JOURNAL_ALIMENTAIRE : "figure dans (0,n) / se réfère à (0,1)"
+  SOURCE_DONNEES ||--o{ EXECUTION_ETL : "est traitée par (0,n) / porte sur (1,1)"
+  EXECUTION_ETL ||--o{ LOT_DONNEES : "produit (0,n) / provient de (1,1)"
+  LOT_DONNEES ||--o{ ENREGISTREMENT_BRUT : "conserve (0,n)"
+  LOT_DONNEES ||--o{ STG_IMPORT : "normalise en (0,n)"
+  EXECUTION_ETL ||--o{ CONTROLE_QUALITE : "déclenche (0,n)"
+  LOT_DONNEES |o--o{ CONTROLE_QUALITE : "est contrôlé par (0,n)"
+  REGLE_QUALITE |o--o{ CONTROLE_QUALITE : "applique (0,n)"
+  UTILISATEUR |o--o{ LOT_DONNEES : "crée (0,n)"
+  UTILISATEUR |o--o{ LOT_DONNEES : "valide (0,n)"
+  LOT_DONNEES |o--o{ MESURE_BIOMETRIQUE : "alimente (0,n) / est issue de (0,1)"
+  LOT_DONNEES |o--o{ MESURE_SOMMEIL_SANTE : "alimente (0,n) / est issue de (0,1)"
+  LOT_DONNEES |o--o{ SEANCE_ENTRAINEMENT : "alimente (0,n) / est issue de (0,1)"
+  LOT_DONNEES |o--o{ PLAT : "alimente (0,n) / est issue de (0,1)"
+  LOT_DONNEES |o--o{ JOURNAL_ALIMENTAIRE : "alimente (0,n) / est issue de (0,1)"
+  SOURCE_DONNEES |o--o{ MESURE_BIOMETRIQUE : "fournit (0,n) / provient de (0,1)"
+  SOURCE_DONNEES |o--o{ MESURE_SOMMEIL_SANTE : "fournit (0,n) / provient de (0,1)"
+  SOURCE_DONNEES |o--o{ SEANCE_ENTRAINEMENT : "fournit (0,n) / provient de (0,1)"
+  SOURCE_DONNEES |o--o{ PLAT : "fournit (0,n) / provient de (0,1)"
+  SOURCE_DONNEES |o--o{ JOURNAL_ALIMENTAIRE : "fournit (0,n) / provient de (0,1)"
+  SOURCE_DONNEES |o--o{ EXERCICE : "fournit (0,n) / provient de (0,1)"
+  SOURCE_DONNEES |o--o{ ALIMENT : "fournit (0,n) / provient de (0,1)"
+
+  ORGANISATION {
+    string nom PK "identifiant organisation"
+    string adresse
+    string image_path
+  }
+  UTILISATEUR {
+    string email PK "identifiant utilisateur"
+    string nom_utilisateur
+    string prenom
+    string nom
+    date date_naissance
+    string genre
+    float taille_cm
+    string role
+    string statut
+    string niveau_activite
+    string niveau_sportif
+    bool onboarding_complete
+  }
+  OBJECTIF {
+    string type_objectif
+    float poids_cible_kg
+    date date_debut
+    date date_fin
+    string statut_objectif
+  }
+  PROGRESSION_PHOTO {
+    string type_photo
+    string image_path
+    datetime prise_le
+  }
+  MESURE_BIOMETRIQUE {
+    datetime mesure_le
+    float poids_kg
+    float imc
+    float taux_masse_grasse
+    int bpm_repos
+    int bpm_moyen
+    int bpm_max
+    float eau_l
+  }
+  MESURE_SOMMEIL_SANTE {
+    datetime mesure_le
+    float duree_sommeil_h
+    int qualite_sommeil_score
+    int stress_score
+    int tension_systolique
+    int tension_diastolique
+    int pas_jour
+    string trouble_sommeil_normalise
+  }
+  SEANCE_ENTRAINEMENT {
+    date date_seance
+    string type_entrainement
+    int duree_seance_min
+    float calories_brulees_total
+    string niveau_experience
+  }
+  SEANCE_EXERCICE {
+    int ordre_exercice
+    int series_nb
+    int repetitions_nb
+    float charge_kg
+    int duree_min
+    float calories_brulees_estimees
+  }
+  EXERCICE {
+    string external_id PK "identifiant ExerciseDB"
+    string nom
+    string body_part_principale
+    string muscle_cible_principal
+    string equipement_principal
+  }
+  COACH_POSTURE_SESSION {
+    string exercice_code
+    string statut_posture
+    float score_alignement
+    int reps
+    int sets_count
+    int hold_seconds
+    datetime valide_le
+  }
+  PLAT {
+    datetime consomme_le
+    string type_repas
+    string nom_plat
+    float calories_totales_kcal
+  }
+  JOURNAL_ALIMENTAIRE {
+    datetime consomme_le
+    string type_repas
+    string aliment_nom_libre
+    float quantite
+    string unite_quantite
+    float calories_kcal
+  }
+  ALIMENT {
+    string nom PK "identifiant aliment"
+    string categorie
+    float calories_kcal
+    float proteines_g
+    float glucides_g
+    float lipides_g
+  }
+  SOURCE_DONNEES {
+    string nom PK "identifiant source"
+    string type_source
+    string format_source
+    bool actif
+  }
+  EXECUTION_ETL {
+    string statut
+    datetime demarre_le
+    datetime termine_le
+    int lignes_lues
+    int lignes_valides
+    int lignes_invalides
+    float taux_qualite
+  }
+  LOT_DONNEES {
+    string nom_lot
+    string statut
+    datetime valide_le
+    string commentaire_validation
+  }
+  ENREGISTREMENT_BRUT {
+    string entite
+    string ref_externe
+    json payload_json
+  }
+  STG_IMPORT {
+    string entite
+    string ref_externe
+    json payload_normalise_json
+    bool est_parseable
+    string statut_validation
+  }
+  REGLE_QUALITE {
+    string code_regle PK "identifiant règle"
+    string entite
+    string nom_champ
+    string type_regle
+    string severite
+    bool actif
+  }
+  CONTROLE_QUALITE {
+    string entite
+    string nom_champ
+    string valeur_observee
+    string valeur_corrigee
+    string decision_finale
+    bool est_bloquant
+    string etape_pipeline
+  }
+</pre>
+  </section>
+
+  <div class="legende">
+    <span><b>Lecture des cardinalités</b> : le libellé donne les cardinalités Merise (min,max) dans le sens entité de gauche → entité de droite, puis l'inverse quand il n'est pas (1,1).</span>
+    <span><b>Identifiants</b> : les attributs marqués PK sont les identifiants conceptuels ; les clés techniques auto-incrémentées apparaissent seulement dans le MPD.</span>
+    <span><b>SEANCE_EXERCICE</b> est une association porteuse entre séance et exercice, matérialisée en table dans le MPD.</span>
+      </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default", er: { useMaxWidth: true } });</script>
+</body>
+</html>

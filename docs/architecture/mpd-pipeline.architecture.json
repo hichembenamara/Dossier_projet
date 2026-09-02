@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "MPD HealthAI — pipeline de données",
+    "quality_profile": "showcase",
+    "repository": { "url": "https://github.com/aedh2/mspr2_version_aedh-Public", "revision": "f6a29aad1020390f60de750a5a4600db18cbae3a" },
+    "views": [
+      { "id": "ingestion", "label": "Ingestion", "focus": ["source_donnees", "execution_etl", "lot_donnees", "enregistrement_brut", "stg_import"], "note": "Une exécution ETL par source produit des lots ; chaque lot conserve le brut et le staging." },
+      { "id": "qualite", "label": "Qualité", "focus": ["execution_etl", "lot_donnees", "regle_qualite", "controle_qualite_donnee"], "note": "Chaque contrôle applique une règle à un lot d'une exécution." },
+      { "id": "lignage", "label": "Lignage vers le métier", "focus": ["source_donnees", "lot_donnees", "tables_metier", "utilisateur"], "note": "Les tables métier gardent source_id et lot_id ; un lot est créé et validé par des utilisateurs." }
+    ]
+  },
+  "components": [
+    { "id": "source_donnees", "type": "database", "label": "source_donnees", "sublabel": "PK source_id", "pos": [600, 40], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 30, "label": "SourceDonnees" }] },
+    { "id": "execution_etl", "type": "database", "label": "execution_etl", "sublabel": "PK execution_id", "pos": [320, 200], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 294, "label": "ExecutionEtl" }] },
+    { "id": "lot_donnees", "type": "database", "label": "lot_donnees", "sublabel": "PK lot_id", "pos": [600, 200], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 312, "label": "LotDonnees" }] },
+    { "id": "utilisateur", "type": "database", "label": "utilisateur", "sublabel": "PK utilisateur_id", "pos": [1160, 200], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 55, "label": "Utilisateur" }] },
+    { "id": "regle_qualite", "type": "database", "label": "regle_qualite", "sublabel": "PK regle_id", "pos": [40, 360], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 41, "label": "RegleQualite" }] },
+    { "id": "controle_qualite_donnee", "type": "database", "label": "controle_qualite_donnee", "sublabel": "PK controle_id", "pos": [320, 360], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 351, "label": "ControleQualiteDonnee" }] },
+    { "id": "enregistrement_brut", "type": "database", "label": "enregistrement_brut", "sublabel": "PK enregistrement_id", "pos": [600, 360], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 327, "label": "EnregistrementBrut" }] },
+    { "id": "stg_import", "type": "database", "label": "stg_import", "sublabel": "PK stg_id", "pos": [880, 360], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 337, "label": "StgImport" }] },
+    { "id": "tables_metier", "type": "database", "label": "tables métier", "sublabel": "FK source_id · lot_id", "pos": [880, 40], "size": [150, 62], "sources": [{ "path": "backend/app/db/models.py", "line": 124, "label": "MesureBiometrique" }] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "MariaDB healthai_coaching — pipeline et qualité", "wraps": ["source_donnees", "execution_etl", "lot_donnees", "utilisateur", "regle_qualite", "controle_qualite_donnee", "enregistrement_brut", "stg_import", "tables_metier"], "pad": 22 }
+  ],
+  "connections": [
+    { "from": "execution_etl", "to": "source_donnees" },
+    { "from": "lot_donnees", "to": "source_donnees", "variant": "emphasis" },
+    { "from": "lot_donnees", "to": "execution_etl", "variant": "emphasis" },
+    { "from": "lot_donnees", "to": "utilisateur", "label": "cree_par · valide_par", "variant": "dashed" },
+    { "from": "enregistrement_brut", "to": "lot_donnees" },
+    { "from": "stg_import", "to": "lot_donnees" },
+    { "from": "controle_qualite_donnee", "to": "execution_etl" },
+    { "from": "controle_qualite_donnee", "to": "lot_donnees", "variant": "dashed" },
+    { "from": "controle_qualite_donnee", "to": "regle_qualite", "variant": "dashed" },
+    { "from": "tables_metier", "to": "source_donnees", "variant": "dashed" },
+    { "from": "tables_metier", "to": "lot_donnees", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Lecture du schéma", "items": ["Flèche = clé étrangère, de la table fille vers la table mère (n,1)", "Pointillés = clé étrangère optionnelle (nullable)"] },
+    { "dot": "emerald", "title": "Grain des lots", "items": ["execution_etl : un passage ETL sur une source", "lot_donnees : un jeu de lignes issu d'une exécution", "enregistrement_brut et stg_import conservent brut et staging par lot"] },
+    { "dot": "rose", "title": "Hors MariaDB", "items": ["Les sorties IA sont dans MongoDB (4 collections), pas dans ce MPD", "Voir runtime.architecture.html pour la vue système"] }
+  ]
+}
