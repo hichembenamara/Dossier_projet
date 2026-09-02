@@ -1,0 +1,11 @@
+flowchart LR
+  SRC[Sources CSV / JSON<br/>nutrition, sport, sommeil, exercices, photos] --> EX[1. Extraction<br/>pandas / json]
+  EX --> RAW[(2. enregistrement_brut<br/>payload JSON d'origine)]
+  RAW --> NORM[3. Normalisation<br/>unités, libellés, IMC]
+  NORM --> STG[(stg_import<br/>payload normalisé + statut)]
+  STG --> QC[4. Contrôles qualité<br/>15 règles regle_qualite (5 types)]
+  QC --> CQD[(controle_qualite_donnee<br/>ACCEPTEE / AVERTISSEMENT / REJETEE)]
+  QC --> LOAD[5. Chargement<br/>upsert tables métier]
+  LOAD --> MET[(mesure_biometrique, seance_*, plat,<br/>journal_alimentaire, exercice, aliment)]
+  EXE[(execution_etl + lot_donnees<br/>compteurs, taux de qualité)] -. trace .-> RAW
+  EXE -. trace .-> CQD

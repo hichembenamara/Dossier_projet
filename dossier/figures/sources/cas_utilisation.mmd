@@ -1,0 +1,19 @@
+flowchart LR
+  U((Utilisateur)) --> C1[S'inscrire / se connecter]
+  U --> C2[Compléter son profil]
+  U --> C3[Saisir mesures, sommeil, séances, repas]
+  U --> C4[Consulter tableau de bord et historique]
+  U --> C5[Obtenir des recommandations]
+  U --> C6[Analyser une photo de repas]
+  U --> C7[Session coach posture]
+  U --> C8[Donner un retour sur une recommandation]
+  A((Administrateur)) --> C9[Lancer une exécution ETL]
+  A --> C10[Consulter lots et contrôles qualité]
+  A --> C11[Gérer les règles de qualité]
+  A --> C12[Gérer aliments et exercices]
+  A --> C13[Exporter les données]
+  S((Super-administrateur)) --> C14[Gérer organisations et sources]
+  S --> C15[Consulter le monitoring global]
+  A -. hérite .-> U
+  S -. hérite .-> A
+  C2 & C3 & C4 & C5 & C6 & C7 & C8 & C9 & C10 & C11 & C12 & C13 & C14 & C15 -. include .-> AUTHC[S'authentifier]

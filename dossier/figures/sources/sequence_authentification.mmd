@@ -1,0 +1,24 @@
+sequenceDiagram
+  participant FE as Frontend (api.ts)
+  participant AUTH as POST /api/auth/login (auth.py)
+  participant SEC as security.py
+  participant DB as MariaDB
+  participant ADM as GET /api/admin/... (require_roles)
+  FE->>AUTH: identifiants (limite 10/min)
+  AUTH->>SEC: authenticate_user
+  SEC->>DB: select utilisateur
+  SEC->>SEC: verify_password (PBKDF2, temps constant)
+  AUTH-->>FE: access_token (30 min) + cookie refresh_token HttpOnly SameSite=Strict (7 j)
+  FE->>ADM: Bearer access_token
+  ADM->>SEC: current_user → statut ACTIF ?
+  alt rôle insuffisant
+    ADM-->>FE: 403
+  else rôle ADMIN
+    ADM-->>FE: 200 données
+  end
+  FE->>ADM: appel après expiration
+  ADM-->>FE: 401
+  FE->>FE: refreshPromise partagée (un seul refresh)
+  FE->>AUTH: POST /api/auth/refresh (cookie)
+  AUTH-->>FE: nouveau access_token
+  FE->>ADM: requête rejouée

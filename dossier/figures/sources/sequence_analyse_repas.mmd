@@ -1,0 +1,26 @@
+sequenceDiagram
+  participant FE as Frontend (MealAnalysis.tsx)
+  participant API as POST /api/ai/analyse-repas (ai_features.py)
+  participant SEC as current_user (security.py)
+  participant GV as GeminiVisionService (ai_enhanced.py)
+  participant GEM as Gemini 2.5 Flash
+  participant DS as document_store.py
+  participant MG as MongoDB
+  FE->>API: multipart image + Bearer access_token
+  API->>SEC: vérifier le jeton, charger l'utilisateur
+  SEC-->>API: utilisateur ACTIF
+  API->>API: taille image > 10 Mo ? 413
+  alt clé Gemini absente
+    API->>DS: log_ai_call(status=unavailable)
+    DS->>MG: insert ai_provider_calls
+    API-->>FE: 503 « Gemini Vision non disponible »
+  else clé présente
+    API->>GV: analyze(image_bytes)
+    GV->>GEM: image + consigne JSON
+    GEM-->>GV: aliments détectés (ou vide)
+    GV-->>API: liste (vide = fallback)
+    API->>DS: log_ai_call(status=success | fallback)
+    API->>DS: save_meal_analysis(payload)
+    DS->>MG: insert food_analyses (ignoré si Mongo indisponible)
+    API-->>FE: 200 MealAnalysisResponse
+  end

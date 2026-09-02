@@ -1,0 +1,37 @@
+flowchart TB
+  subgraph PRES["Présentation — backend/app/modules"]
+    AUTH[auth.py]:::m --> ME[me.py]:::m
+    AI[ai_features.py]:::m
+    ADM[admin.py / super_admin.py]:::m
+    RES[resources.py — CRUD générique]:::m
+  end
+  subgraph CONTRATS["Contrats — backend/app/schemas"]
+    SCH[Pydantic : RecommendationRequest, MealAnalysisResponse …]
+  end
+  subgraph METIER["Métier — backend/app/services"]
+    RECO[recommendations.py — moteur à règles]
+    MEAL[meal_analysis.py / ai_enhanced.py — Gemini, Ollama, repli]
+    DOC[document_store.py — 4 collections]
+  end
+  subgraph DATA["Accès aux données — backend/app/db"]
+    MODELS[models.py — 20 tables SQLAlchemy]
+    SESSION[session.py — pool_pre_ping]
+    MONGO[mongo.py — client tolérant aux pannes]
+  end
+  subgraph CORE["Transverse — backend/app/core"]
+    SEC[security.py]
+    CFG[config.py]
+    ERR[errors.py]
+    PAG[pagination.py]
+    RL[rate_limit.py]
+    MW[middleware.py]
+  end
+  PRES --> CONTRATS
+  PRES --> METIER
+  METIER --> DATA
+  MODELS --> MARIA[(MariaDB 10.11)]
+  MONGO --> MDB[(MongoDB 7)]
+  MEAL --> OLL[Ollama local]
+  MEAL --> GEM[Gemini cloud — optionnel]
+  CORE -.-> PRES
+  CORE -.-> METIER

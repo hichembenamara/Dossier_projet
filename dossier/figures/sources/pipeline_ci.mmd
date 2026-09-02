@@ -1,0 +1,7 @@
+flowchart LR
+  PUSH[push / pull request] --> BT[backend-tests<br/>Python 3.12 · pip cache · pytest -q<br/>SQLite mémoire, MONGO_ENABLED=false]
+  PUSH --> FB[frontend-build<br/>Node 22 · npm ci · next build]
+  BT --> ST{statut sur la PR}
+  FB --> ST
+  ST -->|vert| MERGE[fusion dans maintenance]
+  MERGE -.->|perspective| IMG[build image → registre → docker compose pull sur un VPS]
