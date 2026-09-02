@@ -1,0 +1,92 @@
+..................................                                       [100%]
+=============================== warnings summary ===============================
+../../../../usr/local/lib/python3.12/dist-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.12/dist-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+app/main.py:111
+  /home/claude/dossier_repo/backend/app/main.py:111: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @fastapi_app.on_event("startup")
+
+../../../../usr/local/lib/python3.12/dist-packages/fastapi/applications.py:4681
+  /usr/local/lib/python3.12/dist-packages/fastapi/applications.py:4681: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)  # ty: ignore[deprecated]
+
+tests/test_api_contracts.py::test_register_complete_creates_user_profile_records_and_token
+tests/test_api_contracts.py::test_register_complete_accepts_french_decimal_and_labels
+tests/test_api_contracts.py::test_register_complete_rejects_duplicate_email_and_username
+tests/test_api_contracts.py::test_register_complete_rolls_back_when_linked_profile_fails
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+  /home/claude/dossier_repo/backend/app/modules/auth.py:243: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_api_contracts.py::test_profile_and_dashboards_smoke
+  /home/claude/dossier_repo/backend/app/services/me_sport.py:86: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    today = datetime.utcnow()
+
+tests/test_api_contracts.py::test_profile_and_dashboards_smoke
+  /home/claude/dossier_repo/backend/app/services/admin_quality.py:120: SAWarning: SELECT statement has a cartesian product between FROM element(s) "anon_1" and FROM element "controle_qualite_donnee".  Apply join condition(s) between each element to resolve.
+    nb_entites_distinctes = db.scalar(
+
+tests/test_api_contracts.py::test_avatar_upload_replace_and_delete
+tests/test_api_contracts.py::test_avatar_upload_replace_and_delete
+  /home/claude/dossier_repo/backend/app/modules/me.py:344: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    user.modifie_le = datetime.utcnow()
+
+tests/test_api_contracts.py::test_avatar_upload_replace_and_delete
+  /home/claude/dossier_repo/backend/app/modules/me.py:382: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    user.modifie_le = datetime.utcnow()
+
+tests/test_api_contracts.py::test_onboarding_creates_records_without_duplicates
+tests/test_api_contracts.py::test_onboarding_creates_records_without_duplicates
+  /home/claude/dossier_repo/backend/app/modules/me.py:427: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_api_contracts.py::test_recommendations_apply_allergy_and_equipment_guards
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+  /home/claude/dossier_repo/backend/app/services/recommendations.py:511: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    since = datetime.utcnow() - timedelta(days=45)
+
+tests/test_api_contracts.py::test_recommendations_apply_allergy_and_equipment_guards
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+  /home/claude/dossier_repo/backend/app/services/recommendations.py:524: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    since = datetime.utcnow() - timedelta(days=60)
+
+tests/test_api_contracts.py::test_recommendations_apply_allergy_and_equipment_guards
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+tests/test_api_contracts.py::test_recommendations_use_profile_defaults_and_keep_user_isolation
+  /home/claude/dossier_repo/backend/app/services/recommendations.py:164: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    generated_at=datetime.utcnow(),
+
+tests/test_api_contracts.py::test_coach_posture_validate_dynamic_payload_creates_history_entry
+tests/test_api_contracts.py::test_coach_posture_validate_static_payload_creates_history_entry
+tests/test_api_contracts.py::test_coach_posture_validate_tree_pose_static_payload
+tests/test_api_contracts.py::test_coach_posture_history_returns_recent_validations
+  /home/claude/dossier_repo/backend/app/services/coach_posture.py:48: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    validated_at = payload.validated_at or datetime.utcnow()
+
+tests/test_api_contracts.py::test_coach_posture_validate_dynamic_payload_creates_history_entry
+tests/test_api_contracts.py::test_coach_posture_validate_static_payload_creates_history_entry
+tests/test_api_contracts.py::test_coach_posture_validate_tree_pose_static_payload
+tests/test_api_contracts.py::test_coach_posture_history_returns_recent_validations
+  /home/claude/dossier_repo/backend/app/services/coach_posture.py:69: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cree_le=datetime.utcnow(),
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+34 passed, 36 warnings in 11.00s
