@@ -21,55 +21,55 @@
       "type": "external",
       "label": "Formateur référent",
       "sublabel": "rôle du commanditaire",
-      "pos": [
-        601,
-        64
-      ],
       "size": [
         190,
         62
+      ],
+      "pos": [
+        40,
+        40
       ]
     },
     {
       "id": "hicham",
       "type": "backend",
       "label": "Hicham Benamara",
-      "sublabel": "données, SQL/NoSQL, sécurité, déploiement, veille",
-      "pos": [
-        78,
-        368
-      ],
+      "sublabel": "données, sécurité, déploiement, veille",
       "size": [
-        300,
+        230,
         62
+      ],
+      "pos": [
+        270,
+        200
       ]
     },
     {
       "id": "aedh",
       "type": "backend",
       "label": "Aedh Aljene",
-      "sublabel": "pipeline ETL, cadrage, interface recommandations",
-      "pos": [
-        546,
-        368
-      ],
+      "sublabel": "ETL, cadrage, interface recommandations",
       "size": [
-        300,
+        230,
         62
+      ],
+      "pos": [
+        635,
+        200
       ]
     },
     {
       "id": "maxime",
       "type": "backend",
       "label": "Maxime Rousson",
-      "sublabel": "frontend, services IA, CI, supervision, backup",
-      "pos": [
-        1014,
-        368
-      ],
+      "sublabel": "frontend, IA, CI, supervision, backup",
       "size": [
-        300,
+        230,
         62
+      ],
+      "pos": [
+        1000,
+        200
       ]
     },
     {
@@ -77,27 +77,27 @@
       "type": "external",
       "label": "Quatrième camarade",
       "sublabel": "dépôt initial (déc.), import de juin",
-      "pos": [
-        1014,
-        64
-      ],
       "size": [
-        300,
+        230,
         62
+      ],
+      "pos": [
+        1000,
+        360
       ]
     },
     {
       "id": "jury",
       "type": "external",
       "label": "Jury de soutenance",
-      "sublabel": "professionnels extérieurs · public technique",
-      "pos": [
-        546,
-        688
-      ],
+      "sublabel": "professionnels extérieurs, public technique",
       "size": [
-        300,
+        230,
         62
+      ],
+      "pos": [
+        1000,
+        40
       ]
     }
   ],
@@ -119,52 +119,34 @@
       "to": "aedh",
       "label": "cahier des charges, arbitrages",
       "variant": "emphasis",
-      "fromSide": "bottom",
-      "toSide": "top",
-      "labelAt": [
-        696.0,
-        140.0
-      ]
+      "fromSide": "right",
+      "toSide": "top"
     },
     {
       "from": "hicham",
       "to": "aedh",
-      "label": "relecture croisée",
-      "fromSide": "right",
-      "toSide": "left",
-      "labelDy": 48
+      "label": "relecture croisée"
     },
     {
       "from": "aedh",
       "to": "maxime",
-      "label": "relecture croisée",
-      "fromSide": "right",
-      "toSide": "left",
-      "labelDy": 48
+      "label": "relecture croisée"
     },
     {
       "from": "quatrieme",
       "to": "maxime",
       "label": "dépôt créé le 17 déc. 2025",
       "variant": "dashed",
-      "fromSide": "bottom",
-      "toSide": "top",
-      "labelAt": [
-        1164.0,
-        140.0
-      ]
+      "fromSide": "top",
+      "toSide": "bottom"
     },
     {
       "from": "aedh",
       "to": "jury",
       "label": "trois soutenances : 30/04, 29/06, 03/07",
       "variant": "emphasis",
-      "fromSide": "bottom",
-      "toSide": "top",
-      "labelAt": [
-        696.0,
-        444.0
-      ]
+      "fromSide": "top",
+      "toSide": "bottom"
     }
   ],
   "cards": [
@@ -173,8 +155,7 @@
       "title": "Ma part",
       "items": [
         "Modèle Merise et dictionnaire de données (février)",
-        "Backend FastAPI initial, Docker Compose et seed (avril)",
-        "Intégration du service IA, durcissement sécurité, tests, première CI (juin)"
+        "Backend FastAPI initial, Docker Compose et seed (avril)"
       ]
     },
     {
@@ -182,8 +163,7 @@
       "title": "Rituels",
       "items": [
         "Points d'avancement Discord à chaque étape, animés à tour de rôle",
-        "Relecture par un coéquipier avant fusion",
-        "Comptes rendus par périmètre avant chaque soutenance"
+        "Relecture par un coéquipier avant fusion"
       ]
     },
     {
@@ -191,8 +171,7 @@
       "title": "Rôles non étanches",
       "items": [
         "Aedh sur l'interface de recommandations",
-        "Maxime sur le backend en juillet",
-        "Hicham sur l'ETL et l'intégration IA"
+        "Maxime sur le backend en juillet"
       ]
     }
   ]

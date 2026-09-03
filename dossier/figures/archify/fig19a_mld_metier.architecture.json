@@ -38,202 +38,186 @@
       }
     ]
   },
+  "layout": {
+    "mode": "grid",
+    "origin": [
+      40,
+      80
+    ],
+    "gapX": 46,
+    "gapY": 72,
+    "cellW": 220,
+    "cellH": 64,
+    "cols": 5
+  },
   "components": [
     {
       "id": "organisation",
       "type": "database",
       "label": "organisation",
       "sublabel": "PK organisation_id",
-      "pos": [
-        60,
-        64
-      ],
       "size": [
-        180,
+        220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 1
     },
     {
       "id": "utilisateur",
       "type": "database",
       "label": "utilisateur",
       "sublabel": "PK utilisateur_id · FK organisation_id",
-      "pos": [
-        340,
-        64
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 2
     },
     {
       "id": "objectif",
       "type": "database",
       "label": "objectif_utilisateur",
       "sublabel": "PK objectif_id · FK utilisateur_id",
-      "pos": [
-        660,
-        64
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 3
     },
     {
       "id": "photo",
       "type": "database",
       "label": "progression_photo",
       "sublabel": "FK utilisateur_id · objectif_id",
-      "pos": [
-        940,
-        64
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 4
     },
     {
       "id": "bio",
       "type": "database",
       "label": "mesure_biometrique",
       "sublabel": "FK utilisateur_id · source_id · lot_id",
-      "pos": [
-        60,
-        368
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 1
     },
     {
       "id": "sommeil",
       "type": "database",
       "label": "mesure_sommeil_sante",
       "sublabel": "FK utilisateur_id · source_id · lot_id",
-      "pos": [
-        340,
-        368
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 2
     },
     {
       "id": "posture",
       "type": "database",
       "label": "coach_posture_session",
       "sublabel": "FK utilisateur_id (v2, juin)",
-      "pos": [
-        660,
-        368
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 3
     },
     {
       "id": "seance",
       "type": "database",
       "label": "seance_entrainement",
       "sublabel": "PK seance_id · FK utilisateur_id",
-      "pos": [
-        60,
-        672
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 1
     },
     {
       "id": "seance_ex",
       "type": "database",
       "label": "seance_exercice",
       "sublabel": "FK seance_id · exercice_id · UNIQUE",
-      "pos": [
-        340,
-        672
-      ],
       "size": [
-        240,
+        220,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 2
     },
     {
       "id": "exercice",
       "type": "database",
       "label": "exercice",
       "sublabel": "PK exercice_id · UNIQUE external_id",
-      "pos": [
-        740,
-        672
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 3
     },
     {
       "id": "plat",
       "type": "database",
       "label": "plat",
       "sublabel": "PK plat_id · FK utilisateur_id",
-      "pos": [
-        60,
-        976
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 0
     },
     {
       "id": "journal",
       "type": "database",
       "label": "journal_alimentaire",
-      "sublabel": "FK utilisateur_id · plat_id · aliment_id",
-      "pos": [
-        340,
-        976
-      ],
+      "sublabel": "FK utilisateur_id · plat · aliment",
       "size": [
-        260,
+        220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 0
     },
     {
       "id": "aliment",
       "type": "database",
       "label": "aliment",
       "sublabel": "PK aliment_id · FK source_id",
-      "pos": [
-        740,
-        976
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 0
     },
     {
       "id": "provenance",
       "type": "external",
       "label": "source_donnees · lot_donnees",
       "sublabel": "provenance ETL (voir MLD pilotage)",
-      "pos": [
-        940,
-        512
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 4
     }
   ],
   "boundaries": [
@@ -284,18 +268,18 @@
       "from": "utilisateur",
       "to": "organisation",
       "label": "n,1 · SET NULL",
-      "fromSide": "left",
-      "toSide": "right"
+      "labelAt": [
+        549,
+        76
+      ]
     },
     {
       "from": "objectif",
       "to": "utilisateur",
       "label": "n,1 · CASCADE",
-      "fromSide": "left",
-      "toSide": "right",
       "labelAt": [
-        310.0,
-        748.0
+        815,
+        76
       ]
     },
     {
@@ -303,107 +287,87 @@
       "to": "objectif",
       "label": "n,0..1 · SET NULL",
       "variant": "dashed",
-      "fromSide": "left",
-      "toSide": "right",
       "labelAt": [
-        910.0,
-        140.0
+        1081,
+        76
       ]
     },
     {
       "from": "bio",
       "to": "utilisateur",
       "label": "n,1 · CASCADE",
-      "variant": "emphasis",
-      "labelAt": [
-        310.0,
-        748.0
-      ]
+      "variant": "emphasis"
     },
     {
       "from": "sommeil",
       "to": "utilisateur",
-      "label": "n,1 · CASCADE",
-      "fromSide": "top",
-      "toSide": "bottom",
-      "labelAt": [
-        310.0,
-        748.0
-      ]
+      "label": "n,1 · CASCADE"
     },
     {
       "from": "posture",
       "to": "utilisateur",
-      "label": "n,1 · CASCADE",
-      "labelAt": [
-        310.0,
-        748.0
-      ]
+      "label": "n,1 · CASCADE"
     },
     {
       "from": "seance",
       "to": "bio",
       "label": "FK utilisateur_id",
-      "variant": "dashed",
-      "fromSide": "top",
-      "toSide": "bottom"
+      "variant": "dashed"
     },
     {
       "from": "seance_ex",
       "to": "seance",
       "label": "n,1 · CASCADE",
       "variant": "emphasis",
-      "fromSide": "left",
-      "toSide": "right",
       "labelAt": [
-        310.0,
-        748.0
+        549,
+        428
       ]
     },
     {
       "from": "seance_ex",
       "to": "exercice",
       "label": "n,1 · RESTRICT",
-      "fromSide": "right",
-      "toSide": "left"
+      "labelAt": [
+        815,
+        428
+      ]
     },
     {
       "from": "journal",
       "to": "plat",
       "label": "n,0..1 · SET NULL",
       "variant": "dashed",
-      "fromSide": "left",
-      "toSide": "right",
       "labelAt": [
-        910.0,
-        140.0
+        150,
+        292
       ]
     },
     {
       "from": "journal",
       "to": "aliment",
       "label": "n,0..1 · SET NULL",
-      "variant": "dashed",
-      "fromSide": "right",
-      "toSide": "left",
-      "labelAt": [
-        310.0,
-        1052.0
-      ]
+      "variant": "dashed"
     },
     {
       "from": "plat",
       "to": "seance",
       "label": "FK utilisateur_id",
       "variant": "dashed",
-      "fromSide": "top",
-      "toSide": "bottom"
+      "labelAt": [
+        283,
+        428
+      ]
     },
     {
       "from": "posture",
       "to": "provenance",
       "label": "source_id · lot_id sur les mesures importées",
-      "variant": "dashed"
+      "variant": "dashed",
+      "labelAt": [
+        1081,
+        212
+      ]
     }
   ],
   "cards": [

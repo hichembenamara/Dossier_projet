@@ -209,8 +209,7 @@
       "title": "34 routes au total",
       "items": [
         "Public : /, /login, /forgot-password, /reset-password",
-        "/me : 17 écrans (mesures, sommeil, séances, nutrition, photos, coach posture…)",
-        "/admin : 12 écrans · /super-admin : 4 écrans"
+        "/me : 17 écrans (mesures, sommeil, séances, nutrition, photos, coach posture…)"
       ]
     },
     {
@@ -219,8 +218,7 @@
       "items": [
         "RoleGuard redirige un utilisateur qui tape une URL /admin vers son tableau de bord",
         "L'API répond 403 via require_roles quel que soit l'écran",
-        "Source : frontend/src/lib/routes.ts, components/role-guard.tsx",
-        "Depuis /admin/controles-qualite, une règle trop stricte se corrige dans /admin/regles-qualite"
+        "Source : frontend/src/lib/routes.ts, components/role-guard.tsx"
       ]
     }
   ]

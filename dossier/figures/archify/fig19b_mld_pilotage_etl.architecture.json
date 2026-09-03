@@ -3,48 +3,24 @@
   "diagram_type": "architecture",
   "meta": {
     "title": "MLD HealthAI — pilotage ETL (7 tables)",
-    "quality_profile": "showcase"
+    "quality_profile": "showcase",
+    "viewBox": [
+      1356,
+      480
+    ]
   },
   "components": [
     {
-      "id": "source",
-      "type": "database",
-      "label": "source_donnees",
-      "sublabel": "PK source_id · actif (soft delete)",
+      "id": "metier",
+      "type": "external",
+      "label": "tables métier",
+      "sublabel": "FK source_id · lot_id (SET NULL)",
       "pos": [
-        420,
-        64
+        52,
+        40
       ],
       "size": [
-        220,
-        62
-      ]
-    },
-    {
-      "id": "execution",
-      "type": "database",
-      "label": "execution_etl",
-      "sublabel": "PK execution_id · FK source_id · compteurs, taux_qualite",
-      "pos": [
-        100,
-        368
-      ],
-      "size": [
-        300,
-        62
-      ]
-    },
-    {
-      "id": "lot",
-      "type": "database",
-      "label": "lot_donnees",
-      "sublabel": "PK lot_id · FK execution_id · source_id · valide_par",
-      "pos": [
-        480,
-        368
-      ],
-      "size": [
-        300,
+        192,
         62
       ]
     },
@@ -54,39 +30,53 @@
       "label": "utilisateur",
       "sublabel": "validateur du lot (voir MLD métier)",
       "pos": [
-        860,
-        368
+        797,
+        40
       ],
       "size": [
-        220,
+        209,
         62
       ]
     },
     {
-      "id": "regle",
+      "id": "source",
       "type": "database",
-      "label": "regle_qualite",
-      "sublabel": "PK regle_id · UNIQUE code_regle · actif",
+      "label": "source_donnees",
+      "sublabel": "PK source_id · actif (soft delete)",
       "pos": [
-        60,
-        672
+        52,
+        190
       ],
       "size": [
-        240,
+        192,
         62
       ]
     },
     {
-      "id": "controle",
+      "id": "execution",
       "type": "database",
-      "label": "controle_qualite_donnee",
-      "sublabel": "FK execution_id · lot_id · regle_id",
+      "label": "execution_etl",
+      "sublabel": "PK execution_id · FK source_id · compteurs, taux_qualite",
       "pos": [
-        330,
-        672
+        354,
+        190
       ],
       "size": [
-        260,
+        311,
+        62
+      ]
+    },
+    {
+      "id": "lot",
+      "type": "database",
+      "label": "lot_donnees",
+      "sublabel": "PK lot_id · FK execution_id · source_id · valide_par",
+      "pos": [
+        757,
+        190
+      ],
+      "size": [
+        289,
         62
       ]
     },
@@ -96,11 +86,39 @@
       "label": "enregistrement_brut",
       "sublabel": "FK lot_id · payload_json",
       "pos": [
-        640,
-        672
+        1138,
+        190
+      ],
+      "size": [
+        160,
+        62
+      ]
+    },
+    {
+      "id": "regle",
+      "type": "database",
+      "label": "regle_qualite",
+      "sublabel": "PK regle_id · UNIQUE code_regle · actif",
+      "pos": [
+        38,
+        328
       ],
       "size": [
         220,
+        62
+      ]
+    },
+    {
+      "id": "controle",
+      "type": "database",
+      "label": "controle_qualite_donnee",
+      "sublabel": "FK execution_id · lot_id · regle_id",
+      "pos": [
+        390,
+        328
+      ],
+      "size": [
+        239,
         62
       ]
     },
@@ -110,25 +128,11 @@
       "label": "stg_import",
       "sublabel": "FK lot_id · payload normalisé · statut",
       "pos": [
-        640,
-        896
+        1111,
+        328
       ],
       "size": [
-        220,
-        62
-      ]
-    },
-    {
-      "id": "metier",
-      "type": "external",
-      "label": "tables métier",
-      "sublabel": "FK source_id · lot_id (SET NULL)",
-      "pos": [
-        860,
-        64
-      ],
-      "size": [
-        220,
+        214,
         62
       ]
     }
@@ -159,70 +163,42 @@
       "from": "lot",
       "to": "execution",
       "label": "n,1 · CASCADE",
-      "variant": "emphasis",
-      "fromSide": "left",
-      "toSide": "right",
-      "labelDy": 30,
-      "labelDx": 50,
-      "labelAt": [
-        490.0,
-        444.0
-      ]
+      "variant": "emphasis"
     },
     {
       "from": "lot",
       "to": "utilisateur",
       "label": "cree_par · valide_par · SET NULL",
-      "variant": "dashed",
-      "fromSide": "right",
-      "toSide": "left",
-      "labelAt": [
-        820.0,
-        444.0
-      ]
+      "variant": "dashed"
     },
     {
       "from": "controle",
       "to": "execution",
-      "label": "n,1 · CASCADE",
-      "fromSide": "top",
-      "toSide": "bottom"
+      "label": "n,1 · CASCADE"
     },
     {
       "from": "controle",
       "to": "regle",
       "label": "n,0..1 · SET NULL",
-      "variant": "dashed",
-      "fromSide": "left",
-      "toSide": "right",
-      "labelDy": 30,
-      "labelAt": [
-        315.0,
-        748.0
-      ]
+      "variant": "dashed"
     },
     {
       "from": "brut",
       "to": "lot",
-      "label": "n,1 · CASCADE",
-      "fromSide": "top",
-      "toSide": "bottom"
+      "label": "n,1 · CASCADE"
     },
     {
       "from": "stg",
       "to": "brut",
       "label": "même lot (FK lot_id)",
-      "variant": "dashed",
-      "fromSide": "top",
-      "toSide": "bottom"
+      "variant": "dashed"
     },
     {
       "from": "metier",
       "to": "source",
       "label": "provenance",
       "variant": "dashed",
-      "fromSide": "left",
-      "toSide": "right"
+      "labelDy": 54
     }
   ],
   "cards": [

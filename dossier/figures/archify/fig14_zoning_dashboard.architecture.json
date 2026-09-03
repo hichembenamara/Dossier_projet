@@ -15,104 +15,102 @@
       }
     }
   },
+  "layout": {
+    "mode": "grid",
+    "origin": [
+      24,
+      80
+    ],
+    "gapX": 22,
+    "gapY": 70,
+    "cellW": 305,
+    "cellH": 64,
+    "cols": 4
+  },
   "components": [
     {
       "id": "sidebar",
       "type": "security",
       "label": "Barre latérale",
-      "sublabel": "navigation /me, 17 entrées, dépend du rôle",
-      "pos": [
-        40,
-        64
-      ],
+      "sublabel": "navigation /me, 17 entrées par rôle",
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 0
     },
     {
       "id": "header",
       "type": "frontend",
       "label": "En-tête de page",
       "sublabel": "titre, sous-titre, utilisateur connecté",
-      "pos": [
-        340,
-        64
-      ],
       "size": [
-        760,
+        300,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 1
     },
     {
       "id": "hero",
       "type": "frontend",
       "label": "Synthèse santé",
-      "sublabel": "score global + 4 scores : nutrition, activité, sommeil, régularité",
-      "pos": [
-        340,
-        240
-      ],
+      "sublabel": "score global, nutrition, activité, sommeil, régularité",
       "size": [
-        760,
+        300,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 1
     },
     {
       "id": "kpis",
       "type": "frontend",
       "label": "Rangée d'indicateurs",
       "sublabel": "8 cartes KPI cliquables vers l'écran de détail",
-      "pos": [
-        340,
-        416
-      ],
       "size": [
-        760,
+        300,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 2
     },
     {
       "id": "charts",
       "type": "frontend",
       "label": "Graphiques d'évolution",
       "sublabel": "poids / IMC · sommeil (30 jours)",
-      "pos": [
-        340,
-        592
-      ],
       "size": [
-        360,
+        300,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 3
     },
     {
       "id": "nutrition",
       "type": "frontend",
       "label": "Nutrition et conseils",
       "sublabel": "repas par type · recommandations prioritaires",
-      "pos": [
-        740,
-        592
-      ],
       "size": [
-        360,
+        300,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 2
     },
     {
       "id": "recent",
       "type": "frontend",
       "label": "Historique récent et objectifs",
       "sublabel": "derniers repas et séances · objectif actif",
-      "pos": [
-        340,
-        768
-      ],
       "size": [
-        760,
+        300,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 3
     }
   ],
   "boundaries": [
@@ -144,47 +142,32 @@
       "to": "hero",
       "label": "ordre de lecture",
       "variant": "emphasis",
-      "fromSide": "bottom",
-      "toSide": "top",
-      "labelAt": [
-        632,
-        140.0
-      ]
+      "labelDy": 24
     },
     {
       "from": "hero",
       "to": "kpis",
-      "variant": "emphasis",
-      "fromSide": "bottom",
-      "toSide": "top"
+      "variant": "emphasis"
     },
     {
       "from": "kpis",
       "to": "charts",
-      "variant": "emphasis",
-      "fromSide": "bottom",
-      "toSide": "top"
+      "variant": "emphasis"
     },
     {
       "from": "kpis",
-      "to": "nutrition",
-      "fromSide": "bottom",
-      "toSide": "top"
+      "to": "nutrition"
     },
     {
       "from": "charts",
       "to": "recent",
-      "variant": "emphasis",
-      "fromSide": "bottom",
-      "toSide": "top"
+      "variant": "emphasis"
     },
     {
       "from": "sidebar",
       "to": "header",
       "label": "change d'écran",
-      "variant": "dashed",
-      "fromSide": "right",
-      "toSide": "left"
+      "variant": "dashed"
     }
   ],
   "cards": [

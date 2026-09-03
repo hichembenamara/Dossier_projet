@@ -13,7 +13,11 @@
           "label": "Appel API (TanStack Query)"
         }
       }
-    }
+    },
+    "viewBox": [
+      1352,
+      540
+    ]
   },
   "components": [
     {
@@ -21,13 +25,13 @@
       "type": "backend",
       "label": "GET /api/me/dashboard",
       "sublabel": "queryKey me-dashboard · dashboards.py",
-      "pos": [
-        60,
-        64
-      ],
       "size": [
-        300,
+        240,
         62
+      ],
+      "pos": [
+        40,
+        100
       ]
     },
     {
@@ -35,41 +39,41 @@
       "type": "backend",
       "label": "GET /api/me/objectifs/actif",
       "sublabel": "objectif en cours",
-      "pos": [
-        60,
-        896
-      ],
       "size": [
-        300,
+        240,
         62
+      ],
+      "pos": [
+        40,
+        336
       ]
     },
     {
       "id": "hero",
       "type": "frontend",
       "label": "Synthèse santé",
-      "sublabel": "CircularScore : readiness + nutrition, activité, sommeil, régularité",
-      "pos": [
-        480,
-        64
-      ],
+      "sublabel": "CircularScore : readiness + nutrition, activité, sommeil",
       "size": [
-        640,
+        320,
         62
+      ],
+      "pos": [
+        304,
+        100
       ]
     },
     {
       "id": "kpis",
       "type": "frontend",
       "label": "8 HealthKpiCard",
-      "sublabel": "poids, IMC, calories moy., repas/jour, séances, sommeil, protéines, meilleure série",
-      "pos": [
-        480,
-        240
-      ],
+      "sublabel": "poids, IMC, kcal, repas, séances, sommeil, protéines, série",
       "size": [
-        640,
+        320,
         62
+      ],
+      "pos": [
+        648,
+        100
       ]
     },
     {
@@ -77,13 +81,13 @@
       "type": "frontend",
       "label": "ChartCard poids / IMC",
       "sublabel": "LineSeries, mesures biométriques",
-      "pos": [
-        480,
-        416
-      ],
       "size": [
-        300,
+        320,
         62
+      ],
+      "pos": [
+        992,
+        100
       ]
     },
     {
@@ -91,13 +95,13 @@
       "type": "frontend",
       "label": "ChartCard sommeil",
       "sublabel": "LineSeries, durée et qualité",
-      "pos": [
-        820,
-        416
-      ],
       "size": [
-        300,
+        320,
         62
+      ],
+      "pos": [
+        304,
+        218
       ]
     },
     {
@@ -105,13 +109,13 @@
       "type": "frontend",
       "label": "ChartCard nutrition",
       "sublabel": "CompactDonut repas par type · HealthProgress macros",
-      "pos": [
-        480,
-        592
-      ],
       "size": [
-        300,
+        320,
         62
+      ],
+      "pos": [
+        648,
+        218
       ]
     },
     {
@@ -119,13 +123,13 @@
       "type": "frontend",
       "label": "Recommandations prioritaires",
       "sublabel": "priorités locales, sans appel IA",
-      "pos": [
-        820,
-        592
-      ],
       "size": [
-        300,
+        320,
         62
+      ],
+      "pos": [
+        992,
+        218
       ]
     },
     {
@@ -133,13 +137,13 @@
       "type": "frontend",
       "label": "Historique récent",
       "sublabel": "repas, séances, objectif actif",
-      "pos": [
-        480,
-        768
-      ],
       "size": [
-        300,
+        320,
         62
+      ],
+      "pos": [
+        304,
+        336
       ]
     },
     {
@@ -147,13 +151,13 @@
       "type": "frontend",
       "label": "Prochains objectifs",
       "sublabel": "suivi de l'objectif utilisateur",
-      "pos": [
-        820,
-        768
-      ],
       "size": [
-        300,
+        320,
         62
+      ],
+      "pos": [
+        648,
+        336
       ]
     }
   ],
@@ -184,18 +188,53 @@
       "from": "api",
       "to": "kpis",
       "label": "dernier_poids_kg, dernier_imc, nb_seances…",
-      "labelDx": 140
+      "fromSide": "top",
+      "toSide": "top",
+      "via": [
+        [
+          160,
+          48
+        ],
+        [
+          808,
+          48
+        ]
+      ]
     },
     {
       "from": "api",
       "to": "chartw",
-      "variant": "dashed"
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [
+        [
+          160,
+          190
+        ],
+        [
+          1152,
+          190
+        ]
+      ]
     },
     {
       "from": "apiobj",
       "to": "objectifs",
       "label": "objectif actif",
-      "variant": "emphasis"
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [
+        [
+          160,
+          460
+        ],
+        [
+          808,
+          460
+        ]
+      ]
     }
   ],
   "cards": [

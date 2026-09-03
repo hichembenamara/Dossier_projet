@@ -96,7 +96,7 @@
       "label": "Merise + FastAPI",
       "sublabel": "4-5 février",
       "tag": "dépôt créé le 17 déc.",
-      "width": 150
+      "width": 165
     },
     {
       "id": "sprint1",
@@ -106,7 +106,7 @@
       "label": "Sprint lot 1",
       "sublabel": "25-28 avril",
       "tag": "ETL · Docker · Next.js",
-      "width": 150
+      "width": 165
     },
     {
       "id": "sout1",
@@ -116,7 +116,7 @@
       "label": "Soutenance Bloc 1",
       "sublabel": "30 avril",
       "tag": "validée",
-      "width": 150
+      "width": 165
     },
     {
       "id": "vision",
@@ -125,7 +125,7 @@
       "type": "cloud",
       "label": "Vision Gemini",
       "sublabel": "9-13 juin",
-      "width": 150
+      "width": 165
     },
     {
       "id": "micro",
@@ -135,7 +135,7 @@
       "label": "Micro-service IA",
       "sublabel": "23-25 juin",
       "tag": "sécurité · CI · tests",
-      "width": 150
+      "width": 165
     },
     {
       "id": "sout2",
@@ -145,7 +145,7 @@
       "label": "Soutenance Bloc 2",
       "sublabel": "29 juin",
       "tag": "validée",
-      "width": 150
+      "width": 165
     },
     {
       "id": "maint",
@@ -155,7 +155,7 @@
       "label": "Branche maintenance",
       "sublabel": "24 juin → 2 juil.",
       "tag": "NoSQL · backup · Grafana",
-      "width": 150
+      "width": 165
     },
     {
       "id": "sout34",
@@ -165,7 +165,7 @@
       "label": "Soutenance Blocs 3/4",
       "sublabel": "3 juillet",
       "tag": "validée",
-      "width": 150
+      "width": 165
     },
     {
       "id": "cda",
@@ -175,7 +175,7 @@
       "label": "Dossier CDA",
       "sublabel": "septembre 2026",
       "tag": "cda/security-hardening",
-      "width": 150
+      "width": 165
     }
   ],
   "edges": [
@@ -230,9 +230,8 @@
       "dot": "emerald",
       "title": "Trois soutenances validées",
       "items": [
-        "30 avril : modèle de données, ETL, API, interfaces",
-        "29 juin : vision, LLM local, coach posture, MongoDB",
-        "3 juillet : CI, supervision, sauvegardes, mode dégradé"
+        "30 avril : données, ETL, API, interfaces",
+        "29 juin : vision, LLM local, posture, MongoDB"
       ]
     },
     {
@@ -240,16 +239,15 @@
       "title": "Décisions datées",
       "items": [
         "27 avril : retour de NestJS à FastAPI",
-        "juin : Hugging Face et DeepSeek écartés pour Gemini",
-        "juin : deux lignées de code, la branche maintenance devient la référence"
+        "juin : HF et DeepSeek écartés pour Gemini"
       ]
     },
     {
       "dot": "cyan",
       "title": "Après les MSPR",
       "items": [
-        "Branche cda/security-hardening : PyJWT, PBKDF2 600 000, fail-fast, /metrics",
-        "Jeu d'essai rejoué, audits de dépendances du 3 septembre"
+        "cda/security-hardening : PyJWT, PBKDF2, fail-fast, /metrics",
+        "Jeu d'essai rejoué, audits du 3 septembre"
       ]
     }
   ]

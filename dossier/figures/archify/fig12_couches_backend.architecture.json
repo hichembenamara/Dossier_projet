@@ -39,174 +39,162 @@
       }
     ]
   },
+  "layout": {
+    "mode": "grid",
+    "origin": [
+      40,
+      80
+    ],
+    "gapX": 24,
+    "gapY": 90,
+    "cellW": 218,
+    "cellH": 64,
+    "cols": 5
+  },
   "components": [
     {
       "id": "authme",
       "type": "backend",
       "label": "auth.py · me.py",
-      "sublabel": "connexion, profil, espace personnel",
-      "pos": [
-        60,
-        64
-      ],
+      "sublabel": "connexion et espace personnel",
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 0
     },
     {
       "id": "ai",
       "type": "backend",
       "label": "ai_features.py",
       "sublabel": "analyse repas, recommandations",
-      "pos": [
-        320,
-        64
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 1
     },
     {
       "id": "admin",
       "type": "backend",
       "label": "admin.py · super_admin.py",
       "sublabel": "ETL, qualité, organisations",
-      "pos": [
-        580,
-        64
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 2
     },
     {
       "id": "res",
       "type": "backend",
       "label": "resources.py",
       "sublabel": "CRUD générique, 19 ressources",
-      "pos": [
-        840,
-        64
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 3
     },
     {
       "id": "sch",
       "type": "frontend",
       "label": "schemas/",
       "sublabel": "Pydantic → OpenAPI",
-      "pos": [
-        60,
-        352
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 0
     },
     {
       "id": "reco",
       "type": "backend",
       "label": "recommendations.py",
       "sublabel": "moteur à règles",
-      "pos": [
-        320,
-        352
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 1
     },
     {
       "id": "meal",
       "type": "cloud",
       "label": "meal_analysis · ai_enhanced",
       "sublabel": "Gemini, Ollama, repli",
-      "pos": [
-        580,
-        352
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 2
     },
     {
       "id": "doc",
       "type": "backend",
       "label": "document_store.py",
-      "sublabel": "4 collections, écriture non bloquante",
-      "pos": [
-        840,
-        352
-      ],
+      "sublabel": "4 collections, non bloquant",
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 3
     },
     {
       "id": "models",
       "type": "database",
       "label": "models.py",
       "sublabel": "20 tables SQLAlchemy 2.0",
-      "pos": [
-        320,
-        640
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 1
     },
     {
       "id": "session",
       "type": "database",
       "label": "session.py",
       "sublabel": "pool_pre_ping, get_db",
-      "pos": [
-        580,
-        640
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 0
     },
     {
       "id": "mongo",
       "type": "database",
       "label": "mongo.py",
       "sublabel": "client tolérant aux pannes",
-      "pos": [
-        840,
-        640
-      ],
       "size": [
-        200,
+        190,
         62
-      ]
+      ],
+      "row": 2,
+      "col": 3
     },
     {
       "id": "core",
       "type": "security",
       "label": "core/",
       "sublabel": "utilisé par toutes les couches",
-      "pos": [
-        60,
-        640
-      ],
       "size": [
-        240,
+        230,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 4
     }
   ],
   "boundaries": [
@@ -263,11 +251,9 @@
       "from": "authme",
       "to": "sch",
       "label": "validation entrée / sortie",
-      "fromSide": "bottom",
-      "toSide": "top",
       "labelAt": [
-        137,
-        140.0
+        135.0,
+        156
       ]
     },
     {
@@ -275,11 +261,9 @@
       "to": "reco",
       "label": "build()",
       "variant": "emphasis",
-      "fromSide": "bottom",
-      "toSide": "top",
       "labelAt": [
-        397,
-        140.0
+        377.0,
+        156
       ]
     },
     {
@@ -292,41 +276,33 @@
       "from": "meal",
       "to": "doc",
       "label": "log_ai_call, save_meal_analysis",
-      "fromSide": "right",
-      "toSide": "left",
       "labelAt": [
-        787,
-        428.0
+        740,
+        332
       ]
     },
     {
       "from": "doc",
       "to": "mongo",
       "label": "get_mongo_db() ou None",
-      "fromSide": "bottom",
-      "toSide": "top",
       "labelAt": [
-        917,
-        428.0
+        861,
+        362
       ]
     },
     {
       "from": "reco",
       "to": "models",
       "label": "select() typé",
-      "fromSide": "bottom",
-      "toSide": "top",
       "labelAt": [
-        397,
-        428.0
+        377.0,
+        310
       ]
     },
     {
       "from": "session",
       "to": "models",
-      "label": "sessions",
-      "fromSide": "left",
-      "toSide": "right"
+      "label": "sessions"
     }
   ],
   "cards": [

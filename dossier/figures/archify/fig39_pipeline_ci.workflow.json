@@ -3,39 +3,7 @@
   "diagram_type": "workflow",
   "meta": {
     "title": "Intégration continue GitHub Actions — et la marche manquante vers le déploiement",
-    "quality_profile": "showcase",
-    "views": [
-      {
-        "id": "trigger",
-        "label": "Déclenchement",
-        "focus": [
-          "commit",
-          "pr"
-        ],
-        "note": "Push sur maintenance/main, pull request, ou lancement manuel."
-      },
-      {
-        "id": "jobs",
-        "label": "Deux jobs en parallèle",
-        "focus": [
-          "backend_tests",
-          "frontend_build",
-          "status"
-        ],
-        "note": "pytest sur SQLite en mémoire ; npm ci puis next build. Moins de deux minutes avec le cache."
-      },
-      {
-        "id": "gap",
-        "label": "Ce qui n'existe pas encore",
-        "focus": [
-          "status",
-          "merge",
-          "image",
-          "deploy"
-        ],
-        "note": "Aucune image publiée, aucun serveur : le déploiement continu est la limite assumée sur la compétence C11."
-      }
-    ]
+    "quality_profile": "showcase"
   },
   "lanes": [
     {
@@ -108,7 +76,8 @@
       "col": 0,
       "type": "frontend",
       "label": "Commit",
-      "sublabel": "feat / fix"
+      "sublabel": "feat / fix",
+      "width": 172
     },
     {
       "id": "pr",
@@ -117,7 +86,8 @@
       "type": "frontend",
       "label": "Push / PR",
       "sublabel": "maintenance · main",
-      "tag": "workflow_dispatch"
+      "tag": "workflow_dispatch",
+      "width": 172
     },
     {
       "id": "backend_tests",
@@ -126,7 +96,8 @@
       "type": "backend",
       "label": "backend-tests",
       "sublabel": "pytest -q",
-      "tag": "34 tests"
+      "tag": "34 tests",
+      "width": 172
     },
     {
       "id": "frontend_build",
@@ -135,7 +106,8 @@
       "type": "frontend",
       "label": "frontend-build",
       "sublabel": "next build",
-      "tag": "TypeScript"
+      "tag": "TypeScript",
+      "width": 172
     },
     {
       "id": "status",
@@ -144,7 +116,8 @@
       "type": "security",
       "label": "Statut",
       "sublabel": "vert = fusion",
-      "tag": "bloquant"
+      "tag": "bloquant",
+      "width": 172
     },
     {
       "id": "merge",
@@ -152,7 +125,8 @@
       "col": 4,
       "type": "database",
       "label": "Fusion",
-      "sublabel": "maintenance"
+      "sublabel": "maintenance",
+      "width": 172
     },
     {
       "id": "image",
@@ -161,7 +135,8 @@
       "type": "cloud",
       "label": "Image Docker",
       "sublabel": "push GHCR",
-      "tag": "à faire"
+      "tag": "à faire",
+      "width": 172
     },
     {
       "id": "deploy",
@@ -170,7 +145,8 @@
       "type": "cloud",
       "label": "Déploiement",
       "sublabel": "compose up",
-      "tag": "à faire"
+      "tag": "à faire",
+      "width": 172
     }
   ],
   "edges": [
@@ -236,17 +212,15 @@
       "dot": "emerald",
       "title": "Ce qui tourne",
       "items": [
-        "Tests backend sur SQLite en mémoire, MONGO_ENABLED=false",
-        "Build Next.js : erreurs TypeScript et imports cassés détectés",
-        "Cache pip et npm : moins de deux minutes"
+        "Tests backend sur SQLite en mémoire (MONGO_ENABLED=false)",
+        "Build Next.js (TypeScript) ; cache pip et npm : < 2 min"
       ]
     },
     {
       "dot": "amber",
       "title": "Ce qui manque",
       "items": [
-        "Pas de lint ni de tests ETL en CI",
-        "Pas d'image publiée, pas de serveur",
+        "Ni lint ni tests ETL en CI ; ni image publiée ni serveur",
         "Déploiement continu = première étape pour C11"
       ]
     }

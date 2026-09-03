@@ -27,118 +27,114 @@
       }
     ]
   },
+  "layout": {
+    "mode": "grid",
+    "origin": [
+      60,
+      80
+    ],
+    "gapX": 110,
+    "gapY": 130,
+    "cellW": 225,
+    "cellH": 64,
+    "cols": 4
+  },
   "components": [
     {
       "id": "routes",
       "type": "backend",
       "label": "Routes IA",
       "sublabel": "modules/ai_features.py",
-      "pos": [
-        60,
-        64
-      ],
       "size": [
-        220,
+        190,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 0
     },
     {
       "id": "store",
       "type": "backend",
       "label": "document_store.py",
-      "sublabel": "_collection() crée l'index · _save() insère l'enveloppe",
-      "pos": [
-        400,
-        64
-      ],
+      "sublabel": "_collection() index · _save() insert",
       "size": [
-        320,
+        220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 1
     },
     {
       "id": "mongo",
       "type": "backend",
       "label": "db/mongo.py",
-      "sublabel": "get_mongo_db() → base ou None, jamais d'exception",
-      "pos": [
-        840,
-        64
-      ],
+      "sublabel": "base ou None, jamais d'exception",
       "size": [
-        320,
+        220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 2
     },
     {
       "id": "health",
       "type": "external",
       "label": "GET /health",
-      "sublabel": "documentaire : ok · unavailable · disabled",
-      "pos": [
-        840,
-        380
-      ],
+      "sublabel": "documentaire = ok|unavailable|disabled",
       "size": [
-        320,
+        220,
         62
-      ]
+      ],
+      "row": 0,
+      "col": 3
     },
     {
       "id": "food",
       "type": "database",
       "label": "food_analyses",
       "sublabel": "POST /api/ai/analyse-repas",
-      "pos": [
-        60,
-        576
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 0
     },
     {
       "id": "reco",
       "type": "database",
       "label": "recommendations",
       "sublabel": "POST /api/ai/recommandations",
-      "pos": [
-        340,
-        576
-      ],
       "size": [
         220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 1
     },
     {
       "id": "feedback",
       "type": "database",
       "label": "recommendation_feedback",
       "sublabel": "POST …/recommandations/feedback",
-      "pos": [
-        620,
-        576
-      ],
       "size": [
-        240,
+        220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 2
     },
     {
       "id": "calls",
       "type": "database",
       "label": "ai_provider_calls",
-      "sublabel": "journal : fournisseur, modèle, durée, statut",
-      "pos": [
-        920,
-        576
-      ],
+      "sublabel": "fournisseur, modèle, durée, statut",
       "size": [
-        260,
+        220,
         62
-      ]
+      ],
+      "row": 1,
+      "col": 3
     }
   ],
   "boundaries": [
@@ -159,29 +155,19 @@
       "from": "routes",
       "to": "store",
       "label": "save_*, log_ai_call",
-      "variant": "emphasis",
-      "fromSide": "right",
-      "toSide": "left"
+      "variant": "emphasis"
     },
     {
       "from": "store",
       "to": "mongo",
       "label": "get_mongo_db()",
-      "variant": "emphasis",
-      "fromSide": "right",
-      "toSide": "left"
+      "variant": "emphasis"
     },
     {
       "from": "mongo",
       "to": "health",
       "label": "mongo_status()",
-      "variant": "dashed",
-      "fromSide": "bottom",
-      "toSide": "top",
-      "labelAt": [
-        963,
-        140.0
-      ]
+      "variant": "dashed"
     },
     {
       "from": "store",
@@ -195,7 +181,11 @@
       "to": "reco",
       "label": "insert_one",
       "fromSide": "bottom",
-      "toSide": "top"
+      "toSide": "top",
+      "labelAt": [
+        505,
+        245
+      ]
     },
     {
       "from": "store",
@@ -218,8 +208,7 @@
       "title": "Enveloppe commune",
       "items": [
         "{ utilisateur_id, source, created_at, payload }",
-        "Seul payload varie selon la collection et le fournisseur",
-        "Aucune jointure : lecture « les N derniers documents d'un utilisateur »"
+        "Seul payload varie selon la collection et le fournisseur"
       ]
     },
     {
@@ -227,8 +216,7 @@
       "title": "Tolérance aux pannes",
       "items": [
         "serverSelectionTimeoutMS = 800 ms, pas 30 s",
-        "Après un échec, pas de nouvel essai pendant 20 s",
-        "PyMongoError à l'écriture : avertissement, invalidate(), retour None"
+        "Après un échec, pas de nouvel essai pendant 20 s"
       ]
     },
     {
