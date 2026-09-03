@@ -7,22 +7,32 @@ Ce répertoire contient le dossier projet en cours de rédaction (Phase 2 du pla
 ```
 dossier/
   README.md                         ce fichier
-  sections/
-    01_liminaires.md                page de garde, remerciements, tableau des 11 compétences   [rédigé]
-    02_contexte.md                  cadre, commanditaire, équipe et rôle, décision NestJS → FastAPI [rédigé]
-    03_resume_anglais.md            résumé en anglais (à rédiger en dernier)
-    04_cahier_des_charges.md        besoins, personas, exigences                                [à rédiger]
-    05_gestion_de_projet.md         lots, suivi, environnement, risques                          [à rédiger]
-    06_specifications_fonctionnelles.md  architecture, modèle de données, cas d'utilisation, séquences [rédigé]
-    07_specifications_techniques.md choix, environnements, sécurité                               [rédigé]
-    08_realisations.md              extraits de code commentés                                    [à rédiger]
-    09_tests.md                     plan de tests, jeu d'essai                                    [à rédiger]
-    10_deploiement.md               exploitation, CI, supervision, maintenance                    [à rédiger]
-    11_veille.md                    veille sécurité                                               [à rédiger]
-    12_conclusion.md                                                                              [à rédiger]
-    13_annexes.md                   liste des annexes                                             [à rédiger]
+  sections/                         les 13 sections du dossier, toutes rédigées (Phase 2 terminée)
+    01_liminaires.md                page de garde, remerciements, tableau des 11 compétences
+    02_contexte.md                  cadre, commanditaire, équipe et rôle, décision NestJS → FastAPI
+    03_resume_anglais.md            résumé en anglais (~340 mots, à réduire si l'EPSI impose 250)
+    04_cahier_des_charges.md        contexte, objectifs, périmètre exclu, personas, 24 exigences
+    05_gestion_de_projet.md         3 lots réels, chronologie Git, équipe, environnement, 10 risques
+    06_specifications_fonctionnelles.md  architecture, 20 tables, schéma réel, cas d'utilisation, séquences
+    07_specifications_techniques.md choix comparés, environnements, Dockerfile, grille OWASP
+    08_realisations.md              extraits de code 7 à 23 commentés
+    09_tests.md                     plan de tests, tests manuels, jeu d'essai exécuté (3 écarts)
+    10_deploiement.md               exploitation, CI, supervision, maintenance corrective et évolutive
+    11_veille.md                    veille en 3 axes, audits réels du 02/09/2026, décisions tracées
+    12_conclusion.md                satisfactions, difficultés, perspectives, apport personnel
+    13_annexes.md                   liste des 11 annexes, sources et pagination estimée
+  annexes/
+    annexe_A_base_de_donnees.md     contrôle de cohérence ORM ↔ base
+  jeu_essai/
+    jeu_essai_recommandations.py    script exécutable (depuis backend/), reproduit la section IX
+    sortie.json                     sortie réelle du 02/09/2026
+    pytest_*_2026-09-02.txt         sorties de pytest (34 + 5 tests)
+  veille/
+    pip-audit_2026-09-02.txt, npm-audit_2026-09-02.txt   sorties brutes des audits
   figures/
-    sources/*.mmd                   sources Mermaid à donner à archify (couches, cas d'utilisation, 2 séquences, ETL, CI)
+    sources/*.mmd                   sources Mermaid (référence de topologie)
+    archify/                        figures produites : JSON validé, HTML, PNG 2x + build.sh
+      fig23_sequence_analyse_repas · fig24_sequence_authentification · fig30_pipeline_etl · fig39_pipeline_ci
 ```
 
 ## Conventions
