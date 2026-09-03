@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Zoning du tableau de bord utilisateur — /me/dashboard",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Zone de l'écran"
+        },
+        "security": {
+          "label": "Navigation par rôle"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "sidebar",
+      "type": "security",
+      "label": "Barre latérale",
+      "sublabel": "navigation /me, 17 entrées, dépend du rôle",
+      "pos": [
+        40,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "header",
+      "type": "frontend",
+      "label": "En-tête de page",
+      "sublabel": "titre, sous-titre, utilisateur connecté",
+      "pos": [
+        340,
+        64
+      ],
+      "size": [
+        760,
+        62
+      ]
+    },
+    {
+      "id": "hero",
+      "type": "frontend",
+      "label": "Synthèse santé",
+      "sublabel": "score global + 4 scores : nutrition, activité, sommeil, régularité",
+      "pos": [
+        340,
+        240
+      ],
+      "size": [
+        760,
+        62
+      ]
+    },
+    {
+      "id": "kpis",
+      "type": "frontend",
+      "label": "Rangée d'indicateurs",
+      "sublabel": "8 cartes KPI cliquables vers l'écran de détail",
+      "pos": [
+        340,
+        416
+      ],
+      "size": [
+        760,
+        62
+      ]
+    },
+    {
+      "id": "charts",
+      "type": "frontend",
+      "label": "Graphiques d'évolution",
+      "sublabel": "poids / IMC · sommeil (30 jours)",
+      "pos": [
+        340,
+        592
+      ],
+      "size": [
+        360,
+        62
+      ]
+    },
+    {
+      "id": "nutrition",
+      "type": "frontend",
+      "label": "Nutrition et conseils",
+      "sublabel": "repas par type · recommandations prioritaires",
+      "pos": [
+        740,
+        592
+      ],
+      "size": [
+        360,
+        62
+      ]
+    },
+    {
+      "id": "recent",
+      "type": "frontend",
+      "label": "Historique récent et objectifs",
+      "sublabel": "derniers repas et séances · objectif actif",
+      "pos": [
+        340,
+        768
+      ],
+      "size": [
+        760,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Coque applicative (app-shell.tsx)",
+      "wraps": [
+        "sidebar",
+        "header"
+      ],
+      "pad": 22
+    },
+    {
+      "kind": "region",
+      "label": "Contenu défilant",
+      "wraps": [
+        "hero",
+        "kpis",
+        "charts",
+        "nutrition",
+        "recent"
+      ],
+      "pad": 22
+    }
+  ],
+  "connections": [
+    {
+      "from": "header",
+      "to": "hero",
+      "label": "ordre de lecture",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        632,
+        140.0
+      ]
+    },
+    {
+      "from": "hero",
+      "to": "kpis",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "kpis",
+      "to": "charts",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "kpis",
+      "to": "nutrition",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "charts",
+      "to": "recent",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "sidebar",
+      "to": "header",
+      "label": "change d'écran",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Intention",
+      "items": [
+        "Le plus important en haut : un score global lisible en une seconde",
+        "Les indicateurs renvoient chacun vers l'écran de saisie correspondant",
+        "Les listes récentes ferment la page, sans rafraîchissement automatique"
+      ]
+    }
+  ]
+}

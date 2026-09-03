@@ -1,0 +1,256 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Frise chronologique du projet HealthAI Coaching — décembre 2025 → septembre 2026",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "lot1",
+        "label": "Lot 1 — socle données",
+        "focus": [
+          "depot",
+          "sprint1",
+          "sout1"
+        ],
+        "note": "Modèle Merise et backend FastAPI en février, sprint final fin avril, soutenance validée le 30 avril."
+      },
+      {
+        "id": "lot2",
+        "label": "Lot 2 — intelligence artificielle",
+        "focus": [
+          "vision",
+          "micro",
+          "sout2"
+        ],
+        "note": "Vision Gemini, micro-service IA, sécurité et CI en juin ; soutenance validée le 29 juin."
+      },
+      {
+        "id": "lot3",
+        "label": "Lot 3 et dossier CDA",
+        "focus": [
+          "maint",
+          "sout34",
+          "cda"
+        ],
+        "note": "Branche maintenance (NoSQL, CI, backup, monitoring), soutenance du 3 juillet, puis préparation du dossier."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Lot 1 — Socle données"
+    },
+    {
+      "id": "l2",
+      "label": "Lot 2 — Intelligence artificielle"
+    },
+    {
+      "id": "l3",
+      "label": "Lot 3 — Production"
+    },
+    {
+      "id": "cda",
+      "label": "Titre CDA"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p1",
+      "label": "Décembre 2025 → avril 2026",
+      "fromCol": 0,
+      "toCol": 2
+    },
+    {
+      "id": "p2",
+      "label": "Juin → juillet 2026",
+      "fromCol": 3,
+      "toCol": 4,
+      "variant": "emphasis"
+    },
+    {
+      "id": "p3",
+      "label": "Septembre 2026",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "depot",
+    "sprint1",
+    "sout1",
+    "vision",
+    "micro",
+    "sout2",
+    "sout34",
+    "cda"
+  ],
+  "nodes": [
+    {
+      "id": "depot",
+      "lane": "l1",
+      "col": 0,
+      "type": "backend",
+      "label": "Merise + FastAPI",
+      "sublabel": "4-5 février",
+      "tag": "dépôt créé le 17 déc.",
+      "width": 150
+    },
+    {
+      "id": "sprint1",
+      "lane": "l1",
+      "col": 1,
+      "type": "backend",
+      "label": "Sprint lot 1",
+      "sublabel": "25-28 avril",
+      "tag": "ETL · Docker · Next.js",
+      "width": 150
+    },
+    {
+      "id": "sout1",
+      "lane": "l1",
+      "col": 2,
+      "type": "security",
+      "label": "Soutenance Bloc 1",
+      "sublabel": "30 avril",
+      "tag": "validée",
+      "width": 150
+    },
+    {
+      "id": "vision",
+      "lane": "l2",
+      "col": 3,
+      "type": "cloud",
+      "label": "Vision Gemini",
+      "sublabel": "9-13 juin",
+      "width": 150
+    },
+    {
+      "id": "micro",
+      "lane": "l2",
+      "col": 4,
+      "type": "backend",
+      "label": "Micro-service IA",
+      "sublabel": "23-25 juin",
+      "tag": "sécurité · CI · tests",
+      "width": 150
+    },
+    {
+      "id": "sout2",
+      "lane": "l2",
+      "col": 5,
+      "type": "security",
+      "label": "Soutenance Bloc 2",
+      "sublabel": "29 juin",
+      "tag": "validée",
+      "width": 150
+    },
+    {
+      "id": "maint",
+      "lane": "l3",
+      "col": 4,
+      "type": "backend",
+      "label": "Branche maintenance",
+      "sublabel": "24 juin → 2 juil.",
+      "tag": "NoSQL · backup · Grafana",
+      "width": 150
+    },
+    {
+      "id": "sout34",
+      "lane": "l3",
+      "col": 5,
+      "type": "security",
+      "label": "Soutenance Blocs 3/4",
+      "sublabel": "3 juillet",
+      "tag": "validée",
+      "width": 150
+    },
+    {
+      "id": "cda",
+      "lane": "cda",
+      "col": 5,
+      "type": "frontend",
+      "label": "Dossier CDA",
+      "sublabel": "septembre 2026",
+      "tag": "cda/security-hardening",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "from": "depot",
+      "to": "sprint1",
+      "label": "NestJS essayé puis abandonné"
+    },
+    {
+      "from": "sprint1",
+      "to": "sout1",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sout1",
+      "to": "vision",
+      "label": "même base de code"
+    },
+    {
+      "from": "vision",
+      "to": "micro"
+    },
+    {
+      "from": "micro",
+      "to": "sout2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "micro",
+      "to": "maint",
+      "label": "divergence de juin",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "from": "maint",
+      "to": "sout34",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sout2",
+      "to": "sout34"
+    },
+    {
+      "from": "sout34",
+      "to": "cda",
+      "label": "version de référence"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Trois soutenances validées",
+      "items": [
+        "30 avril : modèle de données, ETL, API, interfaces",
+        "29 juin : vision, LLM local, coach posture, MongoDB",
+        "3 juillet : CI, supervision, sauvegardes, mode dégradé"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Décisions datées",
+      "items": [
+        "27 avril : retour de NestJS à FastAPI",
+        "juin : Hugging Face et DeepSeek écartés pour Gemini",
+        "juin : deux lignées de code, la branche maintenance devient la référence"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Après les MSPR",
+      "items": [
+        "Branche cda/security-hardening : PyJWT, PBKDF2 600 000, fail-fast, /metrics",
+        "Jeu d'essai rejoué, audits de dépendances du 3 septembre"
+      ]
+    }
+  ]
+}

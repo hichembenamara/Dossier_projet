@@ -27,7 +27,7 @@ La procédure complète est dans `README.md` et `docs/MAINTENANCE.md`. Elle tien
 | Prometheus | http://127.0.0.1:9090 | accès local uniquement |
 | Grafana | http://127.0.0.1:3001 | accès local uniquement |
 
-*Figure 38 — Réponse de `GET /health` avec les deux bases disponibles (capture Playwright à produire).*
+*Figure 38 — Réponse de `GET /health` avec les deux bases disponibles (capture Playwright, `dossier/figures/captures/fig38_health.png`).*
 
 ```json
 {"data": {"status": "ok", "databases": {"relationnel": "mariadb", "documentaire": "ok"}}}
@@ -99,7 +99,7 @@ Ce qui n'est pas fait, et qui serait la première étape en production : planifi
 
 ## 2. Intégration continue
 
-*Figure 39 — Pipeline d'intégration continue (archify, source `dossier/figures/sources/pipeline_ci.mmd`).*
+*Figure 39 — Pipeline d'intégration continue (archify, `dossier/figures/archify/fig39_pipeline_ci.png`).*
 
 **Extrait 28 — `.github/workflows/ci.yml`, job `backend-tests`**
 
@@ -172,11 +172,11 @@ Pourquoi ce choix : les étiquettes utilisent le gabarit de route (`/api/me/{ite
 
 ### Tableau de bord Grafana
 
-*Figure 40 — Tableau de bord Grafana `healthai` (capture `bloc34_grafana_dashboard`).*
+*Figure 40 — Tableau de bord Grafana `healthai` (capture `dossier/figures/captures/fig40_grafana_dashboard.png`).*
 
 Le tableau de bord est provisionné automatiquement (`monitoring/grafana/provisioning/`) au démarrage de la pile de supervision, avec six panneaux : requêtes par seconde, latence p95, erreurs 5xx par seconde, requêtes par endpoint, requêtes par statut, latence p50/p95/p99. Prometheus interroge `/metrics` toutes les quinze secondes.
 
-*Figure 41 — Journal des appels IA, `GET /api/ai/ai-calls/history` (capture Playwright à produire).*
+*Figure 41 — Journal des appels IA, `GET /api/ai/ai-calls/history` : un appel Ollama en statut `fallback`, modèle indisponible (capture Playwright, `dossier/figures/captures/fig41_journal_appels_ia.png`).*
 
 La supervision applicative est complétée par le journal des appels IA en MongoDB : pour chaque appel, le fournisseur, le modèle, la durée en millisecondes et le statut (`success`, `fallback`, `error`, `unavailable`). C'est ce journal qui permet de répondre à « combien d'analyses de repas échouent, et pourquoi ».
 

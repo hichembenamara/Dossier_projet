@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Découpage en couches du backend FastAPI (backend/app/)",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "requete",
+        "label": "Une requête traverse les couches",
+        "focus": [
+          "ai",
+          "sch",
+          "meal",
+          "doc",
+          "mongo"
+        ],
+        "note": "POST /api/ai/analyse-repas : route mince, contrat Pydantic, service, écriture documentaire tolérante."
+      },
+      {
+        "id": "sql",
+        "label": "Accès SQL générique",
+        "focus": [
+          "res",
+          "models",
+          "session"
+        ],
+        "note": "19 ressources CRUD par un seul routeur, filtrage par propriétaire dans la requête."
+      },
+      {
+        "id": "transverse",
+        "label": "Couche transverse",
+        "focus": [
+          "core",
+          "authme",
+          "res"
+        ],
+        "note": "Sécurité, configuration, erreurs, pagination, limitation de débit, journalisation."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "authme",
+      "type": "backend",
+      "label": "auth.py · me.py",
+      "sublabel": "connexion, profil, espace personnel",
+      "pos": [
+        60,
+        64
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "ai",
+      "type": "backend",
+      "label": "ai_features.py",
+      "sublabel": "analyse repas, recommandations",
+      "pos": [
+        320,
+        64
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "admin",
+      "type": "backend",
+      "label": "admin.py · super_admin.py",
+      "sublabel": "ETL, qualité, organisations",
+      "pos": [
+        580,
+        64
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "res",
+      "type": "backend",
+      "label": "resources.py",
+      "sublabel": "CRUD générique, 19 ressources",
+      "pos": [
+        840,
+        64
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "sch",
+      "type": "frontend",
+      "label": "schemas/",
+      "sublabel": "Pydantic → OpenAPI",
+      "pos": [
+        60,
+        352
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "reco",
+      "type": "backend",
+      "label": "recommendations.py",
+      "sublabel": "moteur à règles",
+      "pos": [
+        320,
+        352
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "meal",
+      "type": "cloud",
+      "label": "meal_analysis · ai_enhanced",
+      "sublabel": "Gemini, Ollama, repli",
+      "pos": [
+        580,
+        352
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "doc",
+      "type": "backend",
+      "label": "document_store.py",
+      "sublabel": "4 collections, écriture non bloquante",
+      "pos": [
+        840,
+        352
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "models",
+      "type": "database",
+      "label": "models.py",
+      "sublabel": "20 tables SQLAlchemy 2.0",
+      "pos": [
+        320,
+        640
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "session",
+      "type": "database",
+      "label": "session.py",
+      "sublabel": "pool_pre_ping, get_db",
+      "pos": [
+        580,
+        640
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "mongo",
+      "type": "database",
+      "label": "mongo.py",
+      "sublabel": "client tolérant aux pannes",
+      "pos": [
+        840,
+        640
+      ],
+      "size": [
+        200,
+        62
+      ]
+    },
+    {
+      "id": "core",
+      "type": "security",
+      "label": "core/",
+      "sublabel": "utilisé par toutes les couches",
+      "pos": [
+        60,
+        640
+      ],
+      "size": [
+        240,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Présentation — modules/ (routes HTTP)",
+      "wraps": [
+        "authme",
+        "ai",
+        "admin",
+        "res"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "region",
+      "label": "Contrats — schemas/",
+      "wraps": [
+        "sch"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "region",
+      "label": "Métier — services/",
+      "wraps": [
+        "reco",
+        "meal",
+        "doc"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "region",
+      "label": "Accès aux données — db/",
+      "wraps": [
+        "models",
+        "session",
+        "mongo"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "security-group",
+      "label": "Transverse — core/",
+      "wraps": [
+        "core"
+      ],
+      "pad": 20
+    }
+  ],
+  "connections": [
+    {
+      "from": "authme",
+      "to": "sch",
+      "label": "validation entrée / sortie",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        137,
+        140.0
+      ]
+    },
+    {
+      "from": "ai",
+      "to": "reco",
+      "label": "build()",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        397,
+        140.0
+      ]
+    },
+    {
+      "from": "ai",
+      "to": "meal",
+      "label": "analyze()",
+      "variant": "emphasis"
+    },
+    {
+      "from": "meal",
+      "to": "doc",
+      "label": "log_ai_call, save_meal_analysis",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [
+        787,
+        428.0
+      ]
+    },
+    {
+      "from": "doc",
+      "to": "mongo",
+      "label": "get_mongo_db() ou None",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        917,
+        428.0
+      ]
+    },
+    {
+      "from": "reco",
+      "to": "models",
+      "label": "select() typé",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        397,
+        428.0
+      ]
+    },
+    {
+      "from": "session",
+      "to": "models",
+      "label": "sessions",
+      "fromSide": "left",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Pourquoi ces couches",
+      "items": [
+        "Testabilité : les règles se testent sans HTTP (test_recommendation_rules.py)",
+        "Remplaçabilité : Hugging Face → Gemini → Ollama sans toucher aux routes ni aux schémas"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Persistance polyglotte",
+      "items": [
+        "MariaDB : données structurées, durables, jointes",
+        "MongoDB : sorties IA à schéma évolutif, non critiques"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Sécurité à l'endroit où elle s'applique",
+      "items": [
+        "Depends(current_user) et require_roles(\"ADMIN\") comme paramètres de route",
+        "Filtrage par propriétaire dans la requête SQL, pas dans l'interface"
+      ]
+    }
+  ]
+}

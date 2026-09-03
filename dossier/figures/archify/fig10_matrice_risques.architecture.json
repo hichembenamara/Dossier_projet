@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Matrice des risques — probabilité × impact, avec la contre-mesure codée",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "security": {
+          "label": "Impact critique"
+        },
+        "backend": {
+          "label": "Impact moyen"
+        },
+        "external": {
+          "label": "Impact faible"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "r1",
+      "type": "backend",
+      "label": "R1 IA cloud indisponible",
+      "sublabel": "Ollama local, 503 explicite, journal IA",
+      "pos": [
+        78,
+        96
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r5",
+      "type": "backend",
+      "label": "R5 Sortie LLM inexploitable",
+      "sublabel": "mode JSON, _safe_json, repli déterministe",
+      "pos": [
+        78,
+        272
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r6",
+      "type": "backend",
+      "label": "R6 Données sources incohérentes",
+      "sublabel": "15 règles, staging, décisions tracées",
+      "pos": [
+        78,
+        448
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r7",
+      "type": "backend",
+      "label": "R7 Dérive de calendrier",
+      "sublabel": "découpage par périmètre · pas de jalons (limite)",
+      "pos": [
+        78,
+        624
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r9",
+      "type": "security",
+      "label": "R9 Secret par défaut en prod",
+      "sublabel": "fail-fast au démarrage (cda/security-hardening)",
+      "pos": [
+        546,
+        96
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r8",
+      "type": "backend",
+      "label": "R8 Dépendances vulnérables",
+      "sublabel": "pip-audit, npm audit, versions épinglées",
+      "pos": [
+        546,
+        272
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r10",
+      "type": "backend",
+      "label": "R10 Une personne par périmètre",
+      "sublabel": "interventions croisées, docs/ d'exploitation",
+      "pos": [
+        546,
+        448
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r2",
+      "type": "external",
+      "label": "R2 Panne MongoDB",
+      "sublabel": "mode dégradé, /health le signale",
+      "pos": [
+        546,
+        624
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r3",
+      "type": "security",
+      "label": "R3 Fuite de données de santé",
+      "sublabel": "rôles, owner_field, hachage, cookie HttpOnly",
+      "pos": [
+        1014,
+        96
+      ],
+      "size": [
+        270,
+        62
+      ]
+    },
+    {
+      "id": "r4",
+      "type": "security",
+      "label": "R4 Perte de données",
+      "sublabel": "backup/restore · pas de copie hors site (limite)",
+      "pos": [
+        1014,
+        272
+      ],
+      "size": [
+        270,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Probabilité élevée",
+      "wraps": [
+        "r1",
+        "r5",
+        "r6",
+        "r7"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "region",
+      "label": "Probabilité moyenne",
+      "wraps": [
+        "r9",
+        "r8",
+        "r10",
+        "r2"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "region",
+      "label": "Probabilité faible",
+      "wraps": [
+        "r3",
+        "r4"
+      ],
+      "pad": 20
+    }
+  ],
+  "connections": [
+    {
+      "from": "r8",
+      "to": "r9",
+      "label": "veille → correctif",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Impact critique",
+      "items": [
+        "R3 : cloisonnement par organisation et par propriétaire dans la requête SQL",
+        "R4 : sauvegarde cohérente MariaDB + MongoDB, restauration testée",
+        "R9 : refus de démarrer avec une clé d'exemple ou < 32 octets"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Limites assumées",
+      "items": [
+        "R4 : pas de planification ni de copie hors site",
+        "R7 : pas de jalons intermédiaires, fins de lot denses"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Lecture",
+      "items": [
+        "Colonne = probabilité, couleur = impact",
+        "Chaque risque pointe vers un fichier ou une section du dossier"
+      ]
+    }
+  ]
+}

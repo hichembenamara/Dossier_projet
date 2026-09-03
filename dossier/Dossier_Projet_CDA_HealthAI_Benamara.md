@@ -4,7 +4,7 @@
 Hicham Benamara · EPSI Courbevoie · Session 2026  
 Dépôt de référence : `github.com/aedh2/mspr2_version_aedh-Public`, branche `maintenance`
 
-> Version de travail assemblée le 3 septembre 2026 (fin de Phase 2). Les mentions *Figure n — …* désignent les illustrations à insérer ; les figures 11, 18, 20, 23, 24, 30 et 39 existent déjà (archify), les autres sont à produire (Phase 1). La mise en forme Word (Phase 4) et l'humanisation (Phase 3) restent à faire.
+> Version de travail assemblée le 3 septembre 2026 (fin de Phase 2). Les mentions *Figure n — …* désignent les illustrations à insérer ; toutes les figures archify et captures Playwright sont produites dans `dossier/figures/` (chemin indiqué dans chaque légende) ; restent la figure 29 (capture MongoDB Compass) et les tableaux Word. La mise en forme Word (Phase 4) et l'humanisation (Phase 3) restent à faire.
 
 ## Sommaire
 
@@ -153,7 +153,7 @@ HealthAI Coaching a servi de fil conducteur à trois MSPR successives, chacune c
 | TPRE502 | Développer un modèle prédictif d'une solution IA | juin 2026 | 29 juin 2026 | Analyse de repas par vision, recommandations par LLM, coach posture, MongoDB |
 | TPRE601/604 | Produire et maintenir une solution IA | 24 juin → 2 juil. 2026 | 3 juillet 2026 | Intégration continue, supervision Prometheus/Grafana, sauvegarde et restauration, mode dégradé |
 
-*Figure 2 — Frise chronologique du projet (à produire avec archify : trois jalons MSPR et les principaux repères Git).*
+*Figure 2 — Frise chronologique du projet : trois jalons MSPR et principaux repères Git (archify, `dossier/figures/archify/fig02_frise_chronologique.png`).*
 
 ## 2. Le commanditaire
 
@@ -342,7 +342,7 @@ Il n'y a pas eu de planning prévisionnel formalisé au démarrage de chaque lot
 
 ## 2. Planning réalisé et suivi
 
-*Figure 5 — Chronogramme réalisé du projet, décembre 2025 → juillet 2026 (archify).*
+*Figure 5 — Chronogramme réalisé du projet, décembre 2025 → juillet 2026 (archify, `dossier/figures/archify/fig05_chronogramme_realise.png`).*
 
 Repères principaux, tels que l'historique Git les date :
 
@@ -379,7 +379,7 @@ Quatre décisions ont modifié la trajectoire prévue, toutes tracées :
 
 ## 3. Environnement humain
 
-*Figure 7 — Organigramme de l'équipe et périmètres (archify).*
+*Figure 7 — Organigramme de l'équipe et périmètres (archify, `dossier/figures/archify/fig07_organigramme_equipe.png`).*
 
 | Membre | Périmètre principal | Sujets présentés à l'oral |
 |---|---|---|
@@ -468,7 +468,7 @@ Pourquoi ce choix : la configuration est séparée du code (troisième facteur d
 
 ### Stratégie Git
 
-*Figure 9 — Branches et flux de fusion (archify).*
+*Figure 9 — Branches et flux de fusion (archify, `dossier/figures/archify/fig09_branches_git.png`).*
 
 Branches de fonctionnalité (`feature/ai-recommendations-vision`) fusionnées dans `maintenance`, elle-même en avance sur `main`. Commits conventionnels. Avant la première soutenance, plusieurs dépôts ont coexisté au gré des essais (ETL seul, backend seul, version NestJS) ; c'est une source de confusion que je ne reproduirais pas : un dépôt, des branches.
 
@@ -478,7 +478,7 @@ Une définition de « terminé » implicite s'est imposée au lot 3, que je form
 
 ## 6. Matrice des risques
 
-*Figure 10 — Matrice probabilité × impact (archify).*
+*Figure 10 — Matrice probabilité × impact (archify, `dossier/figures/archify/fig10_matrice_risques.png`).*
 
 Chaque risque est associé à une contre-mesure réellement présente dans le code ou dans l'organisation ; ceux qui n'en ont pas sont marqués comme tels.
 
@@ -553,7 +553,7 @@ Le navigateur ne dialogue qu'avec le frontend et l'API. L'API est le point d'ent
 
 ### Architecture en couches du backend
 
-*Figure 12 — Découpage en couches du backend (archify, à produire depuis `dossier/figures/sources/couches_backend.mmd`).*
+*Figure 12 — Découpage en couches du backend (archify, `dossier/figures/archify/fig12_couches_backend.png`, source `dossier/figures/sources/couches_backend.mmd`).*
 
 Le backend suit une séparation en quatre couches, chacune dans un répertoire de `backend/app/` :
 
@@ -583,11 +583,13 @@ Ces documents ont un schéma qui change à chaque évolution de prompt ou de fou
 
 Chaque collection reçoit un index composé `(utilisateur_id, created_at décroissant)`, créé à la première utilisation, parce que la seule lecture faite sur ces collections est « les derniers documents de cet utilisateur ».
 
+*Figure 21 — Les quatre collections MongoDB et le mode dégradé (archify, `dossier/figures/archify/fig21_collections_mongo.png`).*
+
 La base documentaire est déclarée non critique : si MongoDB est arrêté, `get_mongo_db()` renvoie `None`, les écritures sont ignorées avec un avertissement dans les journaux, et `GET /health` passe la clé `documentaire` à `unavailable`. L'API continue de répondre. Ce comportement a été démontré en direct lors de la troisième soutenance.
 
 ## 3. Charte graphique
 
-*Figure 13 — Charte graphique : palette, typographies, composants de base (archify, à produire).*
+*Figure 13 — Charte graphique : palette, typographies, composants de base (archify, `dossier/figures/archify/fig13_charte_graphique.png`).*
 
 Le frontend utilise Tailwind CSS avec une palette définie dans `frontend/src/components/charts/palette.ts` pour les graphiques et dans la configuration Tailwind pour l'interface. Les composants de base sont regroupés dans `frontend/src/components/ui/` : `button`, `badge`, `cards`, `data-table`, `pagination`, `modal`, `tabs`, `forms`, `states` (chargement, vide, erreur). Les trois espaces partagent la même coque applicative (`app-shell.tsx`) avec une barre latérale dont le contenu dépend du rôle.
 
@@ -595,13 +597,13 @@ Le frontend utilise Tailwind CSS avec une palette définie dans `frontend/src/co
 
 Les maquettes présentées ici ont été réalisées après le développement, à partir des écrans livrés. Le projet a démarré directement à partir du cahier des charges et des jeux de données, sans phase de maquettage formelle ; c'est une des choses que je ferais autrement, comme indiqué en section V.
 
-*Figure 14 — Zoning du tableau de bord utilisateur (archify).*
-*Figure 15 — Wireframe du tableau de bord utilisateur (archify).*
-*Figure 16 — Maquette haute fidélité du tableau de bord utilisateur (archify, ou capture `bloc34_dashboard`).*
+*Figure 14 — Zoning du tableau de bord utilisateur (archify, `dossier/figures/archify/fig14_zoning_dashboard.png`).*
+*Figure 15 — Wireframe du tableau de bord utilisateur (archify, `dossier/figures/archify/fig15_wireframe_dashboard.png`).*
+*Figure 16 — Maquette haute fidélité du tableau de bord utilisateur (capture `dossier/figures/captures/fig16_maquette_dashboard.png`).*
 
 Le tableau de bord utilisateur (`/me/dashboard`) est l'écran de référence : une rangée d'indicateurs (poids, IMC, sommeil, séances, plats, calories du journal), deux graphiques d'évolution (poids/IMC et sommeil), l'objectif actif, la dernière photo de progression, puis les dernières séances et les derniers repas.
 
-*Figure 17 — Diagramme de navigation des trois espaces (archify, à produire depuis `frontend/src/lib/routes.ts`).*
+*Figure 17 — Diagramme de navigation des trois espaces (archify, `dossier/figures/archify/fig17_navigation_ecrans.png`).*
 
 Les 34 routes du frontend se répartissent ainsi :
 
@@ -621,7 +623,7 @@ Trois parcours structurent l'usage : l'utilisateur passe par `/login` puis, s'il
 La modélisation a suivi la méthode Merise, du conceptuel au physique. J'ai produit les premiers diagrammes en février 2026 avec PlantUML, accompagnés d'un dictionnaire de données ; ils ont ensuite été enrichis au fil des MSPR (tables de pilotage ETL en avril, `coach_posture_session` en juin). Les figures ci-dessous sont régénérées avec archify à partir de l'état final de `backend/app/db/models.py`.
 
 *Figure 18 — Modèle conceptuel de données (archify, `docs/architecture/mcd.html`).*
-*Figure 19 — Modèle logique de données (archify, à produire).*
+*Figure 19 — Modèle logique de données : tables métier (archify, `dossier/figures/archify/fig19a_mld_metier.png`) et tables de pilotage ETL (`dossier/figures/archify/fig19b_mld_pilotage_etl.png`).*
 *Figure 20 — Modèle physique de données, tables métier (archify, `docs/architecture/mpd-metier.architecture.html`) et tables de pilotage ETL (`docs/architecture/mpd-pipeline.architecture.html`).*
 
 ### Les 20 tables
@@ -790,7 +792,7 @@ Pourquoi ce choix : le projet n'a pas d'outil de migration dans la version de r�
 
 ## 6. Diagramme de cas d'utilisation
 
-*Figure 22 — Cas d'utilisation (archify, à produire depuis `dossier/figures/sources/cas_utilisation.mmd`).*
+*Figure 22 — Cas d'utilisation (archify, `dossier/figures/archify/fig22_cas_utilisation.png`, source `dossier/figures/sources/cas_utilisation.mmd`).*
 
 Trois acteurs, le super-administrateur héritant des droits de l'administrateur, qui hérite de ceux de l'utilisateur. Les cas sont regroupés en cinq paquets :
 
@@ -810,7 +812,7 @@ Deux séquences ont été retenues parce qu'elles traversent toutes les couches 
 
 ### Analyse d'une photo de repas
 
-*Figure 23 — Séquence d'analyse d'un repas par photo (archify, source `dossier/figures/sources/sequence_analyse_repas.mmd`).*
+*Figure 23 — Séquence d'analyse d'un repas par photo (archify, `dossier/figures/archify/fig23_sequence_analyse_repas.png`).*
 
 1. Le composant `MealAnalysis` du frontend envoie l'image en `multipart/form-data` à `POST /api/ai/analyse-repas`, avec le jeton d'accès dans l'en-tête `Authorization`.
 2. La route (`modules/ai_features.py`) vérifie le jeton via la dépendance `current_user`, lit l'image et rejette au-delà de 10 Mo (413).
@@ -821,7 +823,7 @@ Deux séquences ont été retenues parce qu'elles traversent toutes les couches 
 
 ### Authentification et contrôle d'accès
 
-*Figure 24 — Séquence d'authentification et de rafraîchissement du jeton (archify, source `dossier/figures/sources/sequence_authentification.mmd`).*
+*Figure 24 — Séquence d'authentification et de rafraîchissement du jeton (archify, `dossier/figures/archify/fig24_sequence_authentification.png`).*
 
 1. `POST /api/auth/login` est limité à dix appels par minute et par adresse (`@limiter.limit("10/minute")`). Les identifiants sont vérifiés par `authenticate_user` ; le mot de passe est comparé au condensé PBKDF2 en temps constant.
 2. En cas de succès, deux jetons sont émis : un jeton d'accès de 30 minutes renvoyé dans le corps et conservé en mémoire par le frontend, et un jeton de rafraîchissement de 7 jours posé dans un cookie `HttpOnly`, `SameSite=Strict`.
@@ -985,7 +987,7 @@ Cette section présente les composants les plus significatifs de l'application, 
 
 ### L'écran de recommandations
 
-*Figure 27 — Page `/me/recommandations` : formulaire de contraintes, cartes d'exercices avec animation et calories estimées, bouton d'enregistrement de la séance (capture `bloc34_recommandations_sport`).*
+*Figure 27 — Page `/me/recommandations` : formulaire de contraintes, cartes d'exercices avec animation et calories estimées, bouton d'enregistrement de la séance (capture `dossier/figures/captures/fig27_recommandations_sport.png`).*
 
 La page est écrite dans `frontend/src/features/me/pages/Recommandations.tsx`. Elle charge le profil de l'utilisateur pour préremplir les formulaires, puis envoie une requête de recommandation et affiche le résultat en cartes.
 
@@ -1037,7 +1039,7 @@ Pourquoi ce choix : TanStack Query sépare deux natures d'appel. Le profil est u
 
 ### La garde de rôle
 
-*Figure 28 — Page `/admin/controles-qualite` : tableau filtré et paginé des contrôles (capture Playwright à produire).*
+*Figure 28 — Page `/admin/controles-qualite` : tableau filtré et paginé des contrôles (capture Playwright, `dossier/figures/captures/fig28_admin_controles_qualite.png`).*
 
 **Extrait 8 — `frontend/src/components/role-guard.tsx`, intégral**
 
@@ -1503,7 +1505,7 @@ Pourquoi ce choix : un identifiant de requête est accepté depuis le client ou 
 
 ### Traçabilité du pipeline ETL
 
-*Figure 30 — Pipeline ETL en cinq étapes, des fichiers sources aux tables métier (archify, source `dossier/figures/sources/pipeline_etl.mmd`).*
+*Figure 30 — Pipeline ETL en cinq étapes, des fichiers sources aux tables métier (archify, `dossier/figures/archify/fig30_pipeline_etl.png`).*
 
 **Extrait 19 — `healthai_etl/etl_common.py`, exécution tracée et règles de qualité déclaratives**
 
@@ -1594,7 +1596,7 @@ def require_roles(*roles: str):
     return dependency
 ```
 
-*Figure 31 — Swagger : réponse 403 sur une route d'administration appelée avec un compte utilisateur (capture à produire).*
+*Figure 31 — Réponse 403 de `GET /api/admin/utilisateurs` appelée avec le compte utilisateur (capture Playwright de la réponse HTTP, `dossier/figures/captures/fig31_admin_403.png`).*
 
 Pourquoi ce choix : `current_user` vérifie le jeton *et* l'état du compte en base à chaque requête ; désactiver un utilisateur (`statut` autre qu'`ACTIF`) prend effet immédiatement, sans attendre l'expiration de son jeton. `require_roles` se compose par-dessus : les deux codes sont distincts (401 pour « qui êtes-vous ? », 403 pour « vous n'avez pas le droit »), ce que le frontend utilise pour rediriger vers la connexion dans un cas et vers le tableau de bord dans l'autre.
 
@@ -1754,7 +1756,7 @@ Pourquoi ce choix : les 29 tests de contrat tournent sur une base SQLite en mém
 
 Les tests les plus importants pour ce dossier sont ceux qui vérifient la sécurité : `test_role_guard_blocks_regular_user_from_admin_dashboard` (un utilisateur reçoit 403 sur `/api/admin/...`), `test_me_routes_are_scoped_to_authenticated_user` (un utilisateur ne voit que ses propres enregistrements), `test_recommendations_use_profile_defaults_and_keep_user_isolation`, et `test_register_complete_rejects_duplicate_email_and_username`. Deux autres vérifient la résilience : `test_meal_analysis_returns_structured_fallback_when_ai_is_not_configured` et `test_health_and_openapi`.
 
-*Figure 33 — Exécution de la CI GitHub Actions : deux jobs verts, `backend-tests` et `frontend-build` (capture `bloc34_github_actions_checks`), et sortie de `pytest -q`.*
+*Figure 33 — Exécution de la CI GitHub Actions : deux jobs verts, `backend-tests` et `frontend-build` (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
 
 ```
 $ cd backend && python -m pytest -q tests
@@ -1908,7 +1910,7 @@ La procédure complète est dans `README.md` et `docs/MAINTENANCE.md`. Elle tien
 | Prometheus | http://127.0.0.1:9090 | accès local uniquement |
 | Grafana | http://127.0.0.1:3001 | accès local uniquement |
 
-*Figure 38 — Réponse de `GET /health` avec les deux bases disponibles (capture Playwright à produire).*
+*Figure 38 — Réponse de `GET /health` avec les deux bases disponibles (capture Playwright, `dossier/figures/captures/fig38_health.png`).*
 
 ```json
 {"data": {"status": "ok", "databases": {"relationnel": "mariadb", "documentaire": "ok"}}}
@@ -1980,7 +1982,7 @@ Ce qui n'est pas fait, et qui serait la première étape en production : planifi
 
 ## 2. Intégration continue
 
-*Figure 39 — Pipeline d'intégration continue (archify, source `dossier/figures/sources/pipeline_ci.mmd`).*
+*Figure 39 — Pipeline d'intégration continue (archify, `dossier/figures/archify/fig39_pipeline_ci.png`).*
 
 **Extrait 28 — `.github/workflows/ci.yml`, job `backend-tests`**
 
@@ -2053,11 +2055,11 @@ Pourquoi ce choix : les étiquettes utilisent le gabarit de route (`/api/me/{ite
 
 ### Tableau de bord Grafana
 
-*Figure 40 — Tableau de bord Grafana `healthai` (capture `bloc34_grafana_dashboard`).*
+*Figure 40 — Tableau de bord Grafana `healthai` (capture `dossier/figures/captures/fig40_grafana_dashboard.png`).*
 
 Le tableau de bord est provisionné automatiquement (`monitoring/grafana/provisioning/`) au démarrage de la pile de supervision, avec six panneaux : requêtes par seconde, latence p95, erreurs 5xx par seconde, requêtes par endpoint, requêtes par statut, latence p50/p95/p99. Prometheus interroge `/metrics` toutes les quinze secondes.
 
-*Figure 41 — Journal des appels IA, `GET /api/ai/ai-calls/history` (capture Playwright à produire).*
+*Figure 41 — Journal des appels IA, `GET /api/ai/ai-calls/history` : un appel Ollama en statut `fallback`, modèle indisponible (capture Playwright, `dossier/figures/captures/fig41_journal_appels_ia.png`).*
 
 La supervision applicative est complétée par le journal des appels IA en MongoDB : pour chaque appel, le fournisseur, le modèle, la durée en millisecondes et le statut (`success`, `fallback`, `error`, `unavailable`). C'est ce journal qui permet de répondre à « combien d'analyses de repas échouent, et pourquoi ».
 

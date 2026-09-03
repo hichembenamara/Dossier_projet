@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "MLD HealthAI — pilotage ETL (7 tables)",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "source",
+      "type": "database",
+      "label": "source_donnees",
+      "sublabel": "PK source_id · actif (soft delete)",
+      "pos": [
+        420,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "execution",
+      "type": "database",
+      "label": "execution_etl",
+      "sublabel": "PK execution_id · FK source_id · compteurs, taux_qualite",
+      "pos": [
+        100,
+        368
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "lot",
+      "type": "database",
+      "label": "lot_donnees",
+      "sublabel": "PK lot_id · FK execution_id · source_id · valide_par",
+      "pos": [
+        480,
+        368
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "utilisateur",
+      "type": "external",
+      "label": "utilisateur",
+      "sublabel": "validateur du lot (voir MLD métier)",
+      "pos": [
+        860,
+        368
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "regle",
+      "type": "database",
+      "label": "regle_qualite",
+      "sublabel": "PK regle_id · UNIQUE code_regle · actif",
+      "pos": [
+        60,
+        672
+      ],
+      "size": [
+        240,
+        62
+      ]
+    },
+    {
+      "id": "controle",
+      "type": "database",
+      "label": "controle_qualite_donnee",
+      "sublabel": "FK execution_id · lot_id · regle_id",
+      "pos": [
+        330,
+        672
+      ],
+      "size": [
+        260,
+        62
+      ]
+    },
+    {
+      "id": "brut",
+      "type": "database",
+      "label": "enregistrement_brut",
+      "sublabel": "FK lot_id · payload_json",
+      "pos": [
+        640,
+        672
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "stg",
+      "type": "database",
+      "label": "stg_import",
+      "sublabel": "FK lot_id · payload normalisé · statut",
+      "pos": [
+        640,
+        896
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "metier",
+      "type": "external",
+      "label": "tables métier",
+      "sublabel": "FK source_id · lot_id (SET NULL)",
+      "pos": [
+        860,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "MariaDB healthai_coaching — pilotage et qualité",
+      "wraps": [
+        "source",
+        "execution",
+        "lot",
+        "regle",
+        "controle",
+        "brut",
+        "stg"
+      ],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "from": "execution",
+      "to": "source",
+      "label": "n,1 · RESTRICT"
+    },
+    {
+      "from": "lot",
+      "to": "execution",
+      "label": "n,1 · CASCADE",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "right",
+      "labelDy": 30,
+      "labelDx": 50,
+      "labelAt": [
+        490.0,
+        444.0
+      ]
+    },
+    {
+      "from": "lot",
+      "to": "utilisateur",
+      "label": "cree_par · valide_par · SET NULL",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [
+        820.0,
+        444.0
+      ]
+    },
+    {
+      "from": "controle",
+      "to": "execution",
+      "label": "n,1 · CASCADE",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "controle",
+      "to": "regle",
+      "label": "n,0..1 · SET NULL",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "right",
+      "labelDy": 30,
+      "labelAt": [
+        315.0,
+        748.0
+      ]
+    },
+    {
+      "from": "brut",
+      "to": "lot",
+      "label": "n,1 · CASCADE",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "stg",
+      "to": "brut",
+      "label": "même lot (FK lot_id)",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "metier",
+      "to": "source",
+      "label": "provenance",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Grain",
+      "items": [
+        "execution_etl : un passage du pipeline sur une source",
+        "lot_donnees : un jeu de lignes issu d'une exécution, avec statut de validation",
+        "enregistrement_brut et stg_import : brut et normalisé conservés par lot (2 028 lignes chacun)"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Qualité déclarative",
+      "items": [
+        "regle_qualite : 15 règles en base, 5 types, sévérité AVERT ou ERREUR",
+        "controle_qualite_donnee : valeur observée, valeur corrigée, décision, étape du pipeline",
+        "Index (lot_id, entite) et (execution_id, niveau) pour l'espace administrateur"
+      ]
+    }
+  ]
+}

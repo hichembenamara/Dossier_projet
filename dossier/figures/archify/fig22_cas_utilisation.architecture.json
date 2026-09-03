@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Diagramme de cas d'utilisation — trois acteurs, cinq paquets",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "external": {
+          "label": "Acteur"
+        },
+        "frontend": {
+          "label": "Paquet de cas d'utilisation"
+        },
+        "security": {
+          "label": "Cas inclus"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "Utilisateur",
+      "sublabel": "rôle UTILISATEUR",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        170,
+        62
+      ]
+    },
+    {
+      "id": "admin",
+      "type": "external",
+      "label": "Administrateur",
+      "sublabel": "rôle ADMIN",
+      "pos": [
+        40,
+        736
+      ],
+      "size": [
+        170,
+        62
+      ]
+    },
+    {
+      "id": "sadmin",
+      "type": "external",
+      "label": "Super-administrateur",
+      "sublabel": "rôle SUPER_ADMIN",
+      "pos": [
+        40,
+        1056
+      ],
+      "size": [
+        170,
+        62
+      ]
+    },
+    {
+      "id": "compte",
+      "type": "frontend",
+      "label": "Compte",
+      "sublabel": "s'inscrire · se connecter · réinitialiser · compléter son profil",
+      "pos": [
+        360,
+        64
+      ],
+      "size": [
+        400,
+        62
+      ]
+    },
+    {
+      "id": "suivi",
+      "type": "frontend",
+      "label": "Suivi santé",
+      "sublabel": "saisir mesures, sommeil, séances, repas · tableau de bord · historique",
+      "pos": [
+        360,
+        304
+      ],
+      "size": [
+        400,
+        62
+      ]
+    },
+    {
+      "id": "coach",
+      "type": "frontend",
+      "label": "Coaching IA",
+      "sublabel": "recommandations · analyse photo de repas · coach posture · retour",
+      "pos": [
+        360,
+        544
+      ],
+      "size": [
+        400,
+        62
+      ]
+    },
+    {
+      "id": "data",
+      "type": "frontend",
+      "label": "Administration des données",
+      "sublabel": "exécution ETL · lots et contrôles · règles qualité · référentiels · exports",
+      "pos": [
+        360,
+        800
+      ],
+      "size": [
+        400,
+        62
+      ]
+    },
+    {
+      "id": "superv",
+      "type": "frontend",
+      "label": "Supervision",
+      "sublabel": "organisations et sources · monitoring global",
+      "pos": [
+        360,
+        1056
+      ],
+      "size": [
+        400,
+        62
+      ]
+    },
+    {
+      "id": "auth",
+      "type": "security",
+      "label": "S'authentifier",
+      "sublabel": "inclus par tous les cas sauf inscription",
+      "pos": [
+        900,
+        544
+      ],
+      "size": [
+        220,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "HealthAI Coaching",
+      "wraps": [
+        "compte",
+        "suivi",
+        "coach",
+        "data",
+        "superv",
+        "auth"
+      ],
+      "pad": 26
+    }
+  ],
+  "connections": [
+    {
+      "from": "user",
+      "to": "compte"
+    },
+    {
+      "from": "user",
+      "to": "suivi",
+      "variant": "emphasis"
+    },
+    {
+      "from": "user",
+      "to": "coach",
+      "variant": "emphasis"
+    },
+    {
+      "from": "admin",
+      "to": "data",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sadmin",
+      "to": "superv",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "admin",
+      "to": "user",
+      "label": "hérite",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "sadmin",
+      "to": "admin",
+      "label": "hérite",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "suivi",
+      "to": "auth",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "coach",
+      "to": "auth",
+      "label": "include",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelSegment": 0,
+      "labelDy": -12,
+      "labelDx": -60,
+      "labelAt": [
+        770.0,
+        620.0
+      ]
+    },
+    {
+      "from": "data",
+      "to": "auth",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "superv",
+      "to": "auth",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Héritage des rôles",
+      "items": [
+        "Le super-administrateur hérite des droits de l'administrateur, qui hérite de ceux de l'utilisateur",
+        "Vérifié par require_roles côté API, guidé par RoleGuard côté client"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Cas notables",
+      "items": [
+        "Compléter son profil (onboarding) conditionne les recommandations",
+        "Lancer une exécution ETL se fait en ligne de commande, le suivi dans l'interface"
+      ]
+    }
+  ]
+}

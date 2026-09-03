@@ -20,7 +20,7 @@ Il n'y a pas eu de planning prévisionnel formalisé au démarrage de chaque lot
 
 ## 2. Planning réalisé et suivi
 
-*Figure 5 — Chronogramme réalisé du projet, décembre 2025 → juillet 2026 (archify).*
+*Figure 5 — Chronogramme réalisé du projet, décembre 2025 → juillet 2026 (archify, `dossier/figures/archify/fig05_chronogramme_realise.png`).*
 
 Repères principaux, tels que l'historique Git les date :
 
@@ -57,7 +57,7 @@ Quatre décisions ont modifié la trajectoire prévue, toutes tracées :
 
 ## 3. Environnement humain
 
-*Figure 7 — Organigramme de l'équipe et périmètres (archify).*
+*Figure 7 — Organigramme de l'équipe et périmètres (archify, `dossier/figures/archify/fig07_organigramme_equipe.png`).*
 
 | Membre | Périmètre principal | Sujets présentés à l'oral |
 |---|---|---|
@@ -146,7 +146,7 @@ Pourquoi ce choix : la configuration est séparée du code (troisième facteur d
 
 ### Stratégie Git
 
-*Figure 9 — Branches et flux de fusion (archify).*
+*Figure 9 — Branches et flux de fusion (archify, `dossier/figures/archify/fig09_branches_git.png`).*
 
 Branches de fonctionnalité (`feature/ai-recommendations-vision`) fusionnées dans `maintenance`, elle-même en avance sur `main`. Commits conventionnels. Avant la première soutenance, plusieurs dépôts ont coexisté au gré des essais (ETL seul, backend seul, version NestJS) ; c'est une source de confusion que je ne reproduirais pas : un dépôt, des branches.
 
@@ -156,7 +156,7 @@ Une définition de « terminé » implicite s'est imposée au lot 3, que je form
 
 ## 6. Matrice des risques
 
-*Figure 10 — Matrice probabilité × impact (archify).*
+*Figure 10 — Matrice probabilité × impact (archify, `dossier/figures/archify/fig10_matrice_risques.png`).*
 
 Chaque risque est associé à une contre-mesure réellement présente dans le code ou dans l'organisation ; ceux qui n'en ont pas sont marqués comme tels.
 

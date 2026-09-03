@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Les quatre collections MongoDB et le mode dégradé",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "ecriture",
+        "label": "Chemin d'écriture",
+        "focus": [
+          "routes",
+          "store",
+          "mongo",
+          "food"
+        ],
+        "note": "La route appelle document_store, qui obtient la base via get_mongo_db() ; None signifie « écriture ignorée »."
+      },
+      {
+        "id": "degrade",
+        "label": "Mode dégradé",
+        "focus": [
+          "mongo",
+          "health"
+        ],
+        "note": "Timeout 800 ms, cooldown 20 s après échec, /health passe documentaire à unavailable."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "routes",
+      "type": "backend",
+      "label": "Routes IA",
+      "sublabel": "modules/ai_features.py",
+      "pos": [
+        60,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "store",
+      "type": "backend",
+      "label": "document_store.py",
+      "sublabel": "_collection() crée l'index · _save() insère l'enveloppe",
+      "pos": [
+        400,
+        64
+      ],
+      "size": [
+        320,
+        62
+      ]
+    },
+    {
+      "id": "mongo",
+      "type": "backend",
+      "label": "db/mongo.py",
+      "sublabel": "get_mongo_db() → base ou None, jamais d'exception",
+      "pos": [
+        840,
+        64
+      ],
+      "size": [
+        320,
+        62
+      ]
+    },
+    {
+      "id": "health",
+      "type": "external",
+      "label": "GET /health",
+      "sublabel": "documentaire : ok · unavailable · disabled",
+      "pos": [
+        840,
+        380
+      ],
+      "size": [
+        320,
+        62
+      ]
+    },
+    {
+      "id": "food",
+      "type": "database",
+      "label": "food_analyses",
+      "sublabel": "POST /api/ai/analyse-repas",
+      "pos": [
+        60,
+        576
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "reco",
+      "type": "database",
+      "label": "recommendations",
+      "sublabel": "POST /api/ai/recommandations",
+      "pos": [
+        340,
+        576
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "feedback",
+      "type": "database",
+      "label": "recommendation_feedback",
+      "sublabel": "POST …/recommandations/feedback",
+      "pos": [
+        620,
+        576
+      ],
+      "size": [
+        240,
+        62
+      ]
+    },
+    {
+      "id": "calls",
+      "type": "database",
+      "label": "ai_provider_calls",
+      "sublabel": "journal : fournisseur, modèle, durée, statut",
+      "pos": [
+        920,
+        576
+      ],
+      "size": [
+        260,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "MongoDB 7 — base healthai_nosql · index (utilisateur_id, created_at desc) par collection",
+      "wraps": [
+        "food",
+        "reco",
+        "feedback",
+        "calls"
+      ],
+      "pad": 44
+    }
+  ],
+  "connections": [
+    {
+      "from": "routes",
+      "to": "store",
+      "label": "save_*, log_ai_call",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "store",
+      "to": "mongo",
+      "label": "get_mongo_db()",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "mongo",
+      "to": "health",
+      "label": "mongo_status()",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        963,
+        140.0
+      ]
+    },
+    {
+      "from": "store",
+      "to": "food",
+      "label": "insert_one",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "store",
+      "to": "reco",
+      "label": "insert_one",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "store",
+      "to": "feedback",
+      "label": "insert_one",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "store",
+      "to": "calls",
+      "label": "insert_one",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Enveloppe commune",
+      "items": [
+        "{ utilisateur_id, source, created_at, payload }",
+        "Seul payload varie selon la collection et le fournisseur",
+        "Aucune jointure : lecture « les N derniers documents d'un utilisateur »"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Tolérance aux pannes",
+      "items": [
+        "serverSelectionTimeoutMS = 800 ms, pas 30 s",
+        "Après un échec, pas de nouvel essai pendant 20 s",
+        "PyMongoError à l'écriture : avertissement, invalidate(), retour None"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Démontré en soutenance",
+      "items": [
+        "docker compose stop mongo : l'analyse de repas répond toujours",
+        "/health signale documentaire: unavailable, retour à ok au redémarrage"
+      ]
+    }
+  ]
+}

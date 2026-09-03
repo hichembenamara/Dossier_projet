@@ -8,8 +8,11 @@ CHROME="${ARCHIFY_CHROME:-$(command -v chromium || command -v google-chrome || e
 export ARCHIFY_CHROME="$CHROME"
 T=$1; N=$2; IN="$HERE/$N.$T.json"; OUT="$HERE/$N.html"
 cd "$ARCHIFY_HOME"
-node bin/archify.mjs validate "$T" "$IN" --quality showcase --json | python3 -c "import sys,json;d=json.load(sys.stdin);print('validate ok' if d.get('ok') else 'VALIDATE FAIL'); [print(' -',x['severity'],x['message'][:220]) for x in d.get('diagnostics',[])]"
-node bin/archify.mjs deliver "$T" "$IN" "$OUT" --quality showcase --json | python3 -c "import sys,json;d=json.load(sys.stdin);print('deliver ok' if d.get('ok') else 'DELIVER FAIL')"
+node bin/archify.mjs validate "$T" "$IN" --quality showcase --json | python3 -c "
+import sys,json;d=json.load(sys.stdin);ok=d.get('ok');print('validate ok' if ok else 'VALIDATE FAIL')
+for x in d.get('diagnostics',[]): print(' -',x.get('severity'),x.get('code'),x.get('message','')[:300]); print('   fixes:',x.get('supportedFixes'))
+sys.exit(0 if ok else 1)"
+node bin/archify.mjs deliver "$T" "$IN" "$OUT" --quality showcase --json | python3 -c "import sys,json;d=json.load(sys.stdin);print('deliver ok' if d.get('ok') else 'DELIVER FAIL');sys.exit(0 if d.get('ok') else 1)"
 node bin/archify.mjs visual-check "$OUT" --json | python3 -c "import sys,json;d=json.load(sys.stdin);print('visual-check',d.get('status')); [print(' -',x['severity'],x['message'][:160]) for x in d.get('diagnostics',[]) if x['severity']=='error']"
 # PNG du seul diagramme (SVG) pour l'impression : thème clair, échelle 2x, fond blanc
 PY="${ARCHIFY_PY:-$HERE/../../../backend/.venv/bin/python}"

@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Charte graphique — palette, typographies et composants de base (frontend/app/design-system.css)",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Couleur (variable CSS)"
+        },
+        "external": {
+          "label": "Typographie"
+        },
+        "backend": {
+          "label": "Composants"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "accent",
+      "type": "frontend",
+      "label": "Accent / actions",
+      "sublabel": "--accent · --blue : #2563eb",
+      "pos": [
+        60,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "teal",
+      "type": "frontend",
+      "label": "Indicateurs santé",
+      "sublabel": "--teal : #0284c7",
+      "pos": [
+        320,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "violet",
+      "type": "frontend",
+      "label": "Sommeil",
+      "sublabel": "--violet : #6d5bd0",
+      "pos": [
+        580,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "amber",
+      "type": "frontend",
+      "label": "Avertissement / calories",
+      "sublabel": "--amber : #b7791f",
+      "pos": [
+        840,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "red",
+      "type": "frontend",
+      "label": "Erreur",
+      "sublabel": "--red : #b42318",
+      "pos": [
+        60,
+        240
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "bg",
+      "type": "frontend",
+      "label": "Fond et panneaux",
+      "sublabel": "--bg : #f4f8f7 · --panel : #ffffff",
+      "pos": [
+        320,
+        240
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "text",
+      "type": "frontend",
+      "label": "Texte",
+      "sublabel": "--text : #10201d · --muted : #5f716d",
+      "pos": [
+        580,
+        240
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "line",
+      "type": "frontend",
+      "label": "Filets et rayons",
+      "sublabel": "--line : #dce7e4 · radius 8 → 22 px",
+      "pos": [
+        840,
+        240
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "fonts",
+      "type": "external",
+      "label": "Geist Sans · Geist Mono · Fraunces",
+      "sublabel": "corps, code, titres (app/layout.tsx)",
+      "pos": [
+        60,
+        544
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "ui",
+      "type": "backend",
+      "label": "components/ui/",
+      "sublabel": "button · badge · cards · data-table · pagination · modal · tabs · forms · states",
+      "pos": [
+        420,
+        544
+      ],
+      "size": [
+        420,
+        62
+      ]
+    },
+    {
+      "id": "charts",
+      "type": "backend",
+      "label": "components/charts/",
+      "sublabel": "KpiCard · LineSeries · BarSeries · PieSeries · palette.ts",
+      "pos": [
+        880,
+        544
+      ],
+      "size": [
+        320,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Palette (variables CSS, thème clair)",
+      "wraps": [
+        "accent",
+        "teal",
+        "violet",
+        "amber",
+        "red",
+        "bg",
+        "text",
+        "line"
+      ],
+      "pad": 22
+    },
+    {
+      "kind": "region",
+      "label": "Typographie et composants partagés",
+      "wraps": [
+        "fonts",
+        "ui",
+        "charts"
+      ],
+      "pad": 22
+    }
+  ],
+  "connections": [
+    {
+      "from": "fonts",
+      "to": "ui",
+      "label": "--font-body",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Principes",
+      "items": [
+        "Une coque applicative commune (app-shell.tsx), barre latérale dont le contenu dépend du rôle",
+        "États chargement / vide / erreur partagés par les 34 écrans (states.tsx)",
+        "Pas de couleur seule : chaque graphique est doublé de ses valeurs en cartes"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "À confirmer avant impression",
+      "items": [
+        "--green vaut #1d4ed8 (un bleu) dans design-system.css : vérifier l'usage réel",
+        "Un second jeu de variables (thème bleu, l. 1386) existe : préciser lequel est actif"
+      ]
+    }
+  ]
+}

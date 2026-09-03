@@ -1,0 +1,219 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Chronogramme réalisé — trois lots de livraison alignés sur les MSPR",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "backend": {
+          "label": "Jalon Git"
+        },
+        "security": {
+          "label": "Soutenance"
+        },
+        "external": {
+          "label": "Décision"
+        },
+        "cloud": {
+          "label": "Service IA"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "L1 — Socle données (déc. 2025 → 30 avr. 2026)"
+    },
+    {
+      "id": "l2",
+      "label": "L2 — Intelligence artificielle (1er → 29 juin)"
+    },
+    {
+      "id": "l3",
+      "label": "L3 — Production (24 juin → 3 juil.)"
+    },
+    {
+      "id": "dec",
+      "label": "Décisions et dérives",
+      "variant": "exception"
+    }
+  ],
+  "mainPath": [
+    "depot",
+    "merise",
+    "sprint",
+    "sout1",
+    "ia",
+    "sout2"
+  ],
+  "nodes": [
+    {
+      "id": "depot",
+      "lane": "l1",
+      "col": 0,
+      "type": "backend",
+      "label": "Dépôt initial",
+      "sublabel": "17 déc.",
+      "width": 118
+    },
+    {
+      "id": "merise",
+      "lane": "l1",
+      "col": 1,
+      "type": "backend",
+      "label": "Merise + FastAPI",
+      "sublabel": "4-5 février",
+      "width": 118
+    },
+    {
+      "id": "sprint",
+      "lane": "l1",
+      "col": 2,
+      "type": "backend",
+      "label": "Sprint final lot 1",
+      "sublabel": "25-28 avril",
+      "width": 118
+    },
+    {
+      "id": "sout1",
+      "lane": "l1",
+      "col": 3,
+      "type": "security",
+      "label": "Soutenance Bloc 1",
+      "sublabel": "30 avril · validée",
+      "width": 118
+    },
+    {
+      "id": "ia",
+      "lane": "l2",
+      "col": 3,
+      "type": "cloud",
+      "label": "Micro-service IA",
+      "sublabel": "9-25 juin · vision",
+      "width": 118
+    },
+    {
+      "id": "sout2",
+      "lane": "l2",
+      "col": 4,
+      "type": "security",
+      "label": "Soutenance Bloc 2",
+      "sublabel": "29 juin · validée",
+      "width": 118
+    },
+    {
+      "id": "maint",
+      "lane": "l3",
+      "col": 3,
+      "type": "backend",
+      "label": "Maintenance",
+      "sublabel": "24 juin → 2 juil.",
+      "width": 118
+    },
+    {
+      "id": "sout34",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "Soutenance 3/4",
+      "sublabel": "3 juillet · validée",
+      "width": 118
+    },
+    {
+      "id": "nest",
+      "lane": "dec",
+      "col": 2,
+      "type": "external",
+      "label": "NestJS abandonné",
+      "sublabel": "27 avril",
+      "width": 118
+    },
+    {
+      "id": "hf",
+      "lane": "dec",
+      "col": 3,
+      "type": "external",
+      "label": "Modèles écartés",
+      "sublabel": "HF, DeepSeek · juin",
+      "width": 118
+    }
+  ],
+  "edges": [
+    {
+      "from": "depot",
+      "to": "merise"
+    },
+    {
+      "from": "merise",
+      "to": "sprint",
+      "label": "dépôt commun"
+    },
+    {
+      "from": "sprint",
+      "to": "sout1",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sout1",
+      "to": "ia"
+    },
+    {
+      "from": "ia",
+      "to": "sout2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ia",
+      "to": "maint",
+      "label": "divergence",
+      "variant": "dashed",
+      "role": "branch",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "maint",
+      "to": "sout34",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sprint",
+      "to": "nest",
+      "label": "24 h perdues",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "from": "ia",
+      "to": "hf",
+      "label": "sorties non structurées",
+      "variant": "security",
+      "role": "error",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Ce que le chronogramme montre",
+      "items": [
+        "Dépôt initial : Compose et lint ; février : MCD/MLD/MPD et backend ; avril : ETL, Docker, seed",
+        "Pas de planning prévisionnel : les échéances sont les dates de soutenance",
+        "Fin de lot dense (26 avril, 25 juin)",
+        "Les lots 2 et 3 se chevauchent d'une semaine"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Dérives tracées",
+      "items": [
+        "Réécriture NestJS puis retour à FastAPI en 24 h",
+        "Modèle entraîné non livré au lot 2, assumé devant le jury",
+        "Durcissement de juin non repris dans la branche de référence"
+      ]
+    }
+  ]
+}

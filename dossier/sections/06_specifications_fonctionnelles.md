@@ -54,7 +54,7 @@ Le navigateur ne dialogue qu'avec le frontend et l'API. L'API est le point d'ent
 
 ### Architecture en couches du backend
 
-*Figure 12 — Découpage en couches du backend (archify, à produire depuis `dossier/figures/sources/couches_backend.mmd`).*
+*Figure 12 — Découpage en couches du backend (archify, `dossier/figures/archify/fig12_couches_backend.png`, source `dossier/figures/sources/couches_backend.mmd`).*
 
 Le backend suit une séparation en quatre couches, chacune dans un répertoire de `backend/app/` :
 
@@ -84,11 +84,13 @@ Ces documents ont un schéma qui change à chaque évolution de prompt ou de fou
 
 Chaque collection reçoit un index composé `(utilisateur_id, created_at décroissant)`, créé à la première utilisation, parce que la seule lecture faite sur ces collections est « les derniers documents de cet utilisateur ».
 
+*Figure 21 — Les quatre collections MongoDB et le mode dégradé (archify, `dossier/figures/archify/fig21_collections_mongo.png`).*
+
 La base documentaire est déclarée non critique : si MongoDB est arrêté, `get_mongo_db()` renvoie `None`, les écritures sont ignorées avec un avertissement dans les journaux, et `GET /health` passe la clé `documentaire` à `unavailable`. L'API continue de répondre. Ce comportement a été démontré en direct lors de la troisième soutenance.
 
 ## 3. Charte graphique
 
-*Figure 13 — Charte graphique : palette, typographies, composants de base (archify, à produire).*
+*Figure 13 — Charte graphique : palette, typographies, composants de base (archify, `dossier/figures/archify/fig13_charte_graphique.png`).*
 
 Le frontend utilise Tailwind CSS avec une palette définie dans `frontend/src/components/charts/palette.ts` pour les graphiques et dans la configuration Tailwind pour l'interface. Les composants de base sont regroupés dans `frontend/src/components/ui/` : `button`, `badge`, `cards`, `data-table`, `pagination`, `modal`, `tabs`, `forms`, `states` (chargement, vide, erreur). Les trois espaces partagent la même coque applicative (`app-shell.tsx`) avec une barre latérale dont le contenu dépend du rôle.
 
@@ -96,13 +98,13 @@ Le frontend utilise Tailwind CSS avec une palette définie dans `frontend/src/co
 
 Les maquettes présentées ici ont été réalisées après le développement, à partir des écrans livrés. Le projet a démarré directement à partir du cahier des charges et des jeux de données, sans phase de maquettage formelle ; c'est une des choses que je ferais autrement, comme indiqué en section V.
 
-*Figure 14 — Zoning du tableau de bord utilisateur (archify).*
-*Figure 15 — Wireframe du tableau de bord utilisateur (archify).*
-*Figure 16 — Maquette haute fidélité du tableau de bord utilisateur (archify, ou capture `bloc34_dashboard`).*
+*Figure 14 — Zoning du tableau de bord utilisateur (archify, `dossier/figures/archify/fig14_zoning_dashboard.png`).*
+*Figure 15 — Wireframe du tableau de bord utilisateur (archify, `dossier/figures/archify/fig15_wireframe_dashboard.png`).*
+*Figure 16 — Maquette haute fidélité du tableau de bord utilisateur (capture `dossier/figures/captures/fig16_maquette_dashboard.png`).*
 
 Le tableau de bord utilisateur (`/me/dashboard`) est l'écran de référence : une rangée d'indicateurs (poids, IMC, sommeil, séances, plats, calories du journal), deux graphiques d'évolution (poids/IMC et sommeil), l'objectif actif, la dernière photo de progression, puis les dernières séances et les derniers repas.
 
-*Figure 17 — Diagramme de navigation des trois espaces (archify, à produire depuis `frontend/src/lib/routes.ts`).*
+*Figure 17 — Diagramme de navigation des trois espaces (archify, `dossier/figures/archify/fig17_navigation_ecrans.png`).*
 
 Les 34 routes du frontend se répartissent ainsi :
 
@@ -122,7 +124,7 @@ Trois parcours structurent l'usage : l'utilisateur passe par `/login` puis, s'il
 La modélisation a suivi la méthode Merise, du conceptuel au physique. J'ai produit les premiers diagrammes en février 2026 avec PlantUML, accompagnés d'un dictionnaire de données ; ils ont ensuite été enrichis au fil des MSPR (tables de pilotage ETL en avril, `coach_posture_session` en juin). Les figures ci-dessous sont régénérées avec archify à partir de l'état final de `backend/app/db/models.py`.
 
 *Figure 18 — Modèle conceptuel de données (archify, `docs/architecture/mcd.html`).*
-*Figure 19 — Modèle logique de données (archify, à produire).*
+*Figure 19 — Modèle logique de données : tables métier (archify, `dossier/figures/archify/fig19a_mld_metier.png`) et tables de pilotage ETL (`dossier/figures/archify/fig19b_mld_pilotage_etl.png`).*
 *Figure 20 — Modèle physique de données, tables métier (archify, `docs/architecture/mpd-metier.architecture.html`) et tables de pilotage ETL (`docs/architecture/mpd-pipeline.architecture.html`).*
 
 ### Les 20 tables
@@ -291,7 +293,7 @@ Pourquoi ce choix : le projet n'a pas d'outil de migration dans la version de r�
 
 ## 6. Diagramme de cas d'utilisation
 
-*Figure 22 — Cas d'utilisation (archify, à produire depuis `dossier/figures/sources/cas_utilisation.mmd`).*
+*Figure 22 — Cas d'utilisation (archify, `dossier/figures/archify/fig22_cas_utilisation.png`, source `dossier/figures/sources/cas_utilisation.mmd`).*
 
 Trois acteurs, le super-administrateur héritant des droits de l'administrateur, qui hérite de ceux de l'utilisateur. Les cas sont regroupés en cinq paquets :
 
@@ -311,7 +313,7 @@ Deux séquences ont été retenues parce qu'elles traversent toutes les couches 
 
 ### Analyse d'une photo de repas
 
-*Figure 23 — Séquence d'analyse d'un repas par photo (archify, source `dossier/figures/sources/sequence_analyse_repas.mmd`).*
+*Figure 23 — Séquence d'analyse d'un repas par photo (archify, `dossier/figures/archify/fig23_sequence_analyse_repas.png`).*
 
 1. Le composant `MealAnalysis` du frontend envoie l'image en `multipart/form-data` à `POST /api/ai/analyse-repas`, avec le jeton d'accès dans l'en-tête `Authorization`.
 2. La route (`modules/ai_features.py`) vérifie le jeton via la dépendance `current_user`, lit l'image et rejette au-delà de 10 Mo (413).
@@ -322,7 +324,7 @@ Deux séquences ont été retenues parce qu'elles traversent toutes les couches 
 
 ### Authentification et contrôle d'accès
 
-*Figure 24 — Séquence d'authentification et de rafraîchissement du jeton (archify, source `dossier/figures/sources/sequence_authentification.mmd`).*
+*Figure 24 — Séquence d'authentification et de rafraîchissement du jeton (archify, `dossier/figures/archify/fig24_sequence_authentification.png`).*
 
 1. `POST /api/auth/login` est limité à dix appels par minute et par adresse (`@limiter.limit("10/minute")`). Les identifiants sont vérifiés par `authenticate_user` ; le mot de passe est comparé au condensé PBKDF2 en temps constant.
 2. En cas de succès, deux jetons sont émis : un jeton d'accès de 30 minutes renvoyé dans le corps et conservé en mémoire par le frontend, et un jeton de rafraîchissement de 7 jours posé dans un cookie `HttpOnly`, `SameSite=Strict`.

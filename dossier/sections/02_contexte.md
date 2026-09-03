@@ -12,7 +12,7 @@ HealthAI Coaching a servi de fil conducteur à trois MSPR successives, chacune c
 | TPRE502 | Développer un modèle prédictif d'une solution IA | juin 2026 | 29 juin 2026 | Analyse de repas par vision, recommandations par LLM, coach posture, MongoDB |
 | TPRE601/604 | Produire et maintenir une solution IA | 24 juin → 2 juil. 2026 | 3 juillet 2026 | Intégration continue, supervision Prometheus/Grafana, sauvegarde et restauration, mode dégradé |
 
-*Figure 2 — Frise chronologique du projet (à produire avec archify : trois jalons MSPR et les principaux repères Git).*
+*Figure 2 — Frise chronologique du projet : trois jalons MSPR et principaux repères Git (archify, `dossier/figures/archify/fig02_frise_chronologique.png`).*
 
 ## 2. Le commanditaire
 

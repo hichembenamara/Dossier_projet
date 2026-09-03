@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Wireframe du tableau de bord utilisateur — blocs et données (MeDashboard.tsx)",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Bloc d'interface"
+        },
+        "backend": {
+          "label": "Appel API (TanStack Query)"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "GET /api/me/dashboard",
+      "sublabel": "queryKey me-dashboard · dashboards.py",
+      "pos": [
+        60,
+        64
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "apiobj",
+      "type": "backend",
+      "label": "GET /api/me/objectifs/actif",
+      "sublabel": "objectif en cours",
+      "pos": [
+        60,
+        896
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "hero",
+      "type": "frontend",
+      "label": "Synthèse santé",
+      "sublabel": "CircularScore : readiness + nutrition, activité, sommeil, régularité",
+      "pos": [
+        480,
+        64
+      ],
+      "size": [
+        640,
+        62
+      ]
+    },
+    {
+      "id": "kpis",
+      "type": "frontend",
+      "label": "8 HealthKpiCard",
+      "sublabel": "poids, IMC, calories moy., repas/jour, séances, sommeil, protéines, meilleure série",
+      "pos": [
+        480,
+        240
+      ],
+      "size": [
+        640,
+        62
+      ]
+    },
+    {
+      "id": "chartw",
+      "type": "frontend",
+      "label": "ChartCard poids / IMC",
+      "sublabel": "LineSeries, mesures biométriques",
+      "pos": [
+        480,
+        416
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "charts",
+      "type": "frontend",
+      "label": "ChartCard sommeil",
+      "sublabel": "LineSeries, durée et qualité",
+      "pos": [
+        820,
+        416
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "nutri",
+      "type": "frontend",
+      "label": "ChartCard nutrition",
+      "sublabel": "CompactDonut repas par type · HealthProgress macros",
+      "pos": [
+        480,
+        592
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "reco",
+      "type": "frontend",
+      "label": "Recommandations prioritaires",
+      "sublabel": "priorités locales, sans appel IA",
+      "pos": [
+        820,
+        592
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "histo",
+      "type": "frontend",
+      "label": "Historique récent",
+      "sublabel": "repas, séances, objectif actif",
+      "pos": [
+        480,
+        768
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "objectifs",
+      "type": "frontend",
+      "label": "Prochains objectifs",
+      "sublabel": "suivi de l'objectif utilisateur",
+      "pos": [
+        820,
+        768
+      ],
+      "size": [
+        300,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Écran /me/dashboard (ordre vertical réel)",
+      "wraps": [
+        "hero",
+        "kpis",
+        "chartw",
+        "charts",
+        "nutri",
+        "reco",
+        "histo",
+        "objectifs"
+      ],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "from": "api",
+      "to": "hero",
+      "variant": "emphasis"
+    },
+    {
+      "from": "api",
+      "to": "kpis",
+      "label": "dernier_poids_kg, dernier_imc, nb_seances…",
+      "labelDx": 140
+    },
+    {
+      "from": "api",
+      "to": "chartw",
+      "variant": "dashed"
+    },
+    {
+      "from": "apiobj",
+      "to": "objectifs",
+      "label": "objectif actif",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "États rendus",
+      "items": [
+        "LoadingState pendant la requête, ErrorState avec bouton réessayer",
+        "EmptyState par bloc : « Ajoute une mesure biométrique pour suivre ton poids. »"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Limites visibles à l'écran",
+      "items": [
+        "Carte « Protéines atteintes » affiche Indisponible : macros non exposées par le journal",
+        "Réalisé après le développement, à partir de l'écran livré (voir section VI)"
+      ]
+    }
+  ]
+}

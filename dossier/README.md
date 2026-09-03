@@ -31,14 +31,19 @@ dossier/
     pip-audit_2026-09-02.txt, npm-audit_2026-09-02.txt   sorties brutes des audits
   figures/
     sources/*.mmd                   sources Mermaid (référence de topologie)
-    archify/                        figures produites : JSON validé, HTML, PNG 2x + build.sh
-      fig23_sequence_analyse_repas · fig24_sequence_authentification · fig30_pipeline_etl · fig39_pipeline_ci
+    archify/                        17 figures archify : JSON validé (showcase), HTML livré, PNG 2x + build.sh
+      fig02 05 07 09 10 12 13 14 15 17 19a 19b 21 22 23 24 30 39
+      (les sidecars *.visual-check.* sont régénérables et ignorés par git)
+    captures/                       captures d'écran : capture.py (Playwright, stack docker locale) + PNG
+      fig28 admin contrôles qualité · fig31 403 admin · fig38 /health · fig41 journal IA   (Playwright, 03/09/2026)
+      fig16 maquette dashboard · fig27 recommandations sport · fig33 GitHub Actions · fig40 Grafana   (banque bloc 3/4)
 ```
 
 ## Conventions
 
 - Un fichier par section, extraits de code copiés depuis le dépôt (jamais retapés), chemin indiqué.
-- Les figures sont référencées par leur numéro du plan (`*Figure 23 — …*`) avec la source archify à utiliser.
+- Les figures sont référencées par leur numéro du plan (`*Figure 23 — …*`) avec le chemin du PNG à insérer. Reste à produire : figure 29 (MongoDB Compass), tableaux Word.
+- Regénérer une figure archify : `dossier/figures/archify/build.sh <type> <nom>` ; les captures Playwright : `backend/.venv/bin/python dossier/figures/captures/capture.py`.
 - Chaque section passe par `/humanizer-remove-ai-writing-patterns` en Phase 3, puis relecture humaine.
 - Assemblage final : concaténer `sections/*.md` dans l'ordre, puis mise en page Word (Phase 4).
 

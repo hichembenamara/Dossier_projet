@@ -6,7 +6,7 @@ Cette section présente les composants les plus significatifs de l'application, 
 
 ### L'écran de recommandations
 
-*Figure 27 — Page `/me/recommandations` : formulaire de contraintes, cartes d'exercices avec animation et calories estimées, bouton d'enregistrement de la séance (capture `bloc34_recommandations_sport`).*
+*Figure 27 — Page `/me/recommandations` : formulaire de contraintes, cartes d'exercices avec animation et calories estimées, bouton d'enregistrement de la séance (capture `dossier/figures/captures/fig27_recommandations_sport.png`).*
 
 La page est écrite dans `frontend/src/features/me/pages/Recommandations.tsx`. Elle charge le profil de l'utilisateur pour préremplir les formulaires, puis envoie une requête de recommandation et affiche le résultat en cartes.
 
@@ -58,7 +58,7 @@ Pourquoi ce choix : TanStack Query sépare deux natures d'appel. Le profil est u
 
 ### La garde de rôle
 
-*Figure 28 — Page `/admin/controles-qualite` : tableau filtré et paginé des contrôles (capture Playwright à produire).*
+*Figure 28 — Page `/admin/controles-qualite` : tableau filtré et paginé des contrôles (capture Playwright, `dossier/figures/captures/fig28_admin_controles_qualite.png`).*
 
 **Extrait 8 — `frontend/src/components/role-guard.tsx`, intégral**
 
@@ -524,7 +524,7 @@ Pourquoi ce choix : un identifiant de requête est accepté depuis le client ou 
 
 ### Traçabilité du pipeline ETL
 
-*Figure 30 — Pipeline ETL en cinq étapes, des fichiers sources aux tables métier (archify, source `dossier/figures/sources/pipeline_etl.mmd`).*
+*Figure 30 — Pipeline ETL en cinq étapes, des fichiers sources aux tables métier (archify, `dossier/figures/archify/fig30_pipeline_etl.png`).*
 
 **Extrait 19 — `healthai_etl/etl_common.py`, exécution tracée et règles de qualité déclaratives**
 
@@ -615,7 +615,7 @@ def require_roles(*roles: str):
     return dependency
 ```
 
-*Figure 31 — Swagger : réponse 403 sur une route d'administration appelée avec un compte utilisateur (capture à produire).*
+*Figure 31 — Réponse 403 de `GET /api/admin/utilisateurs` appelée avec le compte utilisateur (capture Playwright de la réponse HTTP, `dossier/figures/captures/fig31_admin_403.png`).*
 
 Pourquoi ce choix : `current_user` vérifie le jeton *et* l'état du compte en base à chaque requête ; désactiver un utilisateur (`statut` autre qu'`ACTIF`) prend effet immédiatement, sans attendre l'expiration de son jeton. `require_roles` se compose par-dessus : les deux codes sont distincts (401 pour « qui êtes-vous ? », 403 pour « vous n'avez pas le droit »), ce que le frontend utilise pour rediriger vers la connexion dans un cas et vers le tableau de bord dans l'autre.
 

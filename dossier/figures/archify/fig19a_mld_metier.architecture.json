@@ -1,0 +1,437 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "MLD HealthAI — domaine métier (13 tables)",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "compte",
+        "label": "Compte et objectifs",
+        "focus": [
+          "organisation",
+          "utilisateur",
+          "objectif",
+          "photo"
+        ],
+        "note": "Un utilisateur appartient à une organisation ; un seul objectif actif ; photo rattachée à un objectif."
+      },
+      {
+        "id": "sport",
+        "label": "Sport",
+        "focus": [
+          "seance",
+          "seance_ex",
+          "exercice"
+        ],
+        "note": "seance_exercice porte séries, répétitions et charge ; supprimer un exercice du catalogue est refusé s'il est utilisé."
+      },
+      {
+        "id": "nutrition",
+        "label": "Nutrition",
+        "focus": [
+          "plat",
+          "journal",
+          "aliment"
+        ],
+        "note": "Une ligne de journal référence un aliment du référentiel ou une saisie libre."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "organisation",
+      "type": "database",
+      "label": "organisation",
+      "sublabel": "PK organisation_id",
+      "pos": [
+        60,
+        64
+      ],
+      "size": [
+        180,
+        62
+      ]
+    },
+    {
+      "id": "utilisateur",
+      "type": "database",
+      "label": "utilisateur",
+      "sublabel": "PK utilisateur_id · FK organisation_id",
+      "pos": [
+        340,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "objectif",
+      "type": "database",
+      "label": "objectif_utilisateur",
+      "sublabel": "PK objectif_id · FK utilisateur_id",
+      "pos": [
+        660,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "photo",
+      "type": "database",
+      "label": "progression_photo",
+      "sublabel": "FK utilisateur_id · objectif_id",
+      "pos": [
+        940,
+        64
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "bio",
+      "type": "database",
+      "label": "mesure_biometrique",
+      "sublabel": "FK utilisateur_id · source_id · lot_id",
+      "pos": [
+        60,
+        368
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "sommeil",
+      "type": "database",
+      "label": "mesure_sommeil_sante",
+      "sublabel": "FK utilisateur_id · source_id · lot_id",
+      "pos": [
+        340,
+        368
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "posture",
+      "type": "database",
+      "label": "coach_posture_session",
+      "sublabel": "FK utilisateur_id (v2, juin)",
+      "pos": [
+        660,
+        368
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "seance",
+      "type": "database",
+      "label": "seance_entrainement",
+      "sublabel": "PK seance_id · FK utilisateur_id",
+      "pos": [
+        60,
+        672
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "seance_ex",
+      "type": "database",
+      "label": "seance_exercice",
+      "sublabel": "FK seance_id · exercice_id · UNIQUE",
+      "pos": [
+        340,
+        672
+      ],
+      "size": [
+        240,
+        62
+      ]
+    },
+    {
+      "id": "exercice",
+      "type": "database",
+      "label": "exercice",
+      "sublabel": "PK exercice_id · UNIQUE external_id",
+      "pos": [
+        740,
+        672
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "plat",
+      "type": "database",
+      "label": "plat",
+      "sublabel": "PK plat_id · FK utilisateur_id",
+      "pos": [
+        60,
+        976
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "journal",
+      "type": "database",
+      "label": "journal_alimentaire",
+      "sublabel": "FK utilisateur_id · plat_id · aliment_id",
+      "pos": [
+        340,
+        976
+      ],
+      "size": [
+        260,
+        62
+      ]
+    },
+    {
+      "id": "aliment",
+      "type": "database",
+      "label": "aliment",
+      "sublabel": "PK aliment_id · FK source_id",
+      "pos": [
+        740,
+        976
+      ],
+      "size": [
+        220,
+        62
+      ]
+    },
+    {
+      "id": "provenance",
+      "type": "external",
+      "label": "source_donnees · lot_donnees",
+      "sublabel": "provenance ETL (voir MLD pilotage)",
+      "pos": [
+        940,
+        512
+      ],
+      "size": [
+        220,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Compte et objectifs",
+      "wraps": [
+        "organisation",
+        "utilisateur",
+        "objectif",
+        "photo"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "region",
+      "label": "Suivi santé",
+      "wraps": [
+        "bio",
+        "sommeil",
+        "posture"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "region",
+      "label": "Sport",
+      "wraps": [
+        "seance",
+        "seance_ex",
+        "exercice"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "region",
+      "label": "Nutrition",
+      "wraps": [
+        "plat",
+        "journal",
+        "aliment"
+      ],
+      "pad": 20
+    }
+  ],
+  "connections": [
+    {
+      "from": "utilisateur",
+      "to": "organisation",
+      "label": "n,1 · SET NULL",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "from": "objectif",
+      "to": "utilisateur",
+      "label": "n,1 · CASCADE",
+      "fromSide": "left",
+      "toSide": "right",
+      "labelAt": [
+        310.0,
+        748.0
+      ]
+    },
+    {
+      "from": "photo",
+      "to": "objectif",
+      "label": "n,0..1 · SET NULL",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "right",
+      "labelAt": [
+        910.0,
+        140.0
+      ]
+    },
+    {
+      "from": "bio",
+      "to": "utilisateur",
+      "label": "n,1 · CASCADE",
+      "variant": "emphasis",
+      "labelAt": [
+        310.0,
+        748.0
+      ]
+    },
+    {
+      "from": "sommeil",
+      "to": "utilisateur",
+      "label": "n,1 · CASCADE",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelAt": [
+        310.0,
+        748.0
+      ]
+    },
+    {
+      "from": "posture",
+      "to": "utilisateur",
+      "label": "n,1 · CASCADE",
+      "labelAt": [
+        310.0,
+        748.0
+      ]
+    },
+    {
+      "from": "seance",
+      "to": "bio",
+      "label": "FK utilisateur_id",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "seance_ex",
+      "to": "seance",
+      "label": "n,1 · CASCADE",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "right",
+      "labelAt": [
+        310.0,
+        748.0
+      ]
+    },
+    {
+      "from": "seance_ex",
+      "to": "exercice",
+      "label": "n,1 · RESTRICT",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "journal",
+      "to": "plat",
+      "label": "n,0..1 · SET NULL",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "right",
+      "labelAt": [
+        910.0,
+        140.0
+      ]
+    },
+    {
+      "from": "journal",
+      "to": "aliment",
+      "label": "n,0..1 · SET NULL",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [
+        310.0,
+        1052.0
+      ]
+    },
+    {
+      "from": "plat",
+      "to": "seance",
+      "label": "FK utilisateur_id",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "posture",
+      "to": "provenance",
+      "label": "source_id · lot_id sur les mesures importées",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Lecture",
+      "items": [
+        "Flèche = clé étrangère, de la table fille vers la table mère",
+        "Pointillé = clé étrangère optionnelle (nullable)",
+        "Les FK utilisateur_id de seance, plat et journal sont résumées par « même utilisateur »"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Politiques d'intégrité",
+      "items": [
+        "Ce qui appartient à un utilisateur disparaît avec lui (CASCADE) : droit à l'effacement",
+        "Une provenance (source, lot, organisation) est mise à NULL, la mesure survit",
+        "Un exercice utilisé par une séance ne peut pas être supprimé"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Chiffres",
+      "items": [
+        "20 tables, 57 index dont 16 composés, 35 clés étrangères",
+        "Index (utilisateur_id, date) sur chaque table d'historique"
+      ]
+    }
+  ]
+}

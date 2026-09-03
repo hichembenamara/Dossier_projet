@@ -1,0 +1,227 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Navigation des trois espaces — parcours après connexion",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Écran Next.js"
+        },
+        "security": {
+          "label": "Décision (RoleGuard)"
+        },
+        "external": {
+          "label": "Page publique"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "pub",
+      "label": "Public"
+    },
+    {
+      "id": "me",
+      "label": "Utilisateur — /me"
+    },
+    {
+      "id": "adm",
+      "label": "Administrateur — /admin"
+    },
+    {
+      "id": "sa",
+      "label": "Super-administrateur — /super-admin"
+    }
+  ],
+  "mainPath": [
+    "login",
+    "role",
+    "onbp",
+    "dash",
+    "reco"
+  ],
+  "nodes": [
+    {
+      "id": "login",
+      "lane": "pub",
+      "col": 0,
+      "type": "external",
+      "label": "/login",
+      "sublabel": "identifiants",
+      "width": 124
+    },
+    {
+      "id": "role",
+      "lane": "pub",
+      "col": 1,
+      "type": "security",
+      "label": "Rôle ?",
+      "sublabel": "RoleGuard",
+      "width": 124
+    },
+    {
+      "id": "onbp",
+      "lane": "me",
+      "col": 2,
+      "type": "frontend",
+      "label": "/onboarding",
+      "sublabel": "profil déclaratif",
+      "width": 124
+    },
+    {
+      "id": "dash",
+      "lane": "me",
+      "col": 3,
+      "type": "frontend",
+      "label": "/dashboard",
+      "sublabel": "KPI, graphiques",
+      "width": 124
+    },
+    {
+      "id": "reco",
+      "lane": "me",
+      "col": 4,
+      "type": "frontend",
+      "label": "/recommandations",
+      "sublabel": "règles + LLM",
+      "width": 124
+    },
+    {
+      "id": "etl",
+      "lane": "adm",
+      "col": 2,
+      "type": "frontend",
+      "label": "/etl",
+      "sublabel": "sources",
+      "width": 124
+    },
+    {
+      "id": "exec",
+      "lane": "adm",
+      "col": 3,
+      "type": "frontend",
+      "label": "/etl/executions",
+      "sublabel": "compteurs",
+      "width": 124
+    },
+    {
+      "id": "ctrl",
+      "lane": "adm",
+      "col": 4,
+      "type": "frontend",
+      "label": "/controles-qualite",
+      "sublabel": "filtré, paginé",
+      "width": 124
+    },
+    {
+      "id": "sadash",
+      "lane": "sa",
+      "col": 2,
+      "type": "frontend",
+      "label": "/dashboard",
+      "sublabel": "vue globale",
+      "width": 124
+    },
+    {
+      "id": "orgs",
+      "lane": "sa",
+      "col": 3,
+      "type": "frontend",
+      "label": "/organisations",
+      "sublabel": "clients B2B",
+      "width": 124
+    },
+    {
+      "id": "mon",
+      "lane": "sa",
+      "col": 4,
+      "type": "frontend",
+      "label": "/monitoring",
+      "sublabel": "plateforme",
+      "width": 124
+    }
+  ],
+  "edges": [
+    {
+      "from": "login",
+      "to": "role",
+      "label": "POST /api/auth/login",
+      "variant": "emphasis"
+    },
+    {
+      "from": "role",
+      "to": "onbp",
+      "label": "UTILISATEUR, profil incomplet",
+      "variant": "emphasis"
+    },
+    {
+      "from": "role",
+      "to": "dash",
+      "label": "UTILISATEUR, profil complet",
+      "variant": "dashed"
+    },
+    {
+      "from": "onbp",
+      "to": "dash",
+      "label": "profil enregistré"
+    },
+    {
+      "from": "dash",
+      "to": "reco",
+      "variant": "emphasis"
+    },
+    {
+      "from": "role",
+      "to": "etl",
+      "label": "ADMIN",
+      "role": "branch"
+    },
+    {
+      "from": "etl",
+      "to": "exec"
+    },
+    {
+      "from": "exec",
+      "to": "ctrl",
+      "label": "lot sélectionné"
+    },
+    {
+      "from": "role",
+      "to": "sadash",
+      "label": "SUPER_ADMIN",
+      "role": "branch"
+    },
+    {
+      "from": "sadash",
+      "to": "orgs"
+    },
+    {
+      "from": "orgs",
+      "to": "mon"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "34 routes au total",
+      "items": [
+        "Public : /, /login, /forgot-password, /reset-password",
+        "/me : 17 écrans (mesures, sommeil, séances, nutrition, photos, coach posture…)",
+        "/admin : 12 écrans · /super-admin : 4 écrans"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Le front guide, l'API décide",
+      "items": [
+        "RoleGuard redirige un utilisateur qui tape une URL /admin vers son tableau de bord",
+        "L'API répond 403 via require_roles quel que soit l'écran",
+        "Source : frontend/src/lib/routes.ts, components/role-guard.tsx",
+        "Depuis /admin/controles-qualite, une règle trop stricte se corrige dans /admin/regles-qualite"
+      ]
+    }
+  ]
+}

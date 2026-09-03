@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Organigramme de l'équipe et périmètres",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "backend": {
+          "label": "Membre de l'équipe"
+        },
+        "external": {
+          "label": "Partie prenante"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "formateur",
+      "type": "external",
+      "label": "Formateur référent",
+      "sublabel": "rôle du commanditaire",
+      "pos": [
+        601,
+        64
+      ],
+      "size": [
+        190,
+        62
+      ]
+    },
+    {
+      "id": "hicham",
+      "type": "backend",
+      "label": "Hicham Benamara",
+      "sublabel": "données, SQL/NoSQL, sécurité, déploiement, veille",
+      "pos": [
+        78,
+        368
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "aedh",
+      "type": "backend",
+      "label": "Aedh Aljene",
+      "sublabel": "pipeline ETL, cadrage, interface recommandations",
+      "pos": [
+        546,
+        368
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "maxime",
+      "type": "backend",
+      "label": "Maxime Rousson",
+      "sublabel": "frontend, services IA, CI, supervision, backup",
+      "pos": [
+        1014,
+        368
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "quatrieme",
+      "type": "external",
+      "label": "Quatrième camarade",
+      "sublabel": "dépôt initial (déc.), import de juin",
+      "pos": [
+        1014,
+        64
+      ],
+      "size": [
+        300,
+        62
+      ]
+    },
+    {
+      "id": "jury",
+      "type": "external",
+      "label": "Jury de soutenance",
+      "sublabel": "professionnels extérieurs · public technique",
+      "pos": [
+        546,
+        688
+      ],
+      "size": [
+        300,
+        62
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Équipe MSPR — 3 apprenants, répartition par périmètre",
+      "wraps": [
+        "hicham",
+        "aedh",
+        "maxime"
+      ],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "from": "formateur",
+      "to": "aedh",
+      "label": "cahier des charges, arbitrages",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        696.0,
+        140.0
+      ]
+    },
+    {
+      "from": "hicham",
+      "to": "aedh",
+      "label": "relecture croisée",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelDy": 48
+    },
+    {
+      "from": "aedh",
+      "to": "maxime",
+      "label": "relecture croisée",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelDy": 48
+    },
+    {
+      "from": "quatrieme",
+      "to": "maxime",
+      "label": "dépôt créé le 17 déc. 2025",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        1164.0,
+        140.0
+      ]
+    },
+    {
+      "from": "aedh",
+      "to": "jury",
+      "label": "trois soutenances : 30/04, 29/06, 03/07",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        696.0,
+        444.0
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Ma part",
+      "items": [
+        "Modèle Merise et dictionnaire de données (février)",
+        "Backend FastAPI initial, Docker Compose et seed (avril)",
+        "Intégration du service IA, durcissement sécurité, tests, première CI (juin)"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Rituels",
+      "items": [
+        "Points d'avancement Discord à chaque étape, animés à tour de rôle",
+        "Relecture par un coéquipier avant fusion",
+        "Comptes rendus par périmètre avant chaque soutenance"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Rôles non étanches",
+      "items": [
+        "Aedh sur l'interface de recommandations",
+        "Maxime sur le backend en juillet",
+        "Hicham sur l'ETL et l'intégration IA"
+      ]
+    }
+  ]
+}
