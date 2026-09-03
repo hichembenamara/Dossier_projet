@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Pipeline ETL HealthAI — des fichiers sources aux tables métier",
+    "viewBox": [
+      1070,
+      720
+    ],
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "extract",
+        "label": "Extraction et brut",
+        "focus": [
+          "csv",
+          "json",
+          "extract",
+          "raw"
+        ],
+        "note": "Chaque ligne source est conservée telle quelle en JSON dans enregistrement_brut."
+      },
+      {
+        "id": "quality",
+        "label": "Normalisation et qualité",
+        "focus": [
+          "raw",
+          "normalize",
+          "stg",
+          "quality",
+          "controls"
+        ],
+        "note": "Normalisation puis 15 règles déclaratives ; chaque décision est tracée."
+      },
+      {
+        "id": "load",
+        "label": "Chargement et traçabilité",
+        "focus": [
+          "quality",
+          "load",
+          "metier",
+          "exec"
+        ],
+        "note": "Upsert dans les tables métier ; execution_etl et lot_donnees portent les compteurs."
+      }
+    ]
+  },
+  "stages": [
+    {
+      "label": "Sources"
+    },
+    {
+      "label": "Extraction → brut"
+    },
+    {
+      "label": "Normalisation"
+    },
+    {
+      "label": "Contrôles qualité"
+    },
+    {
+      "label": "Chargement"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "csv",
+      "type": "external",
+      "label": "CSV Kaggle",
+      "sublabel": "3 jeux Kaggle",
+      "stage": 0,
+      "row": 0,
+      "tag": "3 fichiers",
+      "width": 112
+    },
+    {
+      "id": "json",
+      "type": "external",
+      "label": "JSON + GIF",
+      "sublabel": "ExerciseDB",
+      "stage": 0,
+      "row": 2,
+      "tag": "catalogue",
+      "width": 112
+    },
+    {
+      "id": "extract",
+      "type": "backend",
+      "label": "Extraction",
+      "sublabel": "pandas · json",
+      "stage": 1,
+      "row": 0,
+      "tag": "run_all_etl.py",
+      "width": 112
+    },
+    {
+      "id": "raw",
+      "type": "database",
+      "label": "Brut",
+      "sublabel": "enregistrement_brut",
+      "stage": 1,
+      "row": 2,
+      "tag": "2 028 lignes",
+      "width": 112
+    },
+    {
+      "id": "normalize",
+      "type": "backend",
+      "label": "Normalisation",
+      "sublabel": "unités · IMC",
+      "stage": 2,
+      "row": 0,
+      "tag": "etl_common.py",
+      "width": 112
+    },
+    {
+      "id": "stg",
+      "type": "database",
+      "label": "Staging",
+      "sublabel": "stg_import",
+      "stage": 2,
+      "row": 2,
+      "tag": "2 028 lignes",
+      "width": 112
+    },
+    {
+      "id": "quality",
+      "type": "security",
+      "label": "Règles qualité",
+      "sublabel": "15 règles",
+      "stage": 3,
+      "row": 0,
+      "tag": "regle_qualite",
+      "width": 112
+    },
+    {
+      "id": "controls",
+      "type": "database",
+      "label": "Contrôles qualité",
+      "sublabel": "décisions",
+      "stage": 3,
+      "row": 2,
+      "tag": "décisions",
+      "width": 112
+    },
+    {
+      "id": "load",
+      "type": "backend",
+      "label": "Chargement",
+      "sublabel": "upsert",
+      "stage": 4,
+      "row": 0,
+      "tag": "rejouable",
+      "width": 112
+    },
+    {
+      "id": "metier",
+      "type": "database",
+      "label": "Tables métier",
+      "sublabel": "13 tables",
+      "stage": 4,
+      "row": 2,
+      "tag": "13 tables",
+      "width": 112
+    },
+    {
+      "id": "exec",
+      "type": "database",
+      "label": "Exécutions et lots",
+      "sublabel": "compteurs",
+      "stage": 4,
+      "row": 3,
+      "tag": "traçabilité",
+      "width": 112
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "csv",
+      "to": "extract",
+      "label": "lecture",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f2",
+      "from": "json",
+      "to": "extract",
+      "label": "parsing",
+      "variant": "default"
+    },
+    {
+      "id": "f3",
+      "from": "extract",
+      "to": "raw",
+      "label": "insert brut",
+      "variant": "emphasis",
+      "labelDy": 40
+    },
+    {
+      "id": "f4",
+      "from": "raw",
+      "to": "normalize",
+      "label": "ligne par ligne",
+      "variant": "emphasis"
+    },
+    {
+      "id": "f5",
+      "from": "normalize",
+      "to": "stg",
+      "label": "insert staging",
+      "variant": "emphasis",
+      "labelDy": 40
+    },
+    {
+      "id": "f6",
+      "from": "stg",
+      "to": "quality",
+      "label": "validation",
+      "variant": "emphasis"
+    },
+    {
+      "id": "f7",
+      "from": "quality",
+      "to": "controls",
+      "label": "trace de chaque décision",
+      "variant": "security",
+      "labelDy": 40
+    },
+    {
+      "id": "f8",
+      "from": "quality",
+      "to": "load",
+      "label": "lignes acceptées",
+      "variant": "emphasis",
+      "labelDy": -23
+    },
+    {
+      "id": "f9",
+      "from": "load",
+      "to": "metier",
+      "label": "upsert",
+      "variant": "emphasis",
+      "labelDy": 40
+    },
+    {
+      "id": "f10",
+      "from": "metier",
+      "to": "exec",
+      "label": "clôture : finish_execution",
+      "variant": "dashed",
+      "labelDy": 40
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Traçabilité",
+      "items": [
+        "Brut et normalisé conservés en JSON : 2 028 lignes de chaque côté",
+        "Chaque mesure métier référence sa source et son lot",
+        "Un import interrompu reste visible EN_COURS"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Qualité déclarative",
+      "items": [
+        "15 règles en base, modifiables sans redéploiement",
+        "Types : nullabilité, borne, format, cohérence, référentiel",
+        "Sévérité AVERT = chargé mais signalé ; ERREUR = rejeté"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Rejouable",
+      "items": [
+        "Upsert sur les identifiants externes",
+        "ON DUPLICATE KEY UPDATE pour les règles et référentiels",
+        "Taux de qualité 97,6 % sur la source gym (23 lignes invalides)"
+      ]
+    }
+  ]
+}

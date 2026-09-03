@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Analyse d'une photo de repas — POST /api/ai/analyse-repas",
+    "viewBox": [
+      1000,
+      760
+    ],
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "views": [
+      {
+        "id": "auth-and-guard",
+        "label": "Jeton et garde",
+        "focus": [
+          "front",
+          "route",
+          "sec"
+        ],
+        "note": "La route vérifie le jeton puis la taille de l'image avant tout appel externe."
+      },
+      {
+        "id": "vision-call",
+        "label": "Appel Gemini",
+        "focus": [
+          "route",
+          "vision",
+          "gemini"
+        ],
+        "note": "Le service Gemini est interrogé seulement si une clé est configurée."
+      },
+      {
+        "id": "persist-and-return",
+        "label": "Journal et persistance",
+        "focus": [
+          "route",
+          "store",
+          "mongo",
+          "front"
+        ],
+        "note": "Journal d'appel et résultat vont dans MongoDB ; une panne Mongo ne bloque pas la réponse."
+      }
+    ]
+  },
+  "participants": [
+    {
+      "id": "front",
+      "type": "frontend",
+      "label": "Frontend",
+      "sublabel": "MealAnalysis.tsx"
+    },
+    {
+      "id": "route",
+      "type": "backend",
+      "label": "Route API",
+      "sublabel": "ai_features.py"
+    },
+    {
+      "id": "sec",
+      "type": "security",
+      "label": "Sécurité",
+      "sublabel": "current_user"
+    },
+    {
+      "id": "vision",
+      "type": "backend",
+      "label": "Vision",
+      "sublabel": "GeminiVisionService"
+    },
+    {
+      "id": "gemini",
+      "type": "cloud",
+      "label": "Gemini",
+      "sublabel": "2.5 Flash · cloud"
+    },
+    {
+      "id": "store",
+      "type": "backend",
+      "label": "Store",
+      "sublabel": "document_store.py"
+    },
+    {
+      "id": "mongo",
+      "type": "database",
+      "label": "MongoDB",
+      "sublabel": "collections IA"
+    }
+  ],
+  "segments": [
+    {
+      "from": 150,
+      "to": 296,
+      "label": "Requête et garde"
+    },
+    {
+      "from": 306,
+      "to": 500,
+      "label": "Analyse par vision"
+    },
+    {
+      "from": 510,
+      "to": 672,
+      "label": "Journal, persistance, réponse"
+    }
+  ],
+  "messages": [
+    {
+      "id": "upload",
+      "from": "front",
+      "to": "route",
+      "y": 180,
+      "label": "multipart image + Bearer access_token",
+      "variant": "emphasis"
+    },
+    {
+      "id": "verify",
+      "from": "route",
+      "to": "sec",
+      "y": 212,
+      "label": "vérifier le jeton, charger l'utilisateur",
+      "variant": "security"
+    },
+    {
+      "id": "verified",
+      "from": "sec",
+      "to": "route",
+      "y": 244,
+      "label": "utilisateur ACTIF",
+      "variant": "return"
+    },
+    {
+      "id": "size",
+      "from": "route",
+      "to": "sec",
+      "y": 276,
+      "label": "taille > 10 Mo ? → 413",
+      "variant": "dashed"
+    },
+    {
+      "id": "available",
+      "from": "route",
+      "to": "vision",
+      "y": 320,
+      "label": "is_available() — clé GEMINI_API_KEY ?",
+      "variant": "default"
+    },
+    {
+      "id": "unavailable",
+      "from": "vision",
+      "to": "route",
+      "y": 352,
+      "label": "absente → 503 « Gemini non disponible » (journalisé)",
+      "variant": "dashed",
+      "note": "unavailable"
+    },
+    {
+      "id": "analyze",
+      "from": "route",
+      "to": "vision",
+      "y": 386,
+      "label": "analyze(image_bytes)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "gemini-call",
+      "from": "vision",
+      "to": "gemini",
+      "y": 418,
+      "label": "image + consigne « réponse JSON »",
+      "variant": "emphasis"
+    },
+    {
+      "id": "gemini-return",
+      "from": "gemini",
+      "to": "vision",
+      "y": 450,
+      "label": "aliments détectés + macros (ou vide)",
+      "variant": "return"
+    },
+    {
+      "id": "foods",
+      "from": "vision",
+      "to": "route",
+      "y": 482,
+      "label": "liste (vide = fallback)",
+      "variant": "return"
+    },
+    {
+      "id": "log",
+      "from": "route",
+      "to": "store",
+      "y": 524,
+      "label": "log_ai_call(success | fallback, durée ms)",
+      "variant": "dashed"
+    },
+    {
+      "id": "log-insert",
+      "from": "store",
+      "to": "mongo",
+      "y": 554,
+      "label": "insert ai_provider_calls",
+      "variant": "dashed"
+    },
+    {
+      "id": "save",
+      "from": "route",
+      "to": "store",
+      "y": 588,
+      "label": "save_meal_analysis(payload)",
+      "variant": "default"
+    },
+    {
+      "id": "save-insert",
+      "from": "store",
+      "to": "mongo",
+      "y": 618,
+      "label": "insert food_analyses (ignoré si Mongo indisponible)",
+      "variant": "dashed"
+    },
+    {
+      "id": "response",
+      "from": "route",
+      "to": "front",
+      "y": 650,
+      "label": "200 MealAnalysisResponse",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "front",
+      "from": 174,
+      "to": 654,
+      "type": "frontend"
+    },
+    {
+      "participant": "route",
+      "from": 180,
+      "to": 654,
+      "type": "backend"
+    },
+    {
+      "participant": "sec",
+      "from": 208,
+      "to": 282,
+      "type": "security"
+    },
+    {
+      "participant": "vision",
+      "from": 316,
+      "to": 486,
+      "type": "backend"
+    },
+    {
+      "participant": "gemini",
+      "from": 414,
+      "to": 454,
+      "type": "cloud"
+    },
+    {
+      "participant": "store",
+      "from": 520,
+      "to": 622,
+      "type": "backend"
+    },
+    {
+      "participant": "mongo",
+      "from": 550,
+      "to": 622,
+      "type": "database"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Chemin nominal",
+      "items": [
+        "Front → route → service → Gemini → réponse structurée",
+        "Le contrôleur reste mince : validation, délégation, journal",
+        "Résultat typé par MealAnalysisResponse (Pydantic)"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Garde et repli",
+      "items": [
+        "Jeton vérifié avant toute lecture de l'image",
+        "Clé absente : 503 explicite, jamais un résultat vide",
+        "Liste vide : statut fallback, réponse quand même renvoyée"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Persistance non bloquante",
+      "items": [
+        "Journal et résultat écrits en MongoDB (schéma variable)",
+        "get_mongo_db() renvoie None sans exception",
+        "Une panne Mongo se voit dans /health, pas chez l'utilisateur"
+      ]
+    }
+  ]
+}

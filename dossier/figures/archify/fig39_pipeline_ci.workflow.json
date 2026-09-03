@@ -1,0 +1,254 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Intégration continue GitHub Actions — et la marche manquante vers le déploiement",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "trigger",
+        "label": "Déclenchement",
+        "focus": [
+          "commit",
+          "pr"
+        ],
+        "note": "Push sur maintenance/main, pull request, ou lancement manuel."
+      },
+      {
+        "id": "jobs",
+        "label": "Deux jobs en parallèle",
+        "focus": [
+          "backend_tests",
+          "frontend_build",
+          "status"
+        ],
+        "note": "pytest sur SQLite en mémoire ; npm ci puis next build. Moins de deux minutes avec le cache."
+      },
+      {
+        "id": "gap",
+        "label": "Ce qui n'existe pas encore",
+        "focus": [
+          "status",
+          "merge",
+          "image",
+          "deploy"
+        ],
+        "note": "Aucune image publiée, aucun serveur : le déploiement continu est la limite assumée sur la compétence C11."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "dev",
+      "label": "Développeur"
+    },
+    {
+      "id": "ci",
+      "label": "GitHub Actions — backend"
+    },
+    {
+      "id": "ci2",
+      "label": "GitHub Actions — frontend"
+    },
+    {
+      "id": "repo",
+      "label": "Dépôt"
+    },
+    {
+      "id": "future",
+      "label": "Déploiement continu (à faire)",
+      "variant": "exception"
+    }
+  ],
+  "phases": [
+    {
+      "id": "change",
+      "label": "Changement",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "verify",
+      "label": "Vérification automatique",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "next",
+      "label": "Suite",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [],
+  "mainPath": [
+    "commit",
+    "pr",
+    "backend_tests",
+    "status",
+    "merge"
+  ],
+  "semanticChecks": {
+    "allowedRoots": [
+      "commit"
+    ],
+    "requiredEdges": [
+      {
+        "from": "status",
+        "to": "merge"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "commit",
+      "lane": "dev",
+      "col": 0,
+      "type": "frontend",
+      "label": "Commit",
+      "sublabel": "feat / fix"
+    },
+    {
+      "id": "pr",
+      "lane": "dev",
+      "col": 1,
+      "type": "frontend",
+      "label": "Push / PR",
+      "sublabel": "maintenance · main",
+      "tag": "workflow_dispatch"
+    },
+    {
+      "id": "backend_tests",
+      "lane": "ci",
+      "col": 2,
+      "type": "backend",
+      "label": "backend-tests",
+      "sublabel": "pytest -q",
+      "tag": "34 tests"
+    },
+    {
+      "id": "frontend_build",
+      "lane": "ci2",
+      "col": 2,
+      "type": "frontend",
+      "label": "frontend-build",
+      "sublabel": "next build",
+      "tag": "TypeScript"
+    },
+    {
+      "id": "status",
+      "lane": "ci",
+      "col": 3,
+      "type": "security",
+      "label": "Statut",
+      "sublabel": "vert = fusion",
+      "tag": "bloquant"
+    },
+    {
+      "id": "merge",
+      "lane": "repo",
+      "col": 4,
+      "type": "database",
+      "label": "Fusion",
+      "sublabel": "maintenance"
+    },
+    {
+      "id": "image",
+      "lane": "future",
+      "col": 4,
+      "type": "cloud",
+      "label": "Image Docker",
+      "sublabel": "push GHCR",
+      "tag": "à faire"
+    },
+    {
+      "id": "deploy",
+      "lane": "future",
+      "col": 5,
+      "type": "cloud",
+      "label": "Déploiement",
+      "sublabel": "compose up",
+      "tag": "à faire"
+    }
+  ],
+  "edges": [
+    {
+      "from": "commit",
+      "to": "pr",
+      "role": "main",
+      "label": "push"
+    },
+    {
+      "from": "pr",
+      "to": "backend_tests",
+      "role": "main",
+      "label": "déclenche"
+    },
+    {
+      "from": "pr",
+      "to": "frontend_build",
+      "role": "branch",
+      "label": "en parallèle"
+    },
+    {
+      "from": "backend_tests",
+      "to": "status",
+      "role": "main",
+      "label": "34 passed"
+    },
+    {
+      "from": "frontend_build",
+      "to": "status",
+      "role": "branch",
+      "label": "build ok"
+    },
+    {
+      "from": "status",
+      "to": "merge",
+      "role": "main",
+      "label": "vert"
+    },
+    {
+      "from": "status",
+      "to": "pr",
+      "role": "error",
+      "label": "rouge → corriger"
+    },
+    {
+      "from": "merge",
+      "to": "image",
+      "role": "async",
+      "label": "perspective",
+      "variant": "dashed"
+    },
+    {
+      "from": "image",
+      "to": "deploy",
+      "role": "async",
+      "label": "SSH, déclenchement manuel",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Ce qui tourne",
+      "items": [
+        "Tests backend sur SQLite en mémoire, MONGO_ENABLED=false",
+        "Build Next.js : erreurs TypeScript et imports cassés détectés",
+        "Cache pip et npm : moins de deux minutes"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Ce qui manque",
+      "items": [
+        "Pas de lint ni de tests ETL en CI",
+        "Pas d'image publiée, pas de serveur",
+        "Déploiement continu = première étape pour C11"
+      ]
+    }
+  ]
+}

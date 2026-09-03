@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Authentification, contrôle d'accès et rafraîchissement du jeton",
+    "viewBox": [1000, 800],
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "views": [
+      { "id": "login", "label": "Connexion", "focus": ["front", "auth", "sec", "db"], "note": "Limitation de débit, vérification du mot de passe en temps constant, deux jetons émis." },
+      { "id": "guard", "label": "Contrôle d'accès", "focus": ["front", "admin", "sec"], "note": "401 si pas de session valide, 403 si le rôle ne suffit pas." },
+      { "id": "refresh", "label": "Rafraîchissement", "focus": ["front", "auth", "admin"], "note": "Un seul appel /refresh même si plusieurs requêtes reçoivent 401 en même temps." }
+    ]
+  },
+  "participants": [
+    { "id": "front", "type": "frontend", "label": "Frontend", "sublabel": "api.ts" },
+    { "id": "auth", "type": "backend", "label": "Auth", "sublabel": "auth.py" },
+    { "id": "sec", "type": "security", "label": "Sécurité", "sublabel": "security.py" },
+    { "id": "db", "type": "database", "label": "MariaDB", "sublabel": "utilisateur" },
+    { "id": "admin", "type": "backend", "label": "Route admin", "sublabel": "require_roles" }
+  ],
+  "segments": [
+    { "from": 150, "to": 360, "label": "Connexion (limite 10/min)" },
+    { "from": 372, "to": 520, "label": "Appel protégé" },
+    { "from": 532, "to": 730, "label": "Expiration et rafraîchissement" }
+  ],
+  "messages": [
+    { "id": "login", "from": "front", "to": "auth", "y": 182, "label": "POST /api/auth/login (identifiants)", "variant": "emphasis" },
+    { "id": "authenticate", "from": "auth", "to": "sec", "y": 216, "label": "authenticate_user", "variant": "security" },
+    { "id": "select", "from": "sec", "to": "db", "y": 248, "label": "select utilisateur par email ou nom", "variant": "default" },
+    { "id": "row", "from": "db", "to": "sec", "y": 278, "label": "ligne + mot_de_passe_hash", "variant": "return" },
+    { "id": "verify", "from": "sec", "to": "auth", "y": 310, "label": "verify_password (PBKDF2, compare_digest)", "variant": "return" },
+    { "id": "tokens", "from": "auth", "to": "front", "y": 344, "label": "access_token 30 min + cookie refresh HttpOnly SameSite=Strict 7 j", "variant": "return" },
+    { "id": "call", "from": "front", "to": "admin", "y": 404, "label": "GET /api/admin/... + Bearer access_token", "variant": "emphasis" },
+    { "id": "current", "from": "admin", "to": "sec", "y": 438, "label": "current_user → jeton valide ? statut ACTIF ?", "variant": "security" },
+    { "id": "role", "from": "sec", "to": "admin", "y": 470, "label": "rôle ∈ {ADMIN, SUPER_ADMIN} sinon 403", "variant": "return" },
+    { "id": "ok", "from": "admin", "to": "front", "y": 504, "label": "200 données (ou 403 Droits insuffisants)", "variant": "return" },
+    { "id": "expired", "from": "front", "to": "admin", "y": 564, "label": "appel après 30 min", "variant": "default" },
+    { "id": "e401", "from": "admin", "to": "front", "y": 596, "label": "401 Session expirée", "variant": "return" },
+    { "id": "refresh", "from": "front", "to": "auth", "y": 636, "label": "POST /api/auth/refresh (cookie) — refreshPromise partagée", "variant": "security" },
+    { "id": "newtoken", "from": "auth", "to": "front", "y": 668, "label": "nouveau access_token", "variant": "return" },
+    { "id": "replay", "from": "front", "to": "admin", "y": 704, "label": "requête rejouée (retry: false)", "variant": "dashed" }
+  ],
+  "activations": [
+    { "participant": "front", "from": 176, "to": 710, "type": "frontend" },
+    { "participant": "auth", "from": 182, "to": 348, "type": "backend" },
+    { "participant": "sec", "from": 212, "to": 314, "type": "security" },
+    { "participant": "db", "from": 244, "to": 282, "type": "database" },
+    { "participant": "admin", "from": 404, "to": 508, "type": "backend" },
+    { "participant": "sec", "from": 434, "to": 474, "type": "security" },
+    { "participant": "admin", "from": 564, "to": 600, "type": "backend" },
+    { "participant": "auth", "from": 636, "to": 672, "type": "backend" }
+  ],
+  "cards": [
+    { "dot": "rose", "title": "Connexion", "items": ["slowapi : 10 tentatives par minute et par adresse", "Condensé PBKDF2-SHA256 avec sel, comparaison en temps constant", "Jeton d'accès en mémoire, jeton de rafraîchissement en cookie HttpOnly"] },
+    { "dot": "emerald", "title": "Contrôle d'accès", "items": ["current_user relit le compte : désactivation immédiate", "401 = qui êtes-vous ? / 403 = pas le droit", "Le frontend redirige selon le code, l'API décide"] },
+    { "dot": "violet", "title": "Rafraîchissement", "items": ["Promesse partagée : un seul /refresh pour N requêtes en 401", "SameSite=Strict : le cookie n'est jamais envoyé depuis un autre site", "Échec du refresh → retour à /login"] }
+  ]
+}
