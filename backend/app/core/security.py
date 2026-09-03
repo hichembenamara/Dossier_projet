@@ -3,11 +3,11 @@ from __future__ import annotations
 import base64
 import hashlib
 import hmac
-import json
 import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+import jwt
 from fastapi import Cookie, Depends, Header
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
@@ -16,15 +16,6 @@ from app.core.config import get_settings
 from app.core.errors import ApiError
 from app.db.models import Utilisateur
 from app.db.session import get_db
-
-
-def _b64url_encode(raw: bytes) -> str:
-    return base64.urlsafe_b64encode(raw).rstrip(b"=").decode("ascii")
-
-
-def _b64url_decode(value: str) -> bytes:
-    padding = "=" * (-len(value) % 4)
-    return base64.urlsafe_b64decode((value + padding).encode("ascii"))
 
 
 def hash_password_pbkdf2_sha256(password: str, salt: str | None = None, iterations: int = 210000) -> str:
@@ -53,41 +44,27 @@ def create_token(subject: str, token_type: str, expires_delta: timedelta, extra:
     payload = {
         "sub": subject,
         "type": token_type,
-        "iat": int(now.timestamp()),
-        "exp": int((now + expires_delta).timestamp()),
+        "iat": now,
+        "exp": now + expires_delta,
         **(extra or {}),
     }
-    header = {"alg": settings.jwt_algorithm, "typ": "JWT"}
-    signing_input = ".".join(
-        [
-            _b64url_encode(json.dumps(header, separators=(",", ":")).encode("utf-8")),
-            _b64url_encode(json.dumps(payload, separators=(",", ":")).encode("utf-8")),
-        ]
-    )
-    signature = hmac.new(settings.jwt_secret_key.encode("utf-8"), signing_input.encode("ascii"), hashlib.sha256).digest()
-    return f"{signing_input}.{_b64url_encode(signature)}"
+    return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
 
 
 def decode_token(token: str, expected_type: str) -> dict[str, Any]:
     settings = get_settings()
     try:
-        header_raw, payload_raw, signature_raw = token.split(".", 2)
-        signing_input = f"{header_raw}.{payload_raw}"
-        expected_signature = hmac.new(
-            settings.jwt_secret_key.encode("utf-8"),
-            signing_input.encode("ascii"),
-            hashlib.sha256,
-        ).digest()
-        if not hmac.compare_digest(_b64url_decode(signature_raw), expected_signature):
-            raise ValueError("signature")
-        payload = json.loads(_b64url_decode(payload_raw))
-        if payload.get("type") != expected_type:
-            raise ValueError("type")
-        if int(payload.get("exp", 0)) < int(datetime.now(timezone.utc).timestamp()):
-            raise ValueError("exp")
-        return payload
-    except (ValueError, json.JSONDecodeError):
+        payload = jwt.decode(
+            token,
+            settings.jwt_secret_key,
+            algorithms=[settings.jwt_algorithm],
+            options={"require": ["exp", "sub", "type"]},
+        )
+    except jwt.PyJWTError:
         raise ApiError(401, "unauthorized", "Token invalide ou expire.")
+    if payload.get("type") != expected_type:
+        raise ApiError(401, "unauthorized", "Token invalide ou expire.")
+    return payload
 
 
 def authenticate_user(db: Session, identifiant: str, mot_de_passe: str) -> Utilisateur | None:
