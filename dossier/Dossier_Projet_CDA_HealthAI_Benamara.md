@@ -533,7 +533,7 @@ Deux référentiels ont également été pris en compte, sans prétendre à une 
 
 ### Vue d'ensemble
 
-*Figure 11 — Architecture d'exécution de HealthAI Coaching (archify, `docs/architecture/runtime.architecture.html`).*
+*Figure 11 — Architecture d'exécution de HealthAI Coaching (archify, `dossier/figures/archify/fig11_architecture_execution.png`).*
 
 L'application est composée de cinq conteneurs définis dans `docker-compose.yml` et de deux conteneurs de supervision définis à part :
 
@@ -622,9 +622,9 @@ Trois parcours structurent l'usage : l'utilisateur passe par `/login` puis, s'il
 
 La modélisation a suivi la méthode Merise, du conceptuel au physique. J'ai produit les premiers diagrammes en février 2026 avec PlantUML, accompagnés d'un dictionnaire de données ; ils ont ensuite été enrichis au fil des MSPR (tables de pilotage ETL en avril, `coach_posture_session` en juin). Les figures ci-dessous sont régénérées avec archify à partir de l'état final de `backend/app/db/models.py`.
 
-*Figure 18 — Modèle conceptuel de données (archify, `docs/architecture/mcd.html`).*
+*Figure 18 — Modèle conceptuel de données (`dossier/figures/archify/fig18_mcd.png`, rendu de la page `fig18_mcd.html`).*
 *Figure 19 — Modèle logique de données : tables métier (archify, `dossier/figures/archify/fig19a_mld_metier.png`) et tables de pilotage ETL (`dossier/figures/archify/fig19b_mld_pilotage_etl.png`).*
-*Figure 20 — Modèle physique de données, tables métier (archify, `docs/architecture/mpd-metier.architecture.html`) et tables de pilotage ETL (`docs/architecture/mpd-pipeline.architecture.html`).*
+*Figure 20 — Modèle physique de données : tables métier (archify, `dossier/figures/archify/fig20a_mpd_metier.png`) et tables de pilotage ETL (`dossier/figures/archify/fig20b_mpd_pilotage_etl.png`).*
 
 ### Les 20 tables
 

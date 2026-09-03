@@ -53,3 +53,4 @@ backups/*
 !backend/db/*.sql
 # Sidecars de visual-check archify (preuves régénérables)
 dossier/figures/archify/*.visual-check.*
+# Notes d'architecture archivées : voir docs/archive/

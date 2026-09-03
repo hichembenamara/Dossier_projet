@@ -6,13 +6,14 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 ARCHIFY_HOME="${ARCHIFY_HOME:-$HOME/tools/archify/archify}"
 CHROME="${ARCHIFY_CHROME:-$(command -v chromium || command -v google-chrome || echo /opt/google/chrome/chrome)}"
 export ARCHIFY_CHROME="$CHROME"
+REPO="${ARCHIFY_REPO_ROOT:-$(cd "$HERE/../../.." && pwd)}"   # racine du dépôt pour les preuves de code (champ sources)
 T=$1; N=$2; IN="$HERE/$N.$T.json"; OUT="$HERE/$N.html"
 cd "$ARCHIFY_HOME"
-node bin/archify.mjs validate "$T" "$IN" --quality showcase --json | python3 -c "
+node bin/archify.mjs validate "$T" "$IN" --quality showcase --repo-root "$REPO" --json | python3 -c "
 import sys,json;d=json.load(sys.stdin);ok=d.get('ok');print('validate ok' if ok else 'VALIDATE FAIL')
 for x in d.get('diagnostics',[]): print(' -',x.get('severity'),x.get('code'),x.get('message','')[:300]); print('   fixes:',x.get('supportedFixes'))
 sys.exit(0 if ok else 1)"
-node bin/archify.mjs deliver "$T" "$IN" "$OUT" --quality showcase --json | python3 -c "import sys,json;d=json.load(sys.stdin);print('deliver ok' if d.get('ok') else 'DELIVER FAIL');sys.exit(0 if d.get('ok') else 1)"
+node bin/archify.mjs deliver "$T" "$IN" "$OUT" --quality showcase --repo-root "$REPO" --json | python3 -c "import sys,json;d=json.load(sys.stdin);print('deliver ok' if d.get('ok') else 'DELIVER FAIL');sys.exit(0 if d.get('ok') else 1)"
 node bin/archify.mjs visual-check "$OUT" --json | python3 -c "import sys,json;d=json.load(sys.stdin);print('visual-check',d.get('status')); [print(' -',x['severity'],x['message'][:160]) for x in d.get('diagnostics',[]) if x['severity']=='error']"
 # PNG du seul diagramme (SVG) pour l'impression : thème clair, échelle 2x, fond blanc
 PY="${ARCHIFY_PY:-$HERE/../../../backend/.venv/bin/python}"
