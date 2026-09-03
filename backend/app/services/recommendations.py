@@ -92,6 +92,9 @@ EQUIPMENT_ALIASES: dict[str, tuple[str, ...]] = {
 }
 
 
+NUTRITION_MIN_RELEVANCE = 65  # score de pertinence minimal pour proposer un aliment
+
+
 class RecommendationEngine:
     """Moteur local explicable, sans appel externe ni cle API."""
 
@@ -307,7 +310,10 @@ class RecommendationEngine:
             )
 
         recommendations.sort(key=lambda item: (item.score_securite, item.score_pertinence, item.score_nutritionnel), reverse=True)
-        selected = recommendations[: request.max_nutrition]
+        # Jeu d'essai (écart 1) : ne pas combler la liste avec un aliment médiocre.
+        relevant = [item for item in recommendations if item.score_pertinence >= NUTRITION_MIN_RELEVANCE]
+        below_threshold = len(recommendations) - len(relevant)
+        selected = relevant[: request.max_nutrition]
         selected_names = [item.nom for item in selected]
         for item in selected:
             item.alternatives = [name for name in selected_names if name != item.nom][:2]
@@ -317,6 +323,10 @@ class RecommendationEngine:
             messages.append(f"{blocked_allergy} aliment(s) exclus pour allergie ou regime incompatible.")
         if blocked_budget:
             messages.append(f"{blocked_budget} aliment(s) exclus car le budget faible etait incompatible.")
+        if below_threshold and len(selected) < request.max_nutrition:
+            messages.append(
+                f"Catalogue insuffisant : {below_threshold} aliment(s) ecartes car leur pertinence est inferieure a {NUTRITION_MIN_RELEVANCE}."
+            )
         if not selected:
             messages.append("Aucune recommandation nutrition compatible avec toutes les contraintes.")
         return selected, messages
@@ -375,7 +385,6 @@ class RecommendationEngine:
             muscle_bonus = self._requested_muscle_bonus(exercice, request.muscles_cibles)
             session_bonus = self._session_type_bonus(exercice, request.type_seance)
             relevance = self._clamp(58 + preference_bonus + history_bonus + goal_bonus + level_bonus + muscle_bonus + session_bonus)
-            duration = self._exercise_duration(sport_level, request.duree_seance_min)
             intensity = self._sport_intensity(sport_level, health_constraints)
             frequency = self._sport_frequency(sport_level, goal, request.frequence_seances_hebdo)
             muscles = self._exercise_muscles(exercice)
@@ -398,7 +407,7 @@ class RecommendationEngine:
                 SportExerciseRecommendation(
                     exercice_id=exercice.exercice_id,
                     nom=exercice.nom,
-                    duree_min=duration,
+                    duree_min=self._exercise_duration(sport_level),
                     intensite=intensity,
                     frequence=frequency,
                     equipement_necessaire=[item for item in needed if item],
@@ -421,6 +430,11 @@ class RecommendationEngine:
         sessions: list[SportSessionRecommendation] = []
         if selected:
             session_items = selected[: min(4, len(selected))]
+            # Jeu d'essai (écart 2) : la durée unitaire est répartie sur les exercices réellement
+            # retenus dans la séance, et la durée de la séance est leur somme.
+            unit_duration = self._exercise_duration(sport_level, request.duree_seance_min, len(session_items))
+            for item in session_items:
+                item.duree_min = unit_duration
             sessions.append(
                 SportSessionRecommendation(
                     nom=f"Seance {goal.replace('_', ' ')}",
@@ -829,9 +843,9 @@ class RecommendationEngine:
             f"Muscles cibles: {muscles}."
         )
 
-    def _exercise_duration(self, sport_level: str, preferred_duration: int | None = None) -> int:
+    def _exercise_duration(self, sport_level: str, preferred_duration: int | None = None, nb_exercises: int = 4) -> int:
         if preferred_duration:
-            return max(5, min(45, round(preferred_duration / 4)))
+            return max(5, min(45, round(preferred_duration / max(1, nb_exercises))))
         if sport_level == "avance":
             return 14
         if sport_level == "intermediaire":

@@ -1,0 +1,474 @@
+{
+  "generated_at": "2026-09-03T13:11:39.915602",
+  "source": "local_rules",
+  "fallback_utilise": true,
+  "fallback_message": "Fallback local regles metier utilise pour garantir une reponse sans IA externe.",
+  "contexte": {
+    "utilisateur_id": 1,
+    "age": 29,
+    "sexe": "Femme",
+    "taille_cm": 168.0,
+    "poids_kg": 82.0,
+    "imc": 29.05,
+    "objectif_principal": "perte_poids",
+    "budget": null,
+    "niveau_sportif": "debutant",
+    "niveau_activite": null,
+    "frequence_seances_hebdo": 3,
+    "duree_seance_min": 45,
+    "donnees_utilisees": [
+      "profil utilisateur",
+      "catalogue aliments",
+      "catalogue exercices",
+      "derniere biometrie",
+      "objectif actif"
+    ]
+  },
+  "contraintes_prises_en_compte": [
+    "allergies: arachide",
+    "equipement: halteres, tapis",
+    "frequence souhaitee: 3/semaine",
+    "duree seance souhaitee: 45 min",
+    "contraintes sante: douleur genou"
+  ],
+  "nutrition": [
+    {
+      "aliment_id": 2,
+      "source": "aliment",
+      "type": "recette",
+      "nom": "Chicken breast grilled",
+      "recette": "Portion controlee autour de Chicken breast grilled, avec legumes ou crudites si disponibles.",
+      "calories_estimees": 165.0,
+      "proteines_g": 31.0,
+      "glucides_g": 0.0,
+      "lipides_g": 3.6,
+      "score_nutritionnel": 87,
+      "score_pertinence": 87,
+      "score_securite": 100,
+      "justification": "Selectionne depuis le catalogue aliments pour l'objectif perte poids. Bon apport proteique pour soutenir la satiete ou la recuperation. Densite calorique compatible avec une perte de poids progressive.",
+      "ingredients": [
+        "Chicken breast grilled",
+        "Poultry"
+      ],
+      "preparation": "Portion controlee autour de Chicken breast grilled, avec legumes ou crudites si disponibles.",
+      "budget_estime": "moyen",
+      "allergenes_exclus": [
+        "arachide"
+      ],
+      "contraintes_respectees": [
+        "allergies exclues"
+      ],
+      "alternatives": [
+        "Salmon baked",
+        "Lentils cooked"
+      ],
+      "badges": [
+        "perte_poids",
+        "budget moyen",
+        "proteines"
+      ]
+    },
+    {
+      "aliment_id": 4,
+      "source": "aliment",
+      "type": "recette",
+      "nom": "Salmon baked",
+      "recette": "Portion controlee autour de Salmon baked, avec legumes ou crudites si disponibles.",
+      "calories_estimees": 208.0,
+      "proteines_g": 20.0,
+      "glucides_g": 0.0,
+      "lipides_g": 13.0,
+      "score_nutritionnel": 87,
+      "score_pertinence": 87,
+      "score_securite": 100,
+      "justification": "Selectionne depuis le catalogue aliments pour l'objectif perte poids. Bon apport proteique pour soutenir la satiete ou la recuperation. Densite calorique compatible avec une perte de poids progressive.",
+      "ingredients": [
+        "Salmon baked",
+        "Fish"
+      ],
+      "preparation": "Portion controlee autour de Salmon baked, avec legumes ou crudites si disponibles.",
+      "budget_estime": "moyen",
+      "allergenes_exclus": [
+        "arachide"
+      ],
+      "contraintes_respectees": [
+        "allergies exclues"
+      ],
+      "alternatives": [
+        "Chicken breast grilled",
+        "Lentils cooked"
+      ],
+      "badges": [
+        "perte_poids",
+        "budget moyen",
+        "proteines"
+      ]
+    },
+    {
+      "aliment_id": 3,
+      "source": "aliment",
+      "type": "recette",
+      "nom": "Lentils cooked",
+      "recette": "Portion controlee autour de Lentils cooked, avec legumes ou crudites si disponibles.",
+      "calories_estimees": 116.0,
+      "proteines_g": 9.0,
+      "glucides_g": 20.0,
+      "lipides_g": 0.4,
+      "score_nutritionnel": 73,
+      "score_pertinence": 73,
+      "score_securite": 100,
+      "justification": "Selectionne depuis le catalogue aliments pour l'objectif perte poids. Densite calorique compatible avec une perte de poids progressive.",
+      "ingredients": [
+        "Lentils cooked",
+        "Legumes"
+      ],
+      "preparation": "Portion controlee autour de Lentils cooked, avec legumes ou crudites si disponibles.",
+      "budget_estime": "moyen",
+      "allergenes_exclus": [
+        "arachide"
+      ],
+      "contraintes_respectees": [
+        "allergies exclues"
+      ],
+      "alternatives": [
+        "Chicken breast grilled",
+        "Salmon baked"
+      ],
+      "badges": [
+        "perte_poids",
+        "budget moyen"
+      ]
+    },
+    {
+      "aliment_id": 5,
+      "source": "aliment",
+      "type": "recette",
+      "nom": "Greek yogurt plain",
+      "recette": "Portion controlee autour de Greek yogurt plain, avec legumes ou crudites si disponibles.",
+      "calories_estimees": 59.0,
+      "proteines_g": 10.0,
+      "glucides_g": 3.6,
+      "lipides_g": 0.4,
+      "score_nutritionnel": 71,
+      "score_pertinence": 71,
+      "score_securite": 100,
+      "justification": "Selectionne depuis le catalogue aliments pour l'objectif perte poids. Densite calorique compatible avec une perte de poids progressive.",
+      "ingredients": [
+        "Greek yogurt plain",
+        "Dairy"
+      ],
+      "preparation": "Portion controlee autour de Greek yogurt plain, avec legumes ou crudites si disponibles.",
+      "budget_estime": "moyen",
+      "allergenes_exclus": [
+        "arachide"
+      ],
+      "contraintes_respectees": [
+        "allergies exclues"
+      ],
+      "alternatives": [
+        "Chicken breast grilled",
+        "Salmon baked"
+      ],
+      "badges": [
+        "perte_poids",
+        "budget moyen"
+      ]
+    }
+  ],
+  "sport": {
+    "exercices": [
+      {
+        "exercice_id": 3,
+        "nom": "dumbbell bench press",
+        "duree_min": 11,
+        "intensite": "douce",
+        "frequence": "3 fois/semaine",
+        "equipement_necessaire": [
+          "dumbbell"
+        ],
+        "muscles_cibles": [
+          "chest",
+          "pectorals"
+        ],
+        "niveau_adapte": "debutant",
+        "score_pertinence": 61,
+        "score_securite": 100,
+        "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: chest, pectorals.",
+        "series": 2,
+        "repetitions": "8 a 10 repetitions controlees",
+        "repos": "45 a 60 s",
+        "adaptations": [
+          "Amplitude controlee et vitesse lente."
+        ],
+        "contre_indications": [],
+        "contraintes_respectees": [
+          "equipement disponible respecte",
+          "contraintes sante analysees"
+        ]
+      },
+      {
+        "exercice_id": 4,
+        "nom": "pull-up",
+        "duree_min": 11,
+        "intensite": "douce",
+        "frequence": "3 fois/semaine",
+        "equipement_necessaire": [
+          "body weight"
+        ],
+        "muscles_cibles": [
+          "back",
+          "lats"
+        ],
+        "niveau_adapte": "debutant",
+        "score_pertinence": 61,
+        "score_securite": 100,
+        "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: back, lats.",
+        "series": 2,
+        "repetitions": "8 a 10 repetitions controlees",
+        "repos": "45 a 60 s",
+        "adaptations": [
+          "Amplitude controlee et vitesse lente."
+        ],
+        "contre_indications": [],
+        "contraintes_respectees": [
+          "equipement disponible respecte",
+          "contraintes sante analysees"
+        ]
+      },
+      {
+        "exercice_id": 5,
+        "nom": "push-up",
+        "duree_min": 11,
+        "intensite": "douce",
+        "frequence": "3 fois/semaine",
+        "equipement_necessaire": [
+          "body weight"
+        ],
+        "muscles_cibles": [
+          "chest",
+          "pectorals"
+        ],
+        "niveau_adapte": "debutant",
+        "score_pertinence": 61,
+        "score_securite": 100,
+        "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: chest, pectorals.",
+        "series": 2,
+        "repetitions": "8 a 10 repetitions controlees",
+        "repos": "45 a 60 s",
+        "adaptations": [
+          "Amplitude controlee et vitesse lente."
+        ],
+        "contre_indications": [],
+        "contraintes_respectees": [
+          "equipement disponible respecte",
+          "contraintes sante analysees"
+        ]
+      },
+      {
+        "exercice_id": 6,
+        "nom": "dumbbell shoulder press",
+        "duree_min": 11,
+        "intensite": "douce",
+        "frequence": "3 fois/semaine",
+        "equipement_necessaire": [
+          "dumbbell"
+        ],
+        "muscles_cibles": [
+          "shoulders",
+          "delts"
+        ],
+        "niveau_adapte": "debutant",
+        "score_pertinence": 61,
+        "score_securite": 100,
+        "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: shoulders, delts.",
+        "series": 2,
+        "repetitions": "8 a 10 repetitions controlees",
+        "repos": "45 a 60 s",
+        "adaptations": [
+          "Amplitude controlee et vitesse lente."
+        ],
+        "contre_indications": [],
+        "contraintes_respectees": [
+          "equipement disponible respecte",
+          "contraintes sante analysees"
+        ]
+      },
+      {
+        "exercice_id": 7,
+        "nom": "plank",
+        "duree_min": 8,
+        "intensite": "douce",
+        "frequence": "3 fois/semaine",
+        "equipement_necessaire": [
+          "body weight"
+        ],
+        "muscles_cibles": [
+          "waist",
+          "abs"
+        ],
+        "niveau_adapte": "debutant",
+        "score_pertinence": 61,
+        "score_securite": 100,
+        "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: waist, abs.",
+        "series": 2,
+        "repetitions": "8 a 10 repetitions controlees",
+        "repos": "45 a 60 s",
+        "adaptations": [
+          "Amplitude controlee et vitesse lente."
+        ],
+        "contre_indications": [],
+        "contraintes_respectees": [
+          "equipement disponible respecte",
+          "contraintes sante analysees"
+        ]
+      }
+    ],
+    "seances": [
+      {
+        "nom": "Seance perte poids",
+        "duree_min": 44,
+        "intensite": "douce",
+        "frequence": "3 fois/semaine",
+        "exercices": [
+          {
+            "exercice_id": 3,
+            "nom": "dumbbell bench press",
+            "duree_min": 11,
+            "intensite": "douce",
+            "frequence": "3 fois/semaine",
+            "equipement_necessaire": [
+              "dumbbell"
+            ],
+            "muscles_cibles": [
+              "chest",
+              "pectorals"
+            ],
+            "niveau_adapte": "debutant",
+            "score_pertinence": 61,
+            "score_securite": 100,
+            "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: chest, pectorals.",
+            "series": 2,
+            "repetitions": "8 a 10 repetitions controlees",
+            "repos": "45 a 60 s",
+            "adaptations": [
+              "Amplitude controlee et vitesse lente."
+            ],
+            "contre_indications": [],
+            "contraintes_respectees": [
+              "equipement disponible respecte",
+              "contraintes sante analysees"
+            ]
+          },
+          {
+            "exercice_id": 4,
+            "nom": "pull-up",
+            "duree_min": 11,
+            "intensite": "douce",
+            "frequence": "3 fois/semaine",
+            "equipement_necessaire": [
+              "body weight"
+            ],
+            "muscles_cibles": [
+              "back",
+              "lats"
+            ],
+            "niveau_adapte": "debutant",
+            "score_pertinence": 61,
+            "score_securite": 100,
+            "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: back, lats.",
+            "series": 2,
+            "repetitions": "8 a 10 repetitions controlees",
+            "repos": "45 a 60 s",
+            "adaptations": [
+              "Amplitude controlee et vitesse lente."
+            ],
+            "contre_indications": [],
+            "contraintes_respectees": [
+              "equipement disponible respecte",
+              "contraintes sante analysees"
+            ]
+          },
+          {
+            "exercice_id": 5,
+            "nom": "push-up",
+            "duree_min": 11,
+            "intensite": "douce",
+            "frequence": "3 fois/semaine",
+            "equipement_necessaire": [
+              "body weight"
+            ],
+            "muscles_cibles": [
+              "chest",
+              "pectorals"
+            ],
+            "niveau_adapte": "debutant",
+            "score_pertinence": 61,
+            "score_securite": 100,
+            "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: chest, pectorals.",
+            "series": 2,
+            "repetitions": "8 a 10 repetitions controlees",
+            "repos": "45 a 60 s",
+            "adaptations": [
+              "Amplitude controlee et vitesse lente."
+            ],
+            "contre_indications": [],
+            "contraintes_respectees": [
+              "equipement disponible respecte",
+              "contraintes sante analysees"
+            ]
+          },
+          {
+            "exercice_id": 6,
+            "nom": "dumbbell shoulder press",
+            "duree_min": 11,
+            "intensite": "douce",
+            "frequence": "3 fois/semaine",
+            "equipement_necessaire": [
+              "dumbbell"
+            ],
+            "muscles_cibles": [
+              "shoulders",
+              "delts"
+            ],
+            "niveau_adapte": "debutant",
+            "score_pertinence": 61,
+            "score_securite": 100,
+            "justification": "Exercice compatible avec l'objectif perte poids et un niveau debutant. Muscles cibles: shoulders, delts.",
+            "series": 2,
+            "repetitions": "8 a 10 repetitions controlees",
+            "repos": "45 a 60 s",
+            "adaptations": [
+              "Amplitude controlee et vitesse lente."
+            ],
+            "contre_indications": [],
+            "contraintes_respectees": [
+              "equipement disponible respecte",
+              "contraintes sante analysees"
+            ]
+          }
+        ],
+        "materiel_necessaire": [
+          "dumbbell",
+          "body weight"
+        ],
+        "muscles_cibles": [
+          "chest",
+          "pectorals",
+          "back",
+          "lats",
+          "shoulders",
+          "delts"
+        ],
+        "contre_indications": [],
+        "justification": "Seance composee uniquement d'exercices compatibles avec l'equipement declare et les contraintes sante."
+      }
+    ]
+  },
+  "messages": [
+    "Moteur local utilise: aucune cle API externe n'est requise pour ces recommandations.",
+    "2 aliment(s) exclus pour allergie ou regime incompatible.",
+    "Catalogue insuffisant : 1 aliment(s) ecartes car leur pertinence est inferieure a 65.",
+    "2 exercice(s) exclus car le materiel requis n'etait pas disponible.",
+    "1 exercice(s) exclus par securite selon les contraintes sante."
+  ]
+}

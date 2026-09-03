@@ -723,7 +723,11 @@ def test_recommendations_use_profile_defaults_and_keep_user_isolation(client: Te
     assert protected.status_code == 201
     protected_headers = {"Authorization": f"Bearer {protected.json()['data']['access_token']}"}
 
-    open_payload = complete_register_payload(username="open-user", email="open@example.test")
+    # Objectif prise de masse : le beurre de cacahuete (588 kcal, 25 g de proteines) passe le seuil
+    # de pertinence (NUTRITION_MIN_RELEVANCE) ; en perte de poids il serait ecarte pour son score,
+    # pas pour l'allergie, ce qui ne testerait plus l'isolation entre utilisateurs.
+    open_payload = complete_register_payload(username="open-user", email="open@example.test", objectif="Prise de masse")
+    open_payload["poids_cible_kg"] = 78
     open_payload["allergies"] = ["aucune"]
     open_payload["equipements"] = ["halteres"]
     open_payload["contraintes_sante"] = ["aucune"]
