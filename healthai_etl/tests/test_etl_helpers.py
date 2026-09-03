@@ -37,3 +37,22 @@ class TestEtlHelpers(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestDemoPasswordHash(unittest.TestCase):
+    def test_hash_format_matches_backend_verify_password(self):
+        import base64
+        import hashlib
+        import hmac
+
+        from etl_common import PBKDF2_ITERATIONS, hash_password_demo
+
+        encoded = hash_password_demo("secret")
+        algorithm, iterations, salt, digest_b64 = encoded.split("$", 3)
+
+        # Reproduit backend.app.core.security.verify_password sans dépendre du backend.
+        candidate = hashlib.pbkdf2_hmac("sha256", b"secret", salt.encode("utf-8"), int(iterations))
+        self.assertEqual(algorithm, "pbkdf2_sha256")
+        self.assertEqual(int(iterations), PBKDF2_ITERATIONS)
+        self.assertEqual(PBKDF2_ITERATIONS, 600_000)
+        self.assertTrue(hmac.compare_digest(base64.b64encode(candidate).decode("ascii"), digest_b64))

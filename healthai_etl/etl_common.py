@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import math
@@ -759,10 +760,20 @@ def unique_email(conn, base_email: str) -> str:
         suffix += 1
 
 
+PBKDF2_ITERATIONS = 600_000  # doit rester égal à backend/app/core/security.py
+
+
 def hash_password_demo(password: str) -> str:
-    salt = secrets.token_hex(16)
-    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), bytes.fromhex(salt), 210000)
-    return f"pbkdf2_sha256$210000${salt}${digest.hex()}"
+    """Même format que backend.app.core.security.hash_password_pbkdf2_sha256.
+
+    Sel encodé en UTF-8 (pas bytes.fromhex) et condensé en base64 : c'est ce que
+    verify_password relit. L'ancien format (sel hex + condensé hex) produisait des
+    comptes ETL impossibles à authentifier.
+    """
+    salt = secrets.token_urlsafe(12)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), PBKDF2_ITERATIONS)
+    digest_b64 = base64.b64encode(digest).decode("ascii").strip()
+    return f"pbkdf2_sha256${PBKDF2_ITERATIONS}${salt}${digest_b64}"
 
 
 def generate_demo_password(prenom: str, nom: str, naissance: Optional[date], rng: random.Random) -> str:

@@ -18,7 +18,10 @@ from app.db.models import Utilisateur
 from app.db.session import get_db
 
 
-def hash_password_pbkdf2_sha256(password: str, salt: str | None = None, iterations: int = 210000) -> str:
+PBKDF2_ITERATIONS = 600_000  # OWASP Password Storage Cheat Sheet (PBKDF2-HMAC-SHA256)
+
+
+def hash_password_pbkdf2_sha256(password: str, salt: str | None = None, iterations: int = PBKDF2_ITERATIONS) -> str:
     salt = salt or secrets.token_urlsafe(12)
     digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), iterations)
     digest_b64 = base64.b64encode(digest).decode("ascii").strip()

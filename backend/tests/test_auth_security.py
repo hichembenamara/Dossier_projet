@@ -62,3 +62,35 @@ def test_unsigned_token_is_rejected():
 
     with pytest.raises(ApiError):
         decode_token(forged, "access")
+
+
+def test_password_hash_uses_600k_iterations_and_verifies():
+    from app.core.security import PBKDF2_ITERATIONS, hash_password_pbkdf2_sha256, verify_password
+
+    encoded = hash_password_pbkdf2_sha256("secret")
+
+    assert PBKDF2_ITERATIONS == 600_000
+    assert encoded.split("$")[1] == "600000"
+    assert verify_password("secret", encoded) is True
+    assert verify_password("wrong", encoded) is False
+
+
+def test_legacy_210k_hash_still_verifies():
+    from app.core.security import hash_password_pbkdf2_sha256, verify_password
+
+    legacy = hash_password_pbkdf2_sha256("secret", iterations=210000)
+
+    assert legacy.split("$")[1] == "210000"
+    assert verify_password("secret", legacy) is True
+
+
+def test_etl_demo_hash_is_verifiable_by_backend():
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "healthai_etl"))
+    from etl_common import hash_password_demo  # noqa: E402
+
+    from app.core.security import verify_password
+
+    assert verify_password("demo-pass", hash_password_demo("demo-pass")) is True
