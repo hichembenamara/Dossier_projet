@@ -48,3 +48,6 @@ sa-dashboard*.png
 # Sauvegardes générées (dumps BDD) — garder le dossier, pas son contenu
 backups/*
 !backups/.gitkeep
+
+# Scripts de schéma versionnés (le référentiel CDA exige le script de création)
+!backend/db/*.sql
