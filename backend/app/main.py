@@ -1,18 +1,19 @@
 from __future__ import annotations
 
+import ipaddress
 import json
 import logging
 import time
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse, Response
 
 from app.core.config import get_settings
-from app.core.errors import register_error_handlers
+from app.core.errors import ApiError, register_error_handlers
 from app.core.logging import setup_logging
 from app.core.middleware import RequestLogMiddleware
 from app.core.rate_limit import install_rate_limiter
@@ -205,8 +206,23 @@ def create_app() -> FastAPI:
             HTTP_LATENCY.labels(request.method, handler).observe(time.perf_counter() - start)
             return response
 
+        allowed_networks = [ipaddress.ip_network(cidr, strict=False) for cidr in settings.metrics_allowed_networks]
+
+        def _metrics_client_allowed(request: Request) -> bool:
+            """Vrai si l'appelant vient d'un réseau autorisé (réseau Docker interne, boucle locale)."""
+            host = request.client.host if request.client else None
+            try:
+                address = ipaddress.ip_address(host or "")
+            except ValueError:
+                return False
+            return any(address in network for network in allowed_networks)
+
         @fastapi_app.get("/metrics", include_in_schema=False)
-        def metrics() -> Response:
+        def metrics(request: Request) -> Response:
+            # /metrics n'est ni authentifié ni documenté : on le réserve au scraper Prometheus
+            # (même réseau Compose) plutôt que de l'exposer sur le port public 8000.
+            if not _metrics_client_allowed(request):
+                raise ApiError(403, "forbidden", "Endpoint de métriques réservé au réseau de supervision.")
             return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
     return fastapi_app

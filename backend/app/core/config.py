@@ -56,6 +56,8 @@ class Settings(BaseSettings):
     mongo_db_name: str = "healthai_nosql"
     mongo_enabled: bool = True
     mongo_timeout_ms: int = 800
+    # Réseaux autorisés à lire /metrics : boucle locale et plages privées (réseaux Docker Compose).
+    metrics_allowed_networks: list[str] = ["127.0.0.0/8", "::1/128", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
 
     model_config = SettingsConfigDict(
         env_file=("healthai_etl/.env", "backend/.env", ".env"),
