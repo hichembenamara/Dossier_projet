@@ -2,8 +2,13 @@ from __future__ import annotations
 
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+DEFAULT_JWT_SECRET = "change-me-in-production"
+PLACEHOLDER_JWT_SECRETS = {DEFAULT_JWT_SECRET, "change-me-local-dev"}  # valeurs d'exemple (.env.example, docker-compose.yml)
+MIN_JWT_SECRET_BYTES = 32  # RFC 7518 §3.2 : clé HMAC-SHA256 d'au moins 256 bits
 
 
 class Settings(BaseSettings):
@@ -16,7 +21,7 @@ class Settings(BaseSettings):
     db_user: str = "root"
     db_password: str = ""
     db_name: str = "healthai_coaching"
-    jwt_secret_key: str = Field(default="change-me-in-production")
+    jwt_secret_key: str = Field(default=DEFAULT_JWT_SECRET)
     jwt_algorithm: str = "HS256"
     access_token_minutes: int = 30
     refresh_token_days: int = 7
@@ -57,6 +62,20 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
+
+    @model_validator(mode="after")
+    def _reject_weak_secret_in_production(self) -> "Settings":
+        """Échec au démarrage plutôt qu'un service en production signé avec un secret connu (ANSSI)."""
+        if self.environment != "production":
+            return self
+        if self.jwt_secret_key in PLACEHOLDER_JWT_SECRETS:
+            raise ValueError("JWT_SECRET_KEY garde sa valeur par défaut : refus de démarrer en production.")
+        if len(self.jwt_secret_key.encode("utf-8")) < MIN_JWT_SECRET_BYTES:
+            raise ValueError(
+                f"JWT_SECRET_KEY trop courte ({len(self.jwt_secret_key.encode('utf-8'))} octets, "
+                f"minimum {MIN_JWT_SECRET_BYTES}) : refus de démarrer en production."
+            )
+        return self
 
     @property
     def sqlalchemy_database_url(self) -> str:
