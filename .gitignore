@@ -51,3 +51,5 @@ backups/*
 
 # Scripts de schéma versionnés (le référentiel CDA exige le script de création)
 !backend/db/*.sql
+# Sidecars de visual-check archify (preuves régénérables)
+dossier/figures/archify/*.visual-check.*
