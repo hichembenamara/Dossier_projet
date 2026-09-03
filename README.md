@@ -40,8 +40,8 @@ docker-compose.yml
 
 ```bash
 # 1. Cloner le repo
-git clone https://github.com/hichembenamara/mspr-fiiinale.git
-cd mspr-fiiinale
+git clone https://github.com/hichembenamara/Dossier_projet.git
+cd Dossier_projet
 
 # 2. Copier le fichier d'env (les valeurs par défaut suffisent)
 cp .env.example .env
