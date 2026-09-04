@@ -137,7 +137,7 @@ jobs:
 
 Le second job, `frontend-build`, installe Node 22, exécute `npm ci` (installation reproductible depuis `package-lock.json`) puis `next build`, ce qui détecte les erreurs TypeScript et les imports cassés.
 
-Depuis le 4 septembre, quatre jobs s'ajoutent : `etl-tests` (pytest sur `healthai_etl`), `lint` (`ruff check` et `eslint`), et `e2e`, qui démarre la pile avec `docker compose up -d --build`, attend `/health`, charge l'ETL, exécute les trois scénarios Playwright et publie le rapport HTML en artefact.
+Depuis le 4 septembre, trois jobs s'ajoutent : `etl-tests` (pytest sur `healthai_etl`), `lint` (`ruff check` et `eslint`), et `e2e`, qui démarre la pile avec `docker compose up -d --build`, attend `/health`, charge l'ETL, exécute les trois scénarios Playwright et publie le rapport HTML en artefact. Les jeux de données CSV de l'ETL ne sont pas versionnés (`data/` est ignoré) : tant qu'ils ne sont pas fournis au job, l'étape ETL est sautée avec un avertissement et le scénario `admin-etl` échoue, les deux autres passent.
 
 Pourquoi ce choix : les jobs indépendants tournent en parallèle et durent moins de deux minutes grâce au cache des dépendances ; seul `e2e` attend les tests backend et le build. Les tests n'ont besoin d'aucun service externe (SQLite, Mongo désactivé, clé JWT de test), donc le pipeline ne dépend d'aucun secret. Le déclenchement manuel (`workflow_dispatch`) permet de relancer une exécution sans commit. Le pipeline ne couvre pas la qualité du code (lint) ni les tests du pipeline ETL ; les deux sont des ajouts simples, notés en perspective.
 

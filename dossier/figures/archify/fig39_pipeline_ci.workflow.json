@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Intégration continue GitHub Actions — six jobs, et la marche manquante vers le déploiement",
+    "title": "Intégration continue GitHub Actions — cinq jobs, et la marche manquante vers le déploiement",
     "quality_profile": "showcase"
   },
   "lanes": [
@@ -243,7 +243,7 @@
       "dot": "cyan",
       "title": "Ce qui tourne",
       "items": [
-        "Six jobs, e2e après tests backend et build",
+        "Cinq jobs, e2e après tests backend et build",
         "E2E : compose up, ETL, Playwright, rapport HTML"
       ]
     },
