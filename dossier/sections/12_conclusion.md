@@ -30,7 +30,7 @@ Un seul dépôt et des branches dès le premier jour. Un jalonnement daté par p
 
 À court terme, la branche `cda/security-hardening` : PyJWT, Argon2id ou 600 000 itérations, échec au démarrage sur secret faible, restriction de `/metrics`, seuil de pertinence nutritionnelle, durées de séance cohérentes. Puis la publication d'une image et un déploiement déclenché manuellement sur un serveur derrière un reverse proxy TLS.
 
-À moyen terme : tests de bout en bout Playwright sur les trois parcours, table de correction du catalogue d'exercices, planification et externalisation des sauvegardes, analyse d'impact RGPD et hébergement HDS pour envisager un usage réel.
+À moyen terme : étendre les tests de bout en bout Playwright (trois scénarios en CI depuis septembre) aux parcours super-administrateur, table de correction du catalogue d'exercices, planification et externalisation des sauvegardes, analyse d'impact RGPD et hébergement HDS pour envisager un usage réel.
 
 ## Ce que le projet m'a appris
 

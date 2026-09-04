@@ -244,13 +244,13 @@ Donne exactement 5 recommandations courtes (une par ligne, commence par un verbe
             repas_label = "Petit-dejeuner, Dejeuner, Diner"
             nb_repas = "3 jours (Lundi Mardi Mercredi) x 3 repas"
             structure = (
-                f'[{{"day":"Lundi","meals":['
-                f'{{"name":"Petit-dejeuner","description":"plat","justification":"pourquoi","recette":"etapes","calories":350,"proteins_g":20,"carbs_g":40,"fats_g":10}},'
-                f'{{"name":"Dejeuner","description":"plat","justification":"pourquoi","recette":"etapes","calories":600,"proteins_g":40,"carbs_g":55,"fats_g":15}},'
-                f'{{"name":"Diner","description":"plat","justification":"pourquoi","recette":"etapes","calories":500,"proteins_g":35,"carbs_g":40,"fats_g":18}}'
-                f']}},'
-                f'{{"day":"Mardi","meals":[...]}},'
-                f'{{"day":"Mercredi","meals":[...]}}]'
+                '[{"day":"Lundi","meals":['
+                '{"name":"Petit-dejeuner","description":"plat","justification":"pourquoi","recette":"etapes","calories":350,"proteins_g":20,"carbs_g":40,"fats_g":10},'
+                '{"name":"Dejeuner","description":"plat","justification":"pourquoi","recette":"etapes","calories":600,"proteins_g":40,"carbs_g":55,"fats_g":15},'
+                '{"name":"Diner","description":"plat","justification":"pourquoi","recette":"etapes","calories":500,"proteins_g":35,"carbs_g":40,"fats_g":18}'
+                ']},'
+                '{"day":"Mardi","meals":[...]},'
+                '{"day":"Mercredi","meals":[...]}]'
             )
 
         prompt = (
@@ -299,8 +299,8 @@ Donne exactement 5 recommandations courtes (une par ligne, commence par un verbe
     async def _generate_list(self, prompt: str) -> list[str]:
         try:
             text = await self._call_ollama(prompt)
-            lines = [l.strip().lstrip("•-*0123456789. ") for l in text.split("\n")]
-            return [l for l in lines if len(l) > 20][:5]
+            lines = [line.strip().lstrip("•-*0123456789. ") for line in text.split("\n")]
+            return [line for line in lines if len(line) > 20][:5]
         except Exception as exc:
             logger.error("Ollama error: %s", exc)
             return []

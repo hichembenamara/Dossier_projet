@@ -4,6 +4,7 @@ Branche : feature/ai-recommendations-vision
 """
 from __future__ import annotations
 
+import json as _json
 import logging
 import re
 import time
@@ -71,7 +72,6 @@ class RecommendationFeedbackRequest(BaseModel):
 
 # ─── Helpers ─────────────────────────────────────────────────────────────────
 
-import json as _json
 
 # body_part anglais BDD → libellé français lisible (pour le prompt et l'affichage)
 _BODYPART_EN_TO_FR: dict[str, str] = {

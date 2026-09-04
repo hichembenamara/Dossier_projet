@@ -19,6 +19,8 @@ function parseJson<T>(value?: string | null): T | null {
 
 export function ExerciceDetailPage({ id }: { id: string }) {
   const exercice = useExercice(id);
+  // Hook déclaré avant les retours anticipés (règle des hooks) ; la variante réellement affichée est dérivée plus bas.
+  const [chosenVariant, setActiveVariant] = useState<string | null>(null);
   const variants: Array<{ key: keyof typeof gifs; label: string }> = [
     { key: "gif_360_url", label: "360" },
     { key: "gif_180_url", label: "180" },
@@ -42,7 +44,7 @@ export function ExerciceDetailPage({ id }: { id: string }) {
     gif_1080_path: data.gif_1080_url || data.gif_1080_path
   };
   const availableVariants = variants.filter((v) => gifs[v.key]);
-  const [activeVariant, setActiveVariant] = useState<string>(availableVariants[0]?.key ?? "gif_360_url");
+  const activeVariant = chosenVariant && gifs[chosenVariant] ? chosenVariant : availableVariants[0]?.key ?? "gif_360_url";
 
   const instructions = parseJson<string[]>(data.instructions_json) || [];
   const bodyParts = parseJson<string[]>(data.body_parts_json) || [];

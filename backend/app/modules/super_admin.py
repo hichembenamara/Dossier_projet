@@ -12,7 +12,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.security import require_roles
-from app.db.models import ControleQualiteDonnee, ExecutionEtl, LotDonnees, Organisation, SourceDonnees, Utilisateur
+from app.db.models import ControleQualiteDonnee, ExecutionEtl, LotDonnees, Utilisateur
 from app.db.session import get_db
 from app.services import admin_dashboard
 
@@ -58,8 +58,8 @@ def monitoring_etl(
             for e in recent
         ],
         "lots_recents": [
-            {"lot_id": l.lot_id, "nom_lot": l.nom_lot, "statut": l.statut, "cree_le": l.cree_le, "execution_id": l.execution_id, "source_id": l.source_id}
-            for l in db.execute(select(LotDonnees).order_by(LotDonnees.lot_id.desc()).limit(limit)).scalars().all()
+            {"lot_id": lot.lot_id, "nom_lot": lot.nom_lot, "statut": lot.statut, "cree_le": lot.cree_le, "execution_id": lot.execution_id, "source_id": lot.source_id}
+            for lot in db.execute(select(LotDonnees).order_by(LotDonnees.lot_id.desc()).limit(limit)).scalars().all()
         ],
     }}
 

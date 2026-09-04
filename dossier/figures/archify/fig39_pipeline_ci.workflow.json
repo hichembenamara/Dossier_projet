@@ -2,30 +2,29 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Intégration continue GitHub Actions — et la marche manquante vers le déploiement",
+    "title": "Intégration continue GitHub Actions — six jobs, et la marche manquante vers le déploiement",
     "quality_profile": "showcase"
   },
   "lanes": [
     {
       "id": "dev",
-      "label": "Développeur"
+      "label": "Développeur et dépôt"
     },
     {
       "id": "ci",
-      "label": "GitHub Actions — backend"
+      "label": "GitHub Actions — backend et ETL"
     },
     {
       "id": "ci2",
-      "label": "GitHub Actions — frontend"
+      "label": "GitHub Actions — frontend et lint"
     },
     {
-      "id": "repo",
-      "label": "Dépôt"
+      "id": "e2e",
+      "label": "GitHub Actions — bout en bout"
     },
     {
       "id": "future",
-      "label": "Déploiement continu (à faire)",
-      "variant": "exception"
+      "label": "Déploiement continu (à faire)"
     }
   ],
   "phases": [
@@ -39,13 +38,13 @@
       "id": "verify",
       "label": "Vérification automatique",
       "fromCol": 2,
-      "toCol": 3,
+      "toCol": 4,
       "variant": "emphasis"
     },
     {
       "id": "next",
       "label": "Suite",
-      "fromCol": 4,
+      "fromCol": 5,
       "toCol": 5,
       "variant": "dashed"
     }
@@ -55,6 +54,7 @@
     "commit",
     "pr",
     "backend_tests",
+    "etl_tests",
     "status",
     "merge"
   ],
@@ -74,154 +74,185 @@
       "id": "commit",
       "lane": "dev",
       "col": 0,
-      "type": "frontend",
       "label": "Commit",
       "sublabel": "feat / fix",
-      "width": 172
+      "type": "frontend",
+      "width": 176
     },
     {
       "id": "pr",
       "lane": "dev",
       "col": 1,
-      "type": "frontend",
       "label": "Push / PR",
       "sublabel": "maintenance · main",
-      "tag": "workflow_dispatch",
-      "width": 172
+      "type": "frontend",
+      "width": 176
     },
     {
       "id": "backend_tests",
       "lane": "ci",
       "col": 2,
-      "type": "backend",
       "label": "backend-tests",
-      "sublabel": "pytest -q",
-      "tag": "34 tests",
-      "width": 172
+      "sublabel": "pytest -q · 54 tests",
+      "type": "backend",
+      "width": 176
+    },
+    {
+      "id": "etl_tests",
+      "lane": "ci",
+      "col": 3,
+      "label": "etl-tests",
+      "sublabel": "pytest -q · 6 tests",
+      "type": "backend",
+      "width": 176
     },
     {
       "id": "frontend_build",
       "lane": "ci2",
       "col": 2,
-      "type": "frontend",
       "label": "frontend-build",
       "sublabel": "next build",
-      "tag": "TypeScript",
-      "width": 172
+      "type": "frontend",
+      "width": 176
+    },
+    {
+      "id": "lint",
+      "lane": "ci2",
+      "col": 3,
+      "label": "lint",
+      "sublabel": "ruff · eslint",
+      "type": "frontend",
+      "width": 176
+    },
+    {
+      "id": "e2e",
+      "lane": "e2e",
+      "col": 3,
+      "label": "e2e",
+      "sublabel": "Playwright · pile Docker",
+      "type": "security",
+      "width": 176
     },
     {
       "id": "status",
-      "lane": "ci",
-      "col": 3,
-      "type": "security",
+      "lane": "dev",
+      "col": 4,
       "label": "Statut",
       "sublabel": "vert = fusion",
-      "tag": "bloquant",
-      "width": 172
+      "type": "security",
+      "width": 176
     },
     {
       "id": "merge",
-      "lane": "repo",
-      "col": 4,
-      "type": "database",
+      "lane": "dev",
+      "col": 5,
       "label": "Fusion",
-      "sublabel": "maintenance",
-      "width": 172
+      "sublabel": "maintenance · main",
+      "type": "database",
+      "width": 176
     },
     {
       "id": "image",
       "lane": "future",
       "col": 4,
-      "type": "cloud",
       "label": "Image Docker",
       "sublabel": "push GHCR",
-      "tag": "à faire",
-      "width": 172
+      "type": "cloud",
+      "width": 176
     },
     {
       "id": "deploy",
       "lane": "future",
       "col": 5,
-      "type": "cloud",
       "label": "Déploiement",
       "sublabel": "compose up",
-      "tag": "à faire",
-      "width": 172
+      "type": "cloud",
+      "width": 176
     }
   ],
   "edges": [
     {
       "from": "commit",
       "to": "pr",
-      "role": "main",
       "label": "push"
     },
     {
       "from": "pr",
       "to": "backend_tests",
-      "role": "main",
       "label": "déclenche"
     },
     {
       "from": "pr",
       "to": "frontend_build",
-      "role": "branch",
       "label": "en parallèle"
     },
     {
       "from": "backend_tests",
-      "to": "status",
-      "role": "main",
-      "label": "34 passed"
+      "to": "etl_tests"
     },
     {
       "from": "frontend_build",
+      "to": "lint"
+    },
+    {
+      "from": "frontend_build",
+      "to": "e2e",
+      "label": "needs : tests backend + build",
+      "variant": "dashed"
+    },
+    {
+      "from": "etl_tests",
       "to": "status",
-      "role": "branch",
-      "label": "build ok"
+      "label": "6 passed"
+    },
+    {
+      "from": "lint",
+      "to": "status",
+      "label": "0 erreur"
+    },
+    {
+      "from": "e2e",
+      "to": "status",
+      "label": "4 tests verts"
     },
     {
       "from": "status",
       "to": "merge",
-      "role": "main",
       "label": "vert"
     },
     {
       "from": "status",
       "to": "pr",
-      "role": "error",
       "label": "rouge → corriger"
     },
     {
       "from": "merge",
       "to": "image",
-      "role": "async",
       "label": "perspective",
       "variant": "dashed"
     },
     {
       "from": "image",
       "to": "deploy",
-      "role": "async",
       "label": "SSH, déclenchement manuel",
       "variant": "dashed"
     }
   ],
   "cards": [
     {
-      "dot": "emerald",
+      "dot": "cyan",
       "title": "Ce qui tourne",
       "items": [
-        "Tests backend sur SQLite en mémoire (MONGO_ENABLED=false)",
-        "Build Next.js (TypeScript) ; cache pip et npm : < 2 min"
+        "Six jobs, e2e après tests backend et build",
+        "E2E : compose up, ETL, Playwright, rapport HTML"
       ]
     },
     {
       "dot": "amber",
       "title": "Ce qui manque",
       "items": [
-        "Ni lint ni tests ETL en CI ; ni image publiée ni serveur",
-        "Déploiement continu = première étape pour C11"
+        "Ni image publiée ni serveur : à faire pour C11",
+        "Données ETL hors dépôt : le job e2e en dépend"
       ]
     }
   ]

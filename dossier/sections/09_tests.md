@@ -8,14 +8,17 @@ La stratégie suit la pyramide des tests : beaucoup de tests rapides et isolés 
 
 | Niveau | Périmètre | Outil | Nombre | Quand |
 |---|---|---|---|---|
-| Unitaire | Règles du moteur de recommandations (allergènes, matériel, contraintes de santé) | pytest | 3 | CI |
+| Unitaire | Règles du moteur de recommandations (allergènes, matériel, contraintes de santé, seuil de pertinence, durées de séance) | pytest | 5 | CI |
 | Unitaire | Logique du coach posture (comptage des répétitions, maintien statique) | pytest | 2 | CI |
-| Unitaire | Fonctions de normalisation de l'ETL (tension, durées, genre, hachage) | pytest | 5 | CI |
+| Unitaire | Fonctions de normalisation de l'ETL (tension, durées, genre, hachage) | pytest | 6 | CI |
+| Sécurité | Jetons PyJWT (expiration, type, signature), condensés PBKDF2, refus d'un secret faible en production, accès réseau à `/metrics` | pytest | 18 | CI |
 | Contrat API | Authentification, inscription, profil, tableaux de bord, pagination, cloisonnement par rôle et par utilisateur, analyse de repas, recommandations, coach posture, `/health`, OpenAPI | pytest + `TestClient` FastAPI | 29 | CI |
+| Bout en bout | Connexion et déconnexion, redirection hors `/admin` et 403 API, exécutions ETL et contrôles qualité paginés | Playwright Test sur la pile Docker | 4 (3 scénarios) | CI, job `e2e` |
+| Qualité de code | `ruff check` sur backend et ETL, `eslint` (config Next) sur le frontend | ruff, ESLint | 2 jobs | CI, job `lint` |
 | Manuel, bout en bout | Parcours utilisateur, administrateur et super-administrateur ; mode dégradé ; sauvegarde et restauration | navigateur, Docker Compose | 10 cas | avant chaque soutenance |
 | Jeu d'essai | Moteur de recommandations sur un profil de référence | script Python sur base SQLite | 1 scénario | ce dossier |
 
-Le total de 39 tests automatisés a été vérifié le 2 septembre 2026 : `pytest -q` renvoie `34 passed` dans `backend/tests` et `5 passed` dans `healthai_etl/tests`.
+Le total de 64 tests automatisés a été vérifié le 4 septembre 2026 : `pytest -q` renvoie `54 passed` dans `backend/tests` et `6 passed` dans `healthai_etl/tests`, et `npx playwright test` renvoie `4 passed` (le 2 septembre, avant la branche de durcissement, le compte était de 39 : 34 + 5).
 
 ## 2. Tests automatisés
 
@@ -81,7 +84,7 @@ Pourquoi ce choix : les 29 tests de contrat tournent sur une base SQLite en mém
 
 Les tests les plus importants pour ce dossier sont ceux qui vérifient la sécurité : `test_role_guard_blocks_regular_user_from_admin_dashboard` (un utilisateur reçoit 403 sur `/api/admin/...`), `test_me_routes_are_scoped_to_authenticated_user` (un utilisateur ne voit que ses propres enregistrements), `test_recommendations_use_profile_defaults_and_keep_user_isolation`, et `test_register_complete_rejects_duplicate_email_and_username`. Deux autres vérifient la résilience : `test_meal_analysis_returns_structured_fallback_when_ai_is_not_configured` et `test_health_and_openapi`.
 
-*Figure 33 — Exécution de la CI GitHub Actions : deux jobs verts, `backend-tests` et `frontend-build` (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
+*Figure 33 — Exécution de la CI GitHub Actions : six jobs verts, `backend-tests`, `etl-tests`, `frontend-build`, `lint`, `e2e` (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
 
 ```
 $ cd backend && python -m pytest -q tests
@@ -96,9 +99,9 @@ Les parcours suivants ont été rejoués sur la pile Docker complète avant chaq
 
 | # | Parcours | Résultat attendu | Résultat |
 |---|---|---|---|
-| M1 | Inscription puis onboarding d'un nouvel utilisateur | Compte créé, profil déclaratif enregistré, redirection vers le tableau de bord | Conforme |
-| M2 | Connexion, attente de l'expiration du jeton d'accès, navigation | Rafraîchissement transparent, aucune déconnexion | Conforme |
-| M3 | Utilisateur tape `/admin/dashboard` dans l'URL | Redirection vers `/me/dashboard` ; l'API répond 403 si appelée directement | Conforme |
+| M1 | Inscription puis onboarding d'un nouvel utilisateur | Compte créé, profil déclaratif enregistré, redirection vers le tableau de bord | Conforme (rejoué le 2026-09-04 après la montée de Next : `register-complete` 201, arrivée sur `/me/dashboard`) |
+| M2 | Connexion, attente de l'expiration du jeton d'accès, navigation | Rafraîchissement transparent, aucune déconnexion | Conforme (rejoué le 2026-09-04 : jeton expiré → 401, `POST /api/auth/refresh` par cookie → 200, navigation après rechargement sans déconnexion) |
+| M3 | Utilisateur tape `/admin/dashboard` dans l'URL | Redirection vers `/me/dashboard` ; l'API répond 403 si appelée directement | Conforme (rejoué le 2026-09-04, automatisé dans `frontend/e2e/rbac.spec.ts`) |
 | M4 | Lancement de `make etl` puis consultation de `/admin/etl/executions` | Cinq exécutions en succès, compteurs et taux de qualité renseignés, lots créés | Conforme (taux 97,6 % sur la source gym, 23 lignes invalides) |
 | M5 | Consultation d'un lot dans `/admin/etl/compare` | Ligne brute, ligne normalisée et décision qualité affichées côte à côte | Conforme |
 | M6 | Analyse de repas avec clé Gemini absente | Message explicite « service non configuré », aucune erreur 500 | Conforme |

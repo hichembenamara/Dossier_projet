@@ -247,7 +247,7 @@ def main() -> None:
                         "calories_kcal": calories_ligne,
                         "eau_ml": float(item["eau_ml"]),
                     })
-                total_calories = round(sum(l["calories_kcal"] for l in lignes), 2)
+                total_calories = round(sum(ligne["calories_kcal"] for ligne in lignes), 2)
                 nom_plat = f"Plat {current_meal_type} #{plate_number}"
                 plat_id = ensure_plat(conn, utilisateur_id, source_id, lot_id, consomme_le, current_meal_type, nom_plat, total_calories)
                 for ligne in lignes:

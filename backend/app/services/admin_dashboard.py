@@ -216,15 +216,15 @@ def blocked_lots(db: Session, limit: int = 20) -> list[dict[str, Any]]:
     ).all()
     return [
         {
-            "lot_id": l.lot_id,
-            "nom_lot": l.nom_lot,
-            "statut": l.statut,
-            "execution_id": l.execution_id,
-            "source_id": l.source_id,
-            "cree_le": l.cree_le,
+            "lot_id": lot.lot_id,
+            "nom_lot": lot.nom_lot,
+            "statut": lot.statut,
+            "execution_id": lot.execution_id,
+            "source_id": lot.source_id,
+            "cree_le": lot.cree_le,
             "nb_bloquants": int(nb or 0),
         }
-        for l, nb in rows
+        for lot, nb in rows
     ]
 
 

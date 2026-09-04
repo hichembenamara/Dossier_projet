@@ -17,11 +17,10 @@ from app.db.models import (
     Plat,
     SeanceEntrainement,
     Utilisateur,
-    ProgressionPhoto,
 )
 from app.db.session import get_db
 from app.modules.resources import serialize_model
-from app.services import me_metrics, me_nutrition, me_sport
+from app.services import me_metrics, me_sport
 
 router = APIRouter(tags=["dashboards"])
 

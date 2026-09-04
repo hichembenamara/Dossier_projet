@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import datetime
 from typing import Any
 
-from fastapi import APIRouter, Body, Depends, Response
+from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, create_model, model_validator
 from sqlalchemy import Column, Select, func, select
 from sqlalchemy.exc import IntegrityError
@@ -201,7 +201,6 @@ def create_crud_router(config: ResourceConfig) -> APIRouter:
     router = APIRouter(prefix=config.path, tags=[config.path.strip("/")])
     create_schema = config.create_schema or build_schema(f"{config.model.__name__}Create", config.model, partial=False)
     update_schema = config.update_schema or build_schema(f"{config.model.__name__}Update", config.model, partial=True)
-    pk_column = getattr(config.model, config.pk)
 
     sortable = config.sortable_fields or (config.pk,)
 

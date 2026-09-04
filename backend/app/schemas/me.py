@@ -5,7 +5,7 @@ DTOs explicites pour ne pas dépendre de l'introspection SQLAlchemy générique.
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any, Literal
+from typing import Literal
 
 from fastapi import Query
 from pydantic import BaseModel, Field

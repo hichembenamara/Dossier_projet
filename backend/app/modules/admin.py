@@ -444,16 +444,16 @@ def admin_lots(
     return paginated_response(
         [
             {
-                "lot_id": l.lot_id,
-                "execution_id": l.execution_id,
-                "source_id": l.source_id,
-                "nom_lot": l.nom_lot,
-                "statut": l.statut,
-                "valide_le": l.valide_le,
-                "commentaire_validation": l.commentaire_validation,
-                "cree_le": l.cree_le,
+                "lot_id": lot.lot_id,
+                "execution_id": lot.execution_id,
+                "source_id": lot.source_id,
+                "nom_lot": lot.nom_lot,
+                "statut": lot.statut,
+                "valide_le": lot.valide_le,
+                "commentaire_validation": lot.commentaire_validation,
+                "cree_le": lot.cree_le,
             }
-            for l in rows
+            for lot in rows
         ],
         pagination.page,
         pagination.page_size,

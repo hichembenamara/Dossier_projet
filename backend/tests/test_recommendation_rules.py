@@ -2,6 +2,15 @@ from __future__ import annotations
 
 from app.db.models import Exercice
 from app.services.recommendations import RecommendationEngine
+import json
+from datetime import date, datetime
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from app.db.base import Base
+from app.db.models import Aliment, MesureBiometrique, ObjectifUtilisateur, Organisation, SourceDonnees, Utilisateur
+from app.schemas.recommendations import RecommendationRequest
+from app.services.recommendations import NUTRITION_MIN_RELEVANCE
 
 
 def test_food_allergy_alias_blocks_incompatible_food():
@@ -38,17 +47,8 @@ def test_health_constraint_marks_knee_sensitive_exercise_as_severe():
 
 # --- Écarts du jeu d'essai (section IX) -----------------------------------------------------
 
-import json
-from datetime import date, datetime
 
-import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
 
-from app.db.base import Base
-from app.db.models import Aliment, MesureBiometrique, ObjectifUtilisateur, Organisation, SourceDonnees, Utilisateur
-from app.schemas.recommendations import RecommendationRequest
-from app.services.recommendations import NUTRITION_MIN_RELEVANCE
 
 
 @pytest.fixture()

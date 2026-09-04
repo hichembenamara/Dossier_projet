@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import and_, case, func, or_, select
+from sqlalchemy import and_, case, func, select
 from sqlalchemy.orm import Session
 
 from app.core.errors import ApiError
@@ -102,7 +102,7 @@ def execution_detail(db: Session, execution_id: int) -> dict[str, Any]:
     return {
         **_serialize_execution(e),
         "source": {"source_id": src.source_id, "nom": src.nom, "type_source": src.type_source} if src else None,
-        "lots": [_serialize_lot(l) for l in lots],
+        "lots": [_serialize_lot(lot) for lot in lots],
     }
 
 
@@ -330,7 +330,7 @@ def compare_options(
     ).all()
 
     return {
-        "lots": [{"id": l.lot_id, "lot_id": l.lot_id, "nom": l.nom_lot, "statut": l.statut} for l in lots],
+        "lots": [{"id": lot.lot_id, "lot_id": lot.lot_id, "nom": lot.nom_lot, "statut": lot.statut} for lot in lots],
         "sources": [{"id": row.source_id, "nom": row.nom} for row in sources],
         "entites": entites,
         "refs": refs,

@@ -171,11 +171,11 @@ def export_lots(db: Session) -> Iterator[str]:
     ]
 
     def rows() -> Iterator[list[Any]]:
-        for l in db.execute(select(LotDonnees)).scalars():
+        for lot in db.execute(select(LotDonnees)).scalars():
             yield [
-                l.lot_id, l.execution_id, l.source_id, l.nom_lot, l.statut,
-                l.cree_par_utilisateur_id, l.valide_par_utilisateur_id, l.valide_le,
-                l.commentaire_validation, l.cree_le,
+                lot.lot_id, lot.execution_id, lot.source_id, lot.nom_lot, lot.statut,
+                lot.cree_par_utilisateur_id, lot.valide_par_utilisateur_id, lot.valide_le,
+                lot.commentaire_validation, lot.cree_le,
             ]
 
     return _csv_iter(headers, rows())
