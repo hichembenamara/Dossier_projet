@@ -1,0 +1,8 @@
+# Configuration ruff partagée entre le poste de développement et le job CI `lint`.
+# Jeu de règles par défaut de ruff (pyflakes + erreurs pycodestyle) : l'état du code est propre
+# avec ce jeu depuis le 2026-09-04 ; l'extension à isort/bugbear/etc. est une étape ultérieure.
+line-length = 160
+target-version = "py312"
+
+[lint]
+select = ["E4", "E7", "E9", "F"]

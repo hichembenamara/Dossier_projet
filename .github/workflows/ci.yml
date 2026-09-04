@@ -72,7 +72,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r ../backend/requirements.txt
       - name: Run tests
-        run: pytest -q
+        # python -m pytest ajoute healthai_etl au sys.path (import de etl_common)
+        run: python -m pytest -q
 
   lint:
     name: Lint · ruff + eslint
@@ -84,7 +85,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: ruff check
-        run: pipx run ruff check backend healthai_etl
+        run: pipx run ruff==0.15.0 check backend healthai_etl
       - name: Setup Node 22
         uses: actions/setup-node@v4
         with:
@@ -109,6 +110,8 @@ jobs:
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4
+      - name: Prepare .env (compose exige le fichier)
+        run: cp .env.example .env
       - name: Start the stack
         run: docker compose up -d --build
       - name: Wait for /health
