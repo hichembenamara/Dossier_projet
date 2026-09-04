@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Wireframe des exécutions ETL — blocs et données (EtlExecutions.tsx)",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Bloc d'interface"
+        },
+        "backend": {
+          "label": "Appel API (TanStack Query)"
+        }
+      }
+    },
+    "viewBox": [
+      1352,
+      540
+    ]
+  },
+  "components": [
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "GET /api/executions-etl",
+      "sublabel": "?page&statut · usePagedApi · api.py",
+      "size": [
+        240,
+        62
+      ],
+      "pos": [
+        40,
+        100
+      ]
+    },
+    {
+      "id": "apidetail",
+      "type": "backend",
+      "label": "GET /api/executions-etl/{id}",
+      "sublabel": "écran de détail",
+      "size": [
+        240,
+        62
+      ],
+      "pos": [
+        40,
+        336
+      ]
+    },
+    {
+      "id": "filter",
+      "type": "frontend",
+      "label": "Input « Filtrer par statut »",
+      "sublabel": "état local statut, setPage(1) à chaque saisie",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        304,
+        100
+      ]
+    },
+    {
+      "id": "table",
+      "type": "frontend",
+      "label": "DataTable, 7 colonnes",
+      "sublabel": "id, StatusBadge, démarrage, compteurs, qualité",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        648,
+        100
+      ]
+    },
+    {
+      "id": "open",
+      "type": "frontend",
+      "label": "Colonne « Voir détail »",
+      "sublabel": "router.push vers /admin/etl/executions/{id}",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        992,
+        100
+      ]
+    },
+    {
+      "id": "pager",
+      "type": "frontend",
+      "label": "Pagination",
+      "sublabel": "meta.total, totalPages · précédent / suivant",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        304,
+        218
+      ]
+    },
+    {
+      "id": "states",
+      "type": "frontend",
+      "label": "États de la liste (CrudList)",
+      "sublabel": "LoadingState · ErrorState réessayer · emptyLabel",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        648,
+        218
+      ]
+    },
+    {
+      "id": "detail",
+      "type": "frontend",
+      "label": "EtlExecutionDetail",
+      "sublabel": "compteurs, message, lien contrôles qualité",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        992,
+        336
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Écran /admin/etl/executions (Page + CrudList partagés, _shared.tsx)",
+      "wraps": [
+        "filter",
+        "table",
+        "open",
+        "pager",
+        "states"
+      ],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "from": "api",
+      "to": "filter",
+      "variant": "emphasis"
+    },
+    {
+      "from": "api",
+      "to": "table",
+      "label": "execution_id, statut, lignes_valides, taux_qualite…",
+      "fromSide": "top",
+      "toSide": "top",
+      "via": [
+        [
+          160,
+          48
+        ],
+        [
+          808,
+          48
+        ]
+      ]
+    },
+    {
+      "from": "api",
+      "to": "pager",
+      "variant": "dashed",
+      "label": "meta.total, meta.totalPages"
+    },
+    {
+      "from": "open",
+      "to": "detail",
+      "label": "clic ligne",
+      "variant": "emphasis",
+      "labelDy": 24
+    },
+    {
+      "from": "apidetail",
+      "to": "detail",
+      "label": "lot, erreurs",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [
+        [
+          160,
+          460
+        ],
+        [
+          1152,
+          460
+        ]
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "États rendus",
+      "items": [
+        "LoadingState pendant la requête paginée, ErrorState avec bouton réessayer",
+        "Message vide du tableau quand le filtre ne renvoie aucune exécution"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Limites visibles à l'écran",
+      "items": [
+        "Filtre statut en texte libre, sans liste des valeurs (EN_COURS, TERMINE, ECHEC)",
+        "Réalisé après le développement, à partir de l'écran livré (voir section VI)"
+      ]
+    }
+  ]
+}

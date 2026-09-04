@@ -603,6 +603,16 @@ Les maquettes présentées ici ont été réalisées après le développement, �
 
 Le tableau de bord utilisateur (`/me/dashboard`) est l'écran de référence : une rangée d'indicateurs (poids, IMC, sommeil, séances, plats, calories du journal), deux graphiques d'évolution (poids/IMC et sommeil), l'objectif actif, la dernière photo de progression, puis les dernières séances et les derniers repas.
 
+*Figure 14b — Zoning de l'écran des exécutions ETL, `/admin/etl/executions` (archify, `dossier/figures/archify/fig14b_zoning_etl_executions.png`).*
+*Figure 15b — Wireframe de l'écran des exécutions ETL (archify, `dossier/figures/archify/fig15b_wireframe_etl_executions.png`).*
+
+L'écran des exécutions ETL est le second écran maquetté, côté administrateur : une barre de filtre sur le statut, un tableau paginé (identifiant, statut, démarrage, lignes valides et invalides, taux de qualité, message) alimenté par `GET /api/executions-etl`, et un clic sur une ligne qui ouvre le détail de l'exécution puis les contrôles qualité du lot. La page réutilise les composants `Page` et `CrudList` communs aux listes d'administration.
+
+*Figure 14c — Zoning de l'écran des recommandations, `/me/recommandations` (archify, `dossier/figures/archify/fig14c_zoning_recommandations.png`).*
+*Figure 15c — Wireframe de l'écran des recommandations (archify, `dossier/figures/archify/fig15c_wireframe_recommandations.png`).*
+
+L'écran des recommandations est le troisième : deux cartes de choix (repas et recettes, séance de sport) précèdent un formulaire pré-rempli depuis `GET /api/me/profile`, puis une zone de résultats à droite (scores repas ou sport et sécurité, source de la réponse, contexte pris en compte, cartes explicables). La génération passe par `POST /api/ai/recommandations` ; sans clé IA configurée, la carte Source indique « Fallback local » et seules les règles métier répondent.
+
 *Figure 17 — Diagramme de navigation des trois espaces (archify, `dossier/figures/archify/fig17_navigation_ecrans.png`).*
 
 Les 34 routes du frontend se répartissent ainsi :
@@ -1759,7 +1769,7 @@ Pourquoi ce choix : les 29 tests de contrat tournent sur une base SQLite en mém
 
 Les tests les plus importants pour ce dossier sont ceux qui vérifient la sécurité : `test_role_guard_blocks_regular_user_from_admin_dashboard` (un utilisateur reçoit 403 sur `/api/admin/...`), `test_me_routes_are_scoped_to_authenticated_user` (un utilisateur ne voit que ses propres enregistrements), `test_recommendations_use_profile_defaults_and_keep_user_isolation`, et `test_register_complete_rejects_duplicate_email_and_username`. Deux autres vérifient la résilience : `test_meal_analysis_returns_structured_fallback_when_ai_is_not_configured` et `test_health_and_openapi`.
 
-*Figure 33 — Exécution de la CI GitHub Actions du 4 septembre 2026 : `backend-tests`, `etl-tests`, `frontend-build` et `lint` verts ; `e2e` rouge sur le seul scénario ETL, faute de jeux de données CSV dans le dépôt (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
+*Figure 33 — Exécution de la CI GitHub Actions du 4 septembre 2026 : cinq jobs verts, `backend-tests`, `etl-tests`, `frontend-build`, `lint` et `e2e` (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
 
 ```
 $ cd backend && python -m pytest -q tests
@@ -2023,7 +2033,7 @@ jobs:
 
 Le second job, `frontend-build`, installe Node 22, exécute `npm ci` (installation reproductible depuis `package-lock.json`) puis `next build`, ce qui détecte les erreurs TypeScript et les imports cassés.
 
-Depuis le 4 septembre, trois jobs s'ajoutent : `etl-tests` (pytest sur `healthai_etl`), `lint` (`ruff check` et `eslint`), et `e2e`, qui démarre la pile avec `docker compose up -d --build`, attend `/health`, charge l'ETL, exécute les trois scénarios Playwright et publie le rapport HTML en artefact. Les jeux de données CSV de l'ETL ne sont pas versionnés (`data/` est ignoré) : tant qu'ils ne sont pas fournis au job, l'étape ETL est sautée avec un avertissement et le scénario `admin-etl` échoue, les deux autres passent.
+Depuis le 4 septembre, trois jobs s'ajoutent : `etl-tests` (pytest sur `healthai_etl`), `lint` (`ruff check` et `eslint`), et `e2e`, qui démarre la pile avec `docker compose up -d --build`, attend `/health`, charge l'ETL, exécute les trois scénarios Playwright et publie le rapport HTML en artefact. Les jeux de données CSV de l'ETL ne sont pas versionnés (`data/` est ignoré) : le job peuple la base avec un export SQL de démonstration versionné (`backend/db/e2e_seed_2026-09-04.sql`, schéma courant et données chargées par l'ETL), et ne lance l'ETL que si les CSV sont présents.
 
 Pourquoi ce choix : les jobs indépendants tournent en parallèle et durent moins de deux minutes grâce au cache des dépendances ; seul `e2e` attend les tests backend et le build. Les tests n'ont besoin d'aucun service externe (SQLite, Mongo désactivé, clé JWT de test), donc le pipeline ne dépend d'aucun secret. Le déclenchement manuel (`workflow_dispatch`) permet de relancer une exécution sans commit. Le pipeline ne couvre pas la qualité du code (lint) ni les tests du pipeline ETL ; les deux sont des ajouts simples, notés en perspective.
 

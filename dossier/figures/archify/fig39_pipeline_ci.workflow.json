@@ -252,7 +252,7 @@
       "title": "Ce qui manque",
       "items": [
         "Ni image publiée ni serveur : à faire pour C11",
-        "Données ETL hors dépôt : le job e2e en dépend"
+        "Base e2e peuplée par un seed SQL versionné, pas par l'ETL"
       ]
     }
   ]

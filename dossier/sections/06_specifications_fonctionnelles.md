@@ -104,6 +104,16 @@ Les maquettes présentées ici ont été réalisées après le développement, �
 
 Le tableau de bord utilisateur (`/me/dashboard`) est l'écran de référence : une rangée d'indicateurs (poids, IMC, sommeil, séances, plats, calories du journal), deux graphiques d'évolution (poids/IMC et sommeil), l'objectif actif, la dernière photo de progression, puis les dernières séances et les derniers repas.
 
+*Figure 14b — Zoning de l'écran des exécutions ETL, `/admin/etl/executions` (archify, `dossier/figures/archify/fig14b_zoning_etl_executions.png`).*
+*Figure 15b — Wireframe de l'écran des exécutions ETL (archify, `dossier/figures/archify/fig15b_wireframe_etl_executions.png`).*
+
+L'écran des exécutions ETL est le second écran maquetté, côté administrateur : une barre de filtre sur le statut, un tableau paginé (identifiant, statut, démarrage, lignes valides et invalides, taux de qualité, message) alimenté par `GET /api/executions-etl`, et un clic sur une ligne qui ouvre le détail de l'exécution puis les contrôles qualité du lot. La page réutilise les composants `Page` et `CrudList` communs aux listes d'administration.
+
+*Figure 14c — Zoning de l'écran des recommandations, `/me/recommandations` (archify, `dossier/figures/archify/fig14c_zoning_recommandations.png`).*
+*Figure 15c — Wireframe de l'écran des recommandations (archify, `dossier/figures/archify/fig15c_wireframe_recommandations.png`).*
+
+L'écran des recommandations est le troisième : deux cartes de choix (repas et recettes, séance de sport) précèdent un formulaire pré-rempli depuis `GET /api/me/profile`, puis une zone de résultats à droite (scores repas ou sport et sécurité, source de la réponse, contexte pris en compte, cartes explicables). La génération passe par `POST /api/ai/recommandations` ; sans clé IA configurée, la carte Source indique « Fallback local » et seules les règles métier répondent.
+
 *Figure 17 — Diagramme de navigation des trois espaces (archify, `dossier/figures/archify/fig17_navigation_ecrans.png`).*
 
 Les 34 routes du frontend se répartissent ainsi :

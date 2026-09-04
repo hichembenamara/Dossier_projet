@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Wireframe des recommandations — blocs et données (Recommandations.tsx)",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Bloc d'interface"
+        },
+        "backend": {
+          "label": "Appel API (TanStack Query)"
+        }
+      }
+    },
+    "viewBox": [
+      1352,
+      540
+    ]
+  },
+  "components": [
+    {
+      "id": "apiprofile",
+      "type": "backend",
+      "label": "GET /api/me/profile",
+      "sublabel": "queryKey /api/me/profile · me.py",
+      "size": [
+        240,
+        62
+      ],
+      "pos": [
+        40,
+        100
+      ]
+    },
+    {
+      "id": "apireco",
+      "type": "backend",
+      "label": "POST /api/ai/recommandations",
+      "sublabel": "relais app/api/ai → ai_features.py",
+      "size": [
+        240,
+        62
+      ],
+      "pos": [
+        40,
+        218
+      ]
+    },
+    {
+      "id": "apiseance",
+      "type": "backend",
+      "label": "POST /api/ai/seances",
+      "sublabel": "enregistre la séance proposée",
+      "size": [
+        240,
+        62
+      ],
+      "pos": [
+        40,
+        336
+      ]
+    },
+    {
+      "id": "choice",
+      "type": "frontend",
+      "label": "2 ChoiceCard",
+      "sublabel": "repas et recettes · séance de sport",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        304,
+        100
+      ]
+    },
+    {
+      "id": "form",
+      "type": "frontend",
+      "label": "Formulaire du mode choisi",
+      "sublabel": "régime, allergies · niveau, durée, équipement",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        648,
+        100
+      ]
+    },
+    {
+      "id": "scores",
+      "type": "frontend",
+      "label": "3 MetricCard",
+      "sublabel": "Repas ou Sport /100 · Sécurité /100 · Source",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        992,
+        100
+      ]
+    },
+    {
+      "id": "context",
+      "type": "frontend",
+      "label": "RecommendationContextCard",
+      "sublabel": "« Contexte pris en compte », fallback_message",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        304,
+        336
+      ]
+    },
+    {
+      "id": "nutri",
+      "type": "frontend",
+      "label": "ChartCard plats et recettes",
+      "sublabel": "score /100, justification, badges contraintes",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        648,
+        336
+      ]
+    },
+    {
+      "id": "sport",
+      "type": "frontend",
+      "label": "ChartCard séance de sport",
+      "sublabel": "SessionCard, SportCard, enregistrer la séance",
+      "size": [
+        320,
+        62
+      ],
+      "pos": [
+        992,
+        336
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Écran /me/recommandations (formulaire à gauche, résultats à droite)",
+      "wraps": [
+        "choice",
+        "form",
+        "scores",
+        "context",
+        "nutri",
+        "sport"
+      ],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "from": "apiprofile",
+      "to": "form",
+      "label": "pré-remplissage (age, IMC, objectif, allergies…)",
+      "fromSide": "top",
+      "toSide": "top",
+      "via": [
+        [
+          160,
+          48
+        ],
+        [
+          808,
+          48
+        ]
+      ]
+    },
+    {
+      "from": "choice",
+      "to": "form",
+      "label": "mode",
+      "variant": "emphasis",
+      "labelDy": 55
+    },
+    {
+      "from": "apireco",
+      "to": "scores",
+      "label": "scores, source",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "via": [
+        [
+          160,
+          190
+        ],
+        [
+          1152,
+          190
+        ]
+      ]
+    },
+    {
+      "from": "apireco",
+      "to": "context",
+      "variant": "dashed"
+    },
+    {
+      "from": "apireco",
+      "to": "nutri",
+      "label": "nutrition.plats",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "via": [
+        [
+          160,
+          300
+        ],
+        [
+          808,
+          300
+        ]
+      ]
+    },
+    {
+      "from": "sport",
+      "to": "apiseance",
+      "label": "enregistrer",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [
+        [
+          1152,
+          460
+        ],
+        [
+          160,
+          460
+        ]
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "États rendus",
+      "items": [
+        "LoadingState puis ErrorState (réessayer) sur le profil ; EmptyState avant le choix et avant la génération",
+        "RecommendationSkeleton pendant l'appel IA ; zone de résultats en aria-live"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Limites visibles à l'écran",
+      "items": [
+        "Sans clé IA configurée, la carte Source affiche « Fallback local » : règles métier seules",
+        "Réalisé après le développement, à partir de l'écran livré (voir section VI)"
+      ]
+    }
+  ]
+}

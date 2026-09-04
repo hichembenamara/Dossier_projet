@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Zoning des recommandations — /me/recommandations",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Zone de l'écran"
+        },
+        "security": {
+          "label": "Navigation par rôle"
+        }
+      }
+    }
+  },
+  "layout": {
+    "mode": "grid",
+    "origin": [
+      24,
+      80
+    ],
+    "gapX": 22,
+    "gapY": 70,
+    "cellW": 305,
+    "cellH": 64,
+    "cols": 4
+  },
+  "components": [
+    {
+      "id": "sidebar",
+      "type": "security",
+      "label": "Barre latérale",
+      "sublabel": "navigation /me, 17 entrées par rôle",
+      "size": [
+        220,
+        62
+      ],
+      "row": 0,
+      "col": 0
+    },
+    {
+      "id": "header",
+      "type": "frontend",
+      "label": "En-tête de page",
+      "sublabel": "surtitre « Coach HealthAI », titre « Recommandations »",
+      "size": [
+        300,
+        62
+      ],
+      "row": 0,
+      "col": 1
+    },
+    {
+      "id": "intro",
+      "type": "frontend",
+      "label": "Bandeau d'accueil",
+      "sublabel": "consigne : choisir un type, ajuster les champs",
+      "size": [
+        300,
+        62
+      ],
+      "row": 1,
+      "col": 1
+    },
+    {
+      "id": "choice",
+      "type": "frontend",
+      "label": "Deux cartes de choix",
+      "sublabel": "repas et recettes · séance de sport",
+      "size": [
+        300,
+        62
+      ],
+      "row": 1,
+      "col": 2
+    },
+    {
+      "id": "form",
+      "type": "frontend",
+      "label": "Panneau formulaire",
+      "sublabel": "champs pré-remplis depuis le profil, bouton Générer",
+      "size": [
+        300,
+        62
+      ],
+      "row": 2,
+      "col": 2
+    },
+    {
+      "id": "results",
+      "type": "frontend",
+      "label": "Zone de résultats",
+      "sublabel": "scores, contexte pris en compte, cartes explicables",
+      "size": [
+        300,
+        62
+      ],
+      "row": 2,
+      "col": 3
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Coque applicative (app-shell.tsx)",
+      "wraps": [
+        "sidebar",
+        "header"
+      ],
+      "pad": 22
+    },
+    {
+      "kind": "region",
+      "label": "Contenu défilant",
+      "wraps": [
+        "intro",
+        "choice",
+        "form",
+        "results"
+      ],
+      "pad": 22
+    }
+  ],
+  "connections": [
+    {
+      "from": "header",
+      "to": "intro",
+      "label": "ordre de lecture",
+      "variant": "emphasis",
+      "labelDy": 24
+    },
+    {
+      "from": "intro",
+      "to": "choice",
+      "variant": "emphasis"
+    },
+    {
+      "from": "choice",
+      "to": "form",
+      "label": "mode choisi",
+      "variant": "emphasis",
+      "labelDy": 24
+    },
+    {
+      "from": "form",
+      "to": "results",
+      "label": "Générer",
+      "variant": "emphasis",
+      "labelDy": -25
+    },
+    {
+      "from": "sidebar",
+      "to": "header",
+      "label": "change d'écran",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Intention",
+      "items": [
+        "Rien n'est demandé avant le choix repas / sport : le formulaire n'apparaît qu'ensuite",
+        "Le profil pré-remplit les champs ; l'utilisateur ne corrige que ce qui change pour cette demande",
+        "Formulaire à gauche, résultats à droite : la demande reste visible pendant la lecture"
+      ]
+    }
+  ]
+}

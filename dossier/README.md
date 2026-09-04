@@ -31,8 +31,8 @@ dossier/
     pip-audit_2026-09-02.txt, npm-audit_2026-09-02.txt   sorties brutes des audits
   figures/
     sources/*.mmd                   sources Mermaid (référence de topologie)
-    archify/                        20 figures archify : JSON validé (showcase), HTML livré, PNG 2x + build.sh
-      fig02 05 07 09 10 11 12 13 14 15 17 19a 19b 20a 20b 21 22 23 24 30 39 ; fig18_mcd = page HTML dédiée + PNG
+    archify/                        24 figures archify : JSON validé (showcase), HTML livré, PNG 2x + build.sh
+      fig02 05 07 09 10 11 12 13 14 14b 14c 15 15b 15c 17 19a 19b 20a 20b 21 22 23 24 30 39 ; fig18_mcd = page HTML dédiée + PNG
       (les sidecars *.visual-check.* sont régénérables et ignorés par git)
     captures/                       captures d'écran : capture.py (Playwright, stack docker locale) + PNG
       fig28 admin contrôles qualité · fig31 403 admin · fig38 /health · fig41 journal IA   (Playwright, 03/09/2026)

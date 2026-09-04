@@ -110,15 +110,15 @@ jobs:
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare the stack (env, data dir, schema)
+      - name: Prepare the stack (env, data dir, seed SQL)
         run: |
           cp .env.example .env
           # Le backend (uid 1000) écrit dans /app/data/uploads : le montage doit être accessible en écriture.
           mkdir -p data/uploads/avatars && chmod -R 777 data
-          # Le dump d'initialisation monté par compose (backend/healthai_coaching.sql) n'est pas versionné :
-          # on l'assemble depuis les scripts SQL du dossier (schéma v1 + migration v2), et on crée les
-          # fichiers de migration attendus par les montages pour éviter des répertoires vides.
-          cat backend/db/schema_v1_2026-04-25.sql backend/db/migration_v2_2026-06.sql > backend/healthai_coaching.sql
+          # Le dump monté par compose (backend/healthai_coaching.sql) n'est pas versionné : on utilise le jeu de
+          # données de démonstration exporté le 2026-09-04 (schéma + données ETL), et on crée les fichiers de
+          # migration attendus par les montages pour éviter des répertoires vides.
+          cp backend/db/e2e_seed_2026-09-04.sql backend/healthai_coaching.sql
           mkdir -p backend/migrations
           touch backend/migrations/20260618_add_avatar_onboarding.sql backend/migrations/20260618_register_complete_profile.sql
       - name: Start the stack
@@ -130,14 +130,13 @@ jobs:
             sleep 5
           done
           echo "API not ready"; docker compose logs backend | tail -100; exit 1
-      - name: Load the ETL data
-        # Les jeux de données CSV (data/*.csv, ignorés par git) ne sont pas dans le dépôt : sans eux,
-        # l'ETL ne tourne pas et le scénario admin-etl.spec.ts échoue (5 exécutions attendues).
+      - name: Load the ETL data (only when the CSV datasets are provided)
+        # Les CSV Kaggle ne sont pas versionnés ; la base est déjà peuplée par le seed SQL ci-dessus.
         run: |
           if [ -f data/daily_food_nutrition_dataset.csv ]; then
             docker compose --profile etl run --rm etl
           else
-            echo "::warning::Jeux de données ETL absents du dépôt : étape ETL sautée, admin-etl.spec.ts échouera."
+            echo "Jeux de données CSV absents : base peuplée par backend/db/e2e_seed_2026-09-04.sql"
           fi
       - name: Setup Node 22
         uses: actions/setup-node@v4

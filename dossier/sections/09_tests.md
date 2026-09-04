@@ -84,7 +84,7 @@ Pourquoi ce choix : les 29 tests de contrat tournent sur une base SQLite en mém
 
 Les tests les plus importants pour ce dossier sont ceux qui vérifient la sécurité : `test_role_guard_blocks_regular_user_from_admin_dashboard` (un utilisateur reçoit 403 sur `/api/admin/...`), `test_me_routes_are_scoped_to_authenticated_user` (un utilisateur ne voit que ses propres enregistrements), `test_recommendations_use_profile_defaults_and_keep_user_isolation`, et `test_register_complete_rejects_duplicate_email_and_username`. Deux autres vérifient la résilience : `test_meal_analysis_returns_structured_fallback_when_ai_is_not_configured` et `test_health_and_openapi`.
 
-*Figure 33 — Exécution de la CI GitHub Actions du 4 septembre 2026 : `backend-tests`, `etl-tests`, `frontend-build` et `lint` verts ; `e2e` rouge sur le seul scénario ETL, faute de jeux de données CSV dans le dépôt (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
+*Figure 33 — Exécution de la CI GitHub Actions du 4 septembre 2026 : cinq jobs verts, `backend-tests`, `etl-tests`, `frontend-build`, `lint` et `e2e` (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
 
 ```
 $ cd backend && python -m pytest -q tests

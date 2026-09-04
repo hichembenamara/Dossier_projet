@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Zoning des exécutions ETL — /admin/etl/executions",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Zone de l'écran"
+        },
+        "security": {
+          "label": "Navigation par rôle"
+        }
+      }
+    }
+  },
+  "layout": {
+    "mode": "grid",
+    "origin": [
+      24,
+      80
+    ],
+    "gapX": 22,
+    "gapY": 70,
+    "cellW": 305,
+    "cellH": 64,
+    "cols": 4
+  },
+  "components": [
+    {
+      "id": "sidebar",
+      "type": "security",
+      "label": "Barre latérale",
+      "sublabel": "navigation /admin, 12 entrées",
+      "size": [
+        220,
+        62
+      ],
+      "row": 0,
+      "col": 0
+    },
+    {
+      "id": "header",
+      "type": "frontend",
+      "label": "En-tête de page",
+      "sublabel": "surtitre « Audit », titre « Exécutions ETL »",
+      "size": [
+        300,
+        62
+      ],
+      "row": 0,
+      "col": 1
+    },
+    {
+      "id": "filter",
+      "type": "frontend",
+      "label": "Barre de filtre",
+      "sublabel": "champ statut, retour à la page 1",
+      "size": [
+        300,
+        62
+      ],
+      "row": 1,
+      "col": 1
+    },
+    {
+      "id": "table",
+      "type": "frontend",
+      "label": "Tableau des exécutions",
+      "sublabel": "ID, statut, démarrage, compteurs, qualité",
+      "size": [
+        300,
+        62
+      ],
+      "row": 1,
+      "col": 2
+    },
+    {
+      "id": "pager",
+      "type": "frontend",
+      "label": "Pagination",
+      "sublabel": "page x / y, résultats, précédent / suivant",
+      "size": [
+        300,
+        62
+      ],
+      "row": 1,
+      "col": 3
+    },
+    {
+      "id": "detail",
+      "type": "frontend",
+      "label": "Détail d'une exécution",
+      "sublabel": "/admin/etl/executions/{id}, compteurs",
+      "size": [
+        300,
+        62
+      ],
+      "row": 2,
+      "col": 3
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Coque applicative (app-shell.tsx)",
+      "wraps": [
+        "sidebar",
+        "header"
+      ],
+      "pad": 22
+    },
+    {
+      "kind": "region",
+      "label": "Contenu défilant (liste CRUD partagée)",
+      "wraps": [
+        "filter",
+        "table",
+        "pager"
+      ],
+      "pad": 22
+    }
+  ],
+  "connections": [
+    {
+      "from": "header",
+      "to": "filter",
+      "label": "ordre de lecture",
+      "variant": "emphasis",
+      "labelDy": 24
+    },
+    {
+      "from": "filter",
+      "to": "table",
+      "label": "filtre statut",
+      "variant": "emphasis",
+      "labelDy": -25
+    },
+    {
+      "from": "table",
+      "to": "pager",
+      "variant": "emphasis"
+    },
+    {
+      "from": "table",
+      "to": "detail",
+      "label": "clic sur une ligne",
+      "variant": "dashed"
+    },
+    {
+      "from": "sidebar",
+      "to": "header",
+      "label": "change d'écran",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Intention",
+      "items": [
+        "Une seule table plein écran : l'administrateur cherche un lot en échec, pas un tableau de bord",
+        "Le filtre est le seul contrôle au-dessus du tableau ; le tri reste celui du serveur",
+        "Chaque ligne ouvre l'écran de détail, puis les contrôles qualité du lot"
+      ]
+    }
+  ]
+}
