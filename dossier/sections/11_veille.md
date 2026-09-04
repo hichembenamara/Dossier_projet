@@ -22,10 +22,10 @@ Les deux audits ont été exécutés sur la branche de référence pour ce dossi
 
 | Paquet | Plage vulnérable | Nature | Impact pour HealthAI | Décision |
 |---|---|---|---|---|
-| `next` | 9.3.4 → 16.3.0 (avis GHSA-267c-6grr-h53f, GHSA-m99w-x7hq-7vfj, GHSA-955p-x3mx-jcvp et autres) | Contournement de middleware, déni de service via Server Actions, divulgation d'endpoints de fonctions serveur, confusion de cache | Le projet n'utilise ni middleware Next.js ni Server Actions : le contrôle d'accès est dans l'API. Le risque résiduel porte sur le déni de service et le cache | Monter Next.js à la version corrigée ; vérifier que `next build` et les 34 tests backend passent |
-| `postcss` | ≤ 8.5.22 | XSS via `</style>` non échappé dans la sortie, lecture de fichiers via `sourceMappingURL` | PostCSS ne traite que les feuilles de style du projet au moment du build, jamais de contenu utilisateur | Corriger par `npm audit fix` ; risque faible mais correction sans coût |
-| `sharp` | < 0.35.0 | Vulnérabilités héritées de libvips (CVE-2026-33327, -33328, -35590, -35591) | `sharp` est utilisé par l'optimisation d'images de Next.js ; les photos de progression et de repas sont servies par l'API, pas par Next.js | Corriger ; vérifier que le rendu des GIF d'exercices n'est pas affecté |
-| `nanoid` | ≤ 3.3.17 | Dépendance transitive | Aucun usage direct | Corrigé par la montée des autres paquets |
+| `next` | 9.3.4 → 16.3.0 (avis GHSA-267c-6grr-h53f, GHSA-m99w-x7hq-7vfj, GHSA-955p-x3mx-jcvp et autres) | Contournement de middleware, déni de service via Server Actions, divulgation d'endpoints de fonctions serveur, confusion de cache | Le projet n'utilise ni middleware Next.js ni Server Actions : le contrôle d'accès est dans l'API. Le risque résiduel porte sur le déni de service et le cache | Corrigé le 2026-09-04 (branche `fix/npm-audit`) : `next` 15.5 → 16.3.4 par `npm install next@latest`, `next build` et les 54 tests backend passent, `npm audit` à 0 vulnérabilité (`dossier/veille/npm-audit_2026-09-04.txt`) |
+| `postcss` | ≤ 8.5.22 | XSS via `</style>` non échappé dans la sortie, lecture de fichiers via `sourceMappingURL` | PostCSS ne traite que les feuilles de style du projet au moment du build, jamais de contenu utilisateur | Corrigé le 2026-09-04 par `npm audit fix` (branche `fix/npm-audit`) |
+| `sharp` | < 0.35.0 | Vulnérabilités héritées de libvips (CVE-2026-33327, -33328, -35590, -35591) | `sharp` est utilisé par l'optimisation d'images de Next.js ; les photos de progression et de repas sont servies par l'API, pas par Next.js | Corrigé le 2026-09-04 par `npm audit fix` ; rendu des GIF vérifié par le build et le parcours M1 |
+| `nanoid` | ≤ 3.3.17 | Dépendance transitive | Aucun usage direct | Corrigé le 2026-09-04 par la montée des autres paquets |
 
 La montée de version de Next.js est le point à traiter avec le plus de soin : elle peut modifier le comportement de l'App Router. Elle sera faite sur une branche dédiée, validée par la CI (build + tests) puis par les parcours manuels M1 à M3 de la section IX.
 
@@ -44,7 +44,7 @@ Le tableau ci-dessous relie chaque information de veille à ce qu'elle a changé
 | juillet 2026 | CIS Docker Benchmark, guide ANSSI sur la conteneurisation | Ne pas exécuter les processus en root ; lier les ports d'administration à l'hôte local | Utilisateur `app` dans le Dockerfile ; MariaDB, MongoDB, Prometheus et Grafana sur `127.0.0.1` | `Dockerfile`, `docker-compose*.yml` |
 | septembre 2026 | OWASP « Password Storage Cheat Sheet » (édition 2024) | 600 000 itérations pour PBKDF2-HMAC-SHA256, ou Argon2id | Itérations portées à 600 000 sur la branche `cda/security-hardening` | section X |
 | septembre 2026 | ANSSI, « Recommandations pour la sécurisation des sites web » | Aucune valeur par défaut pour les secrets ; refuser de démarrer en production avec une configuration faible | Échec au démarrage si `JWT_SECRET_KEY` vaut la valeur par défaut avec `ENVIRONMENT=production` | section X |
-| septembre 2026 | `pip-audit`, `npm audit` | Voir tableau ci-dessus | Montée de version de `next`, `postcss`, `sharp`, `pytest` | section X |
+| septembre 2026 | `pip-audit`, `npm audit` | Voir tableau ci-dessus | Montée de version de `next`, `postcss`, `sharp`, `pytest` ; audit npm à zéro le 2026-09-04 | section X, `dossier/veille/` |
 
 ## 4. Veille réglementaire et éthique
 

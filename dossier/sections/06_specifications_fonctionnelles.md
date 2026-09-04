@@ -43,7 +43,7 @@ L'application est composée de cinq conteneurs définis dans `docker-compose.yml
 | `db` | MariaDB 10.11, source de vérité des données métier et du pilotage ETL | 3307 sur l'hôte (3306 interne) |
 | `mongo` | MongoDB 7, sorties des services IA | 27017 |
 | `backend` | API FastAPI, module IA inclus | 8000 |
-| `frontend` | Next.js 15 | 3000 |
+| `frontend` | Next.js 16 | 3000 |
 | `etl` | Pipeline Python, lancé à la demande (`--profile etl`) | — |
 | `prometheus` | Collecte des métriques exposées par l'API | 9090 |
 | `grafana` | Tableau de bord de supervision | 3001 |

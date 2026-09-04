@@ -1,0 +1,4 @@
+# npm audit — frontend — 2026-09-04 — branche fix/npm-audit
+# après npm audit fix puis npm install next@latest (next ^16.3.4, installé 16.3.4)
+
+found 0 vulnerabilities

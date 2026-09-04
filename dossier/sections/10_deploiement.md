@@ -137,7 +137,9 @@ jobs:
 
 Le second job, `frontend-build`, installe Node 22, exécute `npm ci` (installation reproductible depuis `package-lock.json`) puis `next build`, ce qui détecte les erreurs TypeScript et les imports cassés.
 
-Pourquoi ce choix : les deux jobs tournent en parallèle et durent moins de deux minutes grâce au cache des dépendances. Les tests n'ont besoin d'aucun service externe (SQLite, Mongo désactivé, clé JWT de test), donc le pipeline ne dépend d'aucun secret. Le déclenchement manuel (`workflow_dispatch`) permet de relancer une exécution sans commit. Le pipeline ne couvre pas la qualité du code (lint) ni les tests du pipeline ETL ; les deux sont des ajouts simples, notés en perspective.
+Depuis le 4 septembre, quatre jobs s'ajoutent : `etl-tests` (pytest sur `healthai_etl`), `lint` (`ruff check` et `eslint`), et `e2e`, qui démarre la pile avec `docker compose up -d --build`, attend `/health`, charge l'ETL, exécute les trois scénarios Playwright et publie le rapport HTML en artefact.
+
+Pourquoi ce choix : les jobs indépendants tournent en parallèle et durent moins de deux minutes grâce au cache des dépendances ; seul `e2e` attend les tests backend et le build. Les tests n'ont besoin d'aucun service externe (SQLite, Mongo désactivé, clé JWT de test), donc le pipeline ne dépend d'aucun secret. Le déclenchement manuel (`workflow_dispatch`) permet de relancer une exécution sans commit. Le pipeline ne couvre pas la qualité du code (lint) ni les tests du pipeline ETL ; les deux sont des ajouts simples, notés en perspective.
 
 ### Ce qui manque pour un déploiement continu
 
@@ -206,6 +208,7 @@ Les correctifs suivants découlent de la relecture du code pour ce dossier et de
 | Veille ANSSI (configuration) | Clé de signature par défaut acceptée | Échec au démarrage si `JWT_SECRET_KEY` vaut la valeur par défaut avec `ENVIRONMENT=production` | `test_settings_reject_default_secret_in_production` |
 | Relecture | `/metrics` accessible publiquement sur le port 8000 | Restriction au réseau Docker (Prometheus seul) | vérification manuelle |
 | Jeu d'essai, écart 1 | Aliment à score faible recommandé pour combler la liste | Seuil de pertinence à 65 et message « catalogue insuffisant » | `test_nutrition_rejects_low_score_candidates` |
+| `npm audit` du 3 septembre | 4 vulnérabilités hautes (`next`, `postcss`, `nanoid`, `sharp`) | `npm audit fix` puis `next` 16.3.4 ; `npm audit` à 0 vulnérabilité le 4 septembre | `npm run build`, `npm run lint`, parcours M1 à M3 rejoués, tests E2E |
 | Jeu d'essai, écart 2 | Durées des exercices et de la séance incohérentes | Calcul de la durée unitaire après sélection, durée de séance = somme | `test_session_duration_matches_exercises` |
 
 Ces correctifs sont de la maintenance évolutive au sens du référentiel : ils ne changent pas les fonctionnalités, ils relèvent le niveau de sécurité et de fiabilité à partir d'informations recueillies par la veille. L'état d'avancement de cette branche sera à jour au moment de la soutenance.

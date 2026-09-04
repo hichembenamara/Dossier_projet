@@ -11,7 +11,7 @@
 | ORM et migrations | SQLAlchemy 2.0 | Prisma (avec NestJS), requêtes SQL brutes | Style `select()` typé, mixins, génération du schéma ; compatibilité MariaDB sans retouche |
 | Base relationnelle | MariaDB 10.11 | PostgreSQL, MySQL | Imposée par le socle de la première MSPR ; compatible avec les outils déjà utilisés en formation |
 | Base documentaire | MongoDB 7 avec PyMongo | Motor (asynchrone), stockage JSON en colonne MariaDB | Sujet exigeant une base NoSQL distincte ; PyMongo suffit pour des écritures courtes et non bloquantes |
-| Frontend | Next.js 15, React 19, TypeScript | Vite + React, Angular | Routage par dossier qui reflète les trois rôles, TypeScript de bout en bout, écosystème de composants |
+| Frontend | Next.js 16 (15 jusqu'au 3 septembre 2026, montée pour l'audit de sécurité), React 19, TypeScript | Vite + React, Angular | Routage par dossier qui reflète les trois rôles, TypeScript de bout en bout, écosystème de composants |
 | État serveur | TanStack Query 5 | Redux, SWR | Cache et invalidation sans code de plomberie ; pagination et rejeu des requêtes |
 | Formulaires | react-hook-form + zod | Formik | Validation typée partagée avec les types du domaine |
 | Graphiques | Recharts | Chart.js, D3 | Composants React déclaratifs, suffisants pour des courbes et histogrammes |

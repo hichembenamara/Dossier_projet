@@ -124,14 +124,14 @@ Le tableau ci-dessous relie chaque compétence du référentiel RNCP 37873 aux �
 | Bloc | Compétence | Ce qui le prouve dans HealthAI Coaching | Pages |
 |---|---|---|---|
 | 1 | **C1** Installer et configurer son environnement de travail en fonction du projet | Docker Compose à cinq services (MariaDB, MongoDB, backend, frontend, ETL) plus une pile de supervision séparée ; fichier `.env.example` ; `Makefile` d'exploitation ; conventions Git (branches de fonctionnalité, commits conventionnels) | V, VII |
-| 1 | **C2** Développer des interfaces utilisateur | Frontend Next.js 15 avec trois espaces par rôle (`/me`, `/admin`, `/super-admin`), 34 routes, composants partagés (`data-table`, `pagination`, `states`), graphiques Recharts, garde de rôle côté client | VIII |
+| 1 | **C2** Développer des interfaces utilisateur | Frontend Next.js 16 avec trois espaces par rôle (`/me`, `/admin`, `/super-admin`), 34 routes, composants partagés (`data-table`, `pagination`, `states`), graphiques Recharts, garde de rôle côté client | VIII |
 | 1 | **C3** Développer des composants métier | Moteur de recommandations à règles (`services/recommendations.py`), analyse de repas avec repli entre fournisseurs (`services/meal_analysis.py`), services LLM (`services/ai_enhanced.py`), contrôles qualité de l'ETL | VIII |
 | 1 | **C4** Contribuer à la gestion d'un projet informatique | Trois lots de livraison alignés sur les MSPR, répartition par périmètre, points d'avancement, relecture croisée, matrice des risques | V |
 | 2 | **C5** Analyser les besoins et maquetter une application | Cahier des charges HealthAI Coach, personas, tableau d'exigences par rôle, maquettes des écrans principaux, diagramme de navigation | IV, VI |
 | 2 | **C6** Définir l'architecture logicielle d'une application | Architecture en couches du backend (routes → services → accès aux données), persistance polyglotte, module IA avec repli, décision NestJS → FastAPI documentée | VI, VII |
 | 2 | **C7** Concevoir et mettre en place une base de données relationnelle | 20 tables MariaDB (13 métier, 7 de pilotage ETL), MCD/MLD/MPD, dictionnaire de données, scripts SQL versionnés (`schema_v1`, `migration_v2`), 57 index dont 16 composés, 35 clés étrangères avec politiques explicites | VI, annexe A |
 | 2 | **C8** Développer des composants d'accès aux données SQL et NoSQL | SQLAlchemy 2.0 avec CRUD générique et pagination (`modules/resources.py`, `core/pagination.py`) ; PyMongo avec quatre collections et mode dégradé (`db/mongo.py`, `services/document_store.py`) | VIII |
-| 3 | **C9** Préparer et exécuter les plans de tests d'une application | Plan de tests, 39 tests automatisés (contrats API, règles métier, ETL) exécutés en CI, tests manuels tracés, jeu d'essai du moteur de recommandations | IX |
+| 3 | **C9** Préparer et exécuter les plans de tests d'une application | Plan de tests, 64 tests automatisés (contrats API, règles métier, sécurité, ETL, 4 tests de bout en bout Playwright) exécutés en CI avec lint, tests manuels tracés, jeu d'essai du moteur de recommandations | IX |
 | 3 | **C10** Préparer et documenter le déploiement d'une application | Procédure d'installation, `docs/MAINTENANCE.md`, scripts `backup.sh` / `restore.sh`, tableau des services et des ports, endpoint `/health` | X |
 | 3 | **C11** Contribuer à la mise en production dans une démarche DevOps | Pipeline GitHub Actions (tests backend + build frontend), métriques Prometheus exposées par l'API, tableau de bord Grafana, correctifs de maintenance tracés par commit | X |
 
@@ -542,7 +542,7 @@ L'application est composée de cinq conteneurs définis dans `docker-compose.yml
 | `db` | MariaDB 10.11, source de vérité des données métier et du pilotage ETL | 3307 sur l'hôte (3306 interne) |
 | `mongo` | MongoDB 7, sorties des services IA | 27017 |
 | `backend` | API FastAPI, module IA inclus | 8000 |
-| `frontend` | Next.js 15 | 3000 |
+| `frontend` | Next.js 16 | 3000 |
 | `etl` | Pipeline Python, lancé à la demande (`--profile etl`) | — |
 | `prometheus` | Collecte des métriques exposées par l'API | 9090 |
 | `grafana` | Tableau de bord de supervision | 3001 |
@@ -847,7 +847,7 @@ Ces deux diagrammes sont repris tels quels dans le support de soutenance.
 | ORM et migrations | SQLAlchemy 2.0 | Prisma (avec NestJS), requêtes SQL brutes | Style `select()` typé, mixins, génération du schéma ; compatibilité MariaDB sans retouche |
 | Base relationnelle | MariaDB 10.11 | PostgreSQL, MySQL | Imposée par le socle de la première MSPR ; compatible avec les outils déjà utilisés en formation |
 | Base documentaire | MongoDB 7 avec PyMongo | Motor (asynchrone), stockage JSON en colonne MariaDB | Sujet exigeant une base NoSQL distincte ; PyMongo suffit pour des écritures courtes et non bloquantes |
-| Frontend | Next.js 15, React 19, TypeScript | Vite + React, Angular | Routage par dossier qui reflète les trois rôles, TypeScript de bout en bout, écosystème de composants |
+| Frontend | Next.js 16 (15 jusqu'au 3 septembre 2026, montée pour l'audit de sécurité), React 19, TypeScript | Vite + React, Angular | Routage par dossier qui reflète les trois rôles, TypeScript de bout en bout, écosystème de composants |
 | État serveur | TanStack Query 5 | Redux, SWR | Cache et invalidation sans code de plomberie ; pagination et rejeu des requêtes |
 | Formulaires | react-hook-form + zod | Formik | Validation typée partagée avec les types du domaine |
 | Graphiques | Recharts | Chart.js, D3 | Composants React déclaratifs, suffisants pour des courbes et histogrammes |
@@ -1683,14 +1683,17 @@ La stratégie suit la pyramide des tests : beaucoup de tests rapides et isolés 
 
 | Niveau | Périmètre | Outil | Nombre | Quand |
 |---|---|---|---|---|
-| Unitaire | Règles du moteur de recommandations (allergènes, matériel, contraintes de santé) | pytest | 3 | CI |
+| Unitaire | Règles du moteur de recommandations (allergènes, matériel, contraintes de santé, seuil de pertinence, durées de séance) | pytest | 5 | CI |
 | Unitaire | Logique du coach posture (comptage des répétitions, maintien statique) | pytest | 2 | CI |
-| Unitaire | Fonctions de normalisation de l'ETL (tension, durées, genre, hachage) | pytest | 5 | CI |
+| Unitaire | Fonctions de normalisation de l'ETL (tension, durées, genre, hachage) | pytest | 6 | CI |
+| Sécurité | Jetons PyJWT (expiration, type, signature), condensés PBKDF2, refus d'un secret faible en production, accès réseau à `/metrics` | pytest | 18 | CI |
 | Contrat API | Authentification, inscription, profil, tableaux de bord, pagination, cloisonnement par rôle et par utilisateur, analyse de repas, recommandations, coach posture, `/health`, OpenAPI | pytest + `TestClient` FastAPI | 29 | CI |
+| Bout en bout | Connexion et déconnexion, redirection hors `/admin` et 403 API, exécutions ETL et contrôles qualité paginés | Playwright Test sur la pile Docker | 4 (3 scénarios) | CI, job `e2e` |
+| Qualité de code | `ruff check` sur backend et ETL, `eslint` (config Next) sur le frontend | ruff, ESLint | 2 jobs | CI, job `lint` |
 | Manuel, bout en bout | Parcours utilisateur, administrateur et super-administrateur ; mode dégradé ; sauvegarde et restauration | navigateur, Docker Compose | 10 cas | avant chaque soutenance |
 | Jeu d'essai | Moteur de recommandations sur un profil de référence | script Python sur base SQLite | 1 scénario | ce dossier |
 
-Le total de 39 tests automatisés a été vérifié le 2 septembre 2026 : `pytest -q` renvoie `34 passed` dans `backend/tests` et `5 passed` dans `healthai_etl/tests`.
+Le total de 64 tests automatisés a été vérifié le 4 septembre 2026 : `pytest -q` renvoie `54 passed` dans `backend/tests` et `6 passed` dans `healthai_etl/tests`, et `npx playwright test` renvoie `4 passed` (le 2 septembre, avant la branche de durcissement, le compte était de 39 : 34 + 5).
 
 ## 2. Tests automatisés
 
@@ -1756,7 +1759,7 @@ Pourquoi ce choix : les 29 tests de contrat tournent sur une base SQLite en mém
 
 Les tests les plus importants pour ce dossier sont ceux qui vérifient la sécurité : `test_role_guard_blocks_regular_user_from_admin_dashboard` (un utilisateur reçoit 403 sur `/api/admin/...`), `test_me_routes_are_scoped_to_authenticated_user` (un utilisateur ne voit que ses propres enregistrements), `test_recommendations_use_profile_defaults_and_keep_user_isolation`, et `test_register_complete_rejects_duplicate_email_and_username`. Deux autres vérifient la résilience : `test_meal_analysis_returns_structured_fallback_when_ai_is_not_configured` et `test_health_and_openapi`.
 
-*Figure 33 — Exécution de la CI GitHub Actions : deux jobs verts, `backend-tests` et `frontend-build` (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
+*Figure 33 — Exécution de la CI GitHub Actions : six jobs verts, `backend-tests`, `etl-tests`, `frontend-build`, `lint`, `e2e` (capture `dossier/figures/captures/fig33_github_actions_checks.png`), et sortie de `pytest -q`.*
 
 ```
 $ cd backend && python -m pytest -q tests
@@ -1771,9 +1774,9 @@ Les parcours suivants ont été rejoués sur la pile Docker complète avant chaq
 
 | # | Parcours | Résultat attendu | Résultat |
 |---|---|---|---|
-| M1 | Inscription puis onboarding d'un nouvel utilisateur | Compte créé, profil déclaratif enregistré, redirection vers le tableau de bord | Conforme |
-| M2 | Connexion, attente de l'expiration du jeton d'accès, navigation | Rafraîchissement transparent, aucune déconnexion | Conforme |
-| M3 | Utilisateur tape `/admin/dashboard` dans l'URL | Redirection vers `/me/dashboard` ; l'API répond 403 si appelée directement | Conforme |
+| M1 | Inscription puis onboarding d'un nouvel utilisateur | Compte créé, profil déclaratif enregistré, redirection vers le tableau de bord | Conforme (rejoué le 2026-09-04 après la montée de Next : `register-complete` 201, arrivée sur `/me/dashboard`) |
+| M2 | Connexion, attente de l'expiration du jeton d'accès, navigation | Rafraîchissement transparent, aucune déconnexion | Conforme (rejoué le 2026-09-04 : jeton expiré → 401, `POST /api/auth/refresh` par cookie → 200, navigation après rechargement sans déconnexion) |
+| M3 | Utilisateur tape `/admin/dashboard` dans l'URL | Redirection vers `/me/dashboard` ; l'API répond 403 si appelée directement | Conforme (rejoué le 2026-09-04, automatisé dans `frontend/e2e/rbac.spec.ts`) |
 | M4 | Lancement de `make etl` puis consultation de `/admin/etl/executions` | Cinq exécutions en succès, compteurs et taux de qualité renseignés, lots créés | Conforme (taux 97,6 % sur la source gym, 23 lignes invalides) |
 | M5 | Consultation d'un lot dans `/admin/etl/compare` | Ligne brute, ligne normalisée et décision qualité affichées côte à côte | Conforme |
 | M6 | Analyse de repas avec clé Gemini absente | Message explicite « service non configuré », aucune erreur 500 | Conforme |
@@ -2020,7 +2023,9 @@ jobs:
 
 Le second job, `frontend-build`, installe Node 22, exécute `npm ci` (installation reproductible depuis `package-lock.json`) puis `next build`, ce qui détecte les erreurs TypeScript et les imports cassés.
 
-Pourquoi ce choix : les deux jobs tournent en parallèle et durent moins de deux minutes grâce au cache des dépendances. Les tests n'ont besoin d'aucun service externe (SQLite, Mongo désactivé, clé JWT de test), donc le pipeline ne dépend d'aucun secret. Le déclenchement manuel (`workflow_dispatch`) permet de relancer une exécution sans commit. Le pipeline ne couvre pas la qualité du code (lint) ni les tests du pipeline ETL ; les deux sont des ajouts simples, notés en perspective.
+Depuis le 4 septembre, quatre jobs s'ajoutent : `etl-tests` (pytest sur `healthai_etl`), `lint` (`ruff check` et `eslint`), et `e2e`, qui démarre la pile avec `docker compose up -d --build`, attend `/health`, charge l'ETL, exécute les trois scénarios Playwright et publie le rapport HTML en artefact.
+
+Pourquoi ce choix : les jobs indépendants tournent en parallèle et durent moins de deux minutes grâce au cache des dépendances ; seul `e2e` attend les tests backend et le build. Les tests n'ont besoin d'aucun service externe (SQLite, Mongo désactivé, clé JWT de test), donc le pipeline ne dépend d'aucun secret. Le déclenchement manuel (`workflow_dispatch`) permet de relancer une exécution sans commit. Le pipeline ne couvre pas la qualité du code (lint) ni les tests du pipeline ETL ; les deux sont des ajouts simples, notés en perspective.
 
 ### Ce qui manque pour un déploiement continu
 
@@ -2089,6 +2094,7 @@ Les correctifs suivants découlent de la relecture du code pour ce dossier et de
 | Veille ANSSI (configuration) | Clé de signature par défaut acceptée | Échec au démarrage si `JWT_SECRET_KEY` vaut la valeur par défaut avec `ENVIRONMENT=production` | `test_settings_reject_default_secret_in_production` |
 | Relecture | `/metrics` accessible publiquement sur le port 8000 | Restriction au réseau Docker (Prometheus seul) | vérification manuelle |
 | Jeu d'essai, écart 1 | Aliment à score faible recommandé pour combler la liste | Seuil de pertinence à 65 et message « catalogue insuffisant » | `test_nutrition_rejects_low_score_candidates` |
+| `npm audit` du 3 septembre | 4 vulnérabilités hautes (`next`, `postcss`, `nanoid`, `sharp`) | `npm audit fix` puis `next` 16.3.4 ; `npm audit` à 0 vulnérabilité le 4 septembre | `npm run build`, `npm run lint`, parcours M1 à M3 rejoués, tests E2E |
 | Jeu d'essai, écart 2 | Durées des exercices et de la séance incohérentes | Calcul de la durée unitaire après sélection, durée de séance = somme | `test_session_duration_matches_exercises` |
 
 Ces correctifs sont de la maintenance évolutive au sens du référentiel : ils ne changent pas les fonctionnalités, ils relèvent le niveau de sécurité et de fiabilité à partir d'informations recueillies par la veille. L'état d'avancement de cette branche sera à jour au moment de la soutenance.
@@ -2119,10 +2125,10 @@ Les deux audits ont été exécutés sur la branche de référence pour ce dossi
 
 | Paquet | Plage vulnérable | Nature | Impact pour HealthAI | Décision |
 |---|---|---|---|---|
-| `next` | 9.3.4 → 16.3.0 (avis GHSA-267c-6grr-h53f, GHSA-m99w-x7hq-7vfj, GHSA-955p-x3mx-jcvp et autres) | Contournement de middleware, déni de service via Server Actions, divulgation d'endpoints de fonctions serveur, confusion de cache | Le projet n'utilise ni middleware Next.js ni Server Actions : le contrôle d'accès est dans l'API. Le risque résiduel porte sur le déni de service et le cache | Monter Next.js à la version corrigée ; vérifier que `next build` et les 34 tests backend passent |
-| `postcss` | ≤ 8.5.22 | XSS via `</style>` non échappé dans la sortie, lecture de fichiers via `sourceMappingURL` | PostCSS ne traite que les feuilles de style du projet au moment du build, jamais de contenu utilisateur | Corriger par `npm audit fix` ; risque faible mais correction sans coût |
-| `sharp` | < 0.35.0 | Vulnérabilités héritées de libvips (CVE-2026-33327, -33328, -35590, -35591) | `sharp` est utilisé par l'optimisation d'images de Next.js ; les photos de progression et de repas sont servies par l'API, pas par Next.js | Corriger ; vérifier que le rendu des GIF d'exercices n'est pas affecté |
-| `nanoid` | ≤ 3.3.17 | Dépendance transitive | Aucun usage direct | Corrigé par la montée des autres paquets |
+| `next` | 9.3.4 → 16.3.0 (avis GHSA-267c-6grr-h53f, GHSA-m99w-x7hq-7vfj, GHSA-955p-x3mx-jcvp et autres) | Contournement de middleware, déni de service via Server Actions, divulgation d'endpoints de fonctions serveur, confusion de cache | Le projet n'utilise ni middleware Next.js ni Server Actions : le contrôle d'accès est dans l'API. Le risque résiduel porte sur le déni de service et le cache | Corrigé le 2026-09-04 (branche `fix/npm-audit`) : `next` 15.5 → 16.3.4 par `npm install next@latest`, `next build` et les 54 tests backend passent, `npm audit` à 0 vulnérabilité (`dossier/veille/npm-audit_2026-09-04.txt`) |
+| `postcss` | ≤ 8.5.22 | XSS via `</style>` non échappé dans la sortie, lecture de fichiers via `sourceMappingURL` | PostCSS ne traite que les feuilles de style du projet au moment du build, jamais de contenu utilisateur | Corrigé le 2026-09-04 par `npm audit fix` (branche `fix/npm-audit`) |
+| `sharp` | < 0.35.0 | Vulnérabilités héritées de libvips (CVE-2026-33327, -33328, -35590, -35591) | `sharp` est utilisé par l'optimisation d'images de Next.js ; les photos de progression et de repas sont servies par l'API, pas par Next.js | Corrigé le 2026-09-04 par `npm audit fix` ; rendu des GIF vérifié par le build et le parcours M1 |
+| `nanoid` | ≤ 3.3.17 | Dépendance transitive | Aucun usage direct | Corrigé le 2026-09-04 par la montée des autres paquets |
 
 La montée de version de Next.js est le point à traiter avec le plus de soin : elle peut modifier le comportement de l'App Router. Elle sera faite sur une branche dédiée, validée par la CI (build + tests) puis par les parcours manuels M1 à M3 de la section IX.
 
@@ -2141,7 +2147,7 @@ Le tableau ci-dessous relie chaque information de veille à ce qu'elle a changé
 | juillet 2026 | CIS Docker Benchmark, guide ANSSI sur la conteneurisation | Ne pas exécuter les processus en root ; lier les ports d'administration à l'hôte local | Utilisateur `app` dans le Dockerfile ; MariaDB, MongoDB, Prometheus et Grafana sur `127.0.0.1` | `Dockerfile`, `docker-compose*.yml` |
 | septembre 2026 | OWASP « Password Storage Cheat Sheet » (édition 2024) | 600 000 itérations pour PBKDF2-HMAC-SHA256, ou Argon2id | Itérations portées à 600 000 sur la branche `cda/security-hardening` | section X |
 | septembre 2026 | ANSSI, « Recommandations pour la sécurisation des sites web » | Aucune valeur par défaut pour les secrets ; refuser de démarrer en production avec une configuration faible | Échec au démarrage si `JWT_SECRET_KEY` vaut la valeur par défaut avec `ENVIRONMENT=production` | section X |
-| septembre 2026 | `pip-audit`, `npm audit` | Voir tableau ci-dessus | Montée de version de `next`, `postcss`, `sharp`, `pytest` | section X |
+| septembre 2026 | `pip-audit`, `npm audit` | Voir tableau ci-dessus | Montée de version de `next`, `postcss`, `sharp`, `pytest` ; audit npm à zéro le 2026-09-04 | section X, `dossier/veille/` |
 
 ## 4. Veille réglementaire et éthique
 
@@ -2193,7 +2199,7 @@ Un seul dépôt et des branches dès le premier jour. Un jalonnement daté par p
 
 À court terme, la branche `cda/security-hardening` : PyJWT, Argon2id ou 600 000 itérations, échec au démarrage sur secret faible, restriction de `/metrics`, seuil de pertinence nutritionnelle, durées de séance cohérentes. Puis la publication d'une image et un déploiement déclenché manuellement sur un serveur derrière un reverse proxy TLS.
 
-À moyen terme : tests de bout en bout Playwright sur les trois parcours, table de correction du catalogue d'exercices, planification et externalisation des sauvegardes, analyse d'impact RGPD et hébergement HDS pour envisager un usage réel.
+À moyen terme : étendre les tests de bout en bout Playwright (trois scénarios en CI depuis septembre) aux parcours super-administrateur, table de correction du catalogue d'exercices, planification et externalisation des sauvegardes, analyse d'impact RGPD et hébergement HDS pour envisager un usage réel.
 
 ## Ce que le projet m'a appris
 
